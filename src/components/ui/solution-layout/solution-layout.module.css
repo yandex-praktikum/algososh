@@ -1,0 +1,46 @@
+.content {
+  background-image: url("../../../images/bg.jpg");
+  background-repeat: no-repeat;
+  background-size: cover;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.titleBox {
+  display: flex;
+  margin-left: 19px;
+}
+
+.subtitle {
+  margin: auto 0 8px 7px;
+}
+
+.contentCard {
+  background: #ffffff;
+  border-radius: 20px;
+  margin: 31px 20px 28px;
+  padding: 36px;
+  height: 693px;
+  box-sizing: border-box;
+}
+
+.returnButton {
+  margin-bottom: 50px;
+}
+
+.cardTitle {
+  margin-bottom: 48px;
+}
+
+.copyright {
+  margin: 0 20px 0 auto;
+  text-align: right;
+  padding-bottom: 36px;
+  max-width: 1240px;
+}
+
+.link {
+  text-decoration: none;
+}

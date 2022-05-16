@@ -1,0 +1,32 @@
+.app {
+  text-align: center;
+}
+
+.btns_box {
+  display: grid;
+  grid-template-areas:
+    "btn1 btn2"
+    "btn3 btn3";
+  grid-template-rows: auto auto;
+  grid-template-columns: auto auto;
+  gap: 12px;
+  max-width: 362px;
+}
+
+.btn1 {
+  grid-area: btn1;
+}
+
+.btn2 {
+  grid-area: btn2;
+}
+
+.btn3 {
+  grid-area: btn3;
+}
+
+.circlex_box {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}

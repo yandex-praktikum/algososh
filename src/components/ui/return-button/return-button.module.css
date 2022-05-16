@@ -1,0 +1,13 @@
+.button {
+  display: flex;
+  align-items: center;
+  border: none;
+  outline: none;
+  background: none;
+  transition: var(--common-transition);
+  cursor: pointer;
+}
+
+.button:hover {
+  opacity: 0.8;
+}

@@ -1,0 +1,23 @@
+.content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  box-sizing: border-box;
+  width: 50px;
+}
+
+.column {
+  width: 100%;
+}
+
+.default {
+  background-color: var(--default-color);
+}
+
+.changing {
+  background-color: var(--changing-color);
+}
+
+.modified {
+  background-color: var(--modified-color);
+}

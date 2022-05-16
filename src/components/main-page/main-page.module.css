@@ -1,0 +1,127 @@
+.content {
+  background-image: url("../../images/bg.jpg");
+  background-repeat: no-repeat;
+  background-size: cover;
+  min-height: 100vh;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.container {
+  max-width: 1280px;
+  margin: 0 auto;
+}
+
+.title_box {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 1280px;
+  margin: 0 auto;
+}
+
+.title {
+  display: inline-block;
+  line-height: 152px;
+}
+
+.fibonacci_title {
+  display: inline-block;
+  writing-mode: vertical-lr;
+  transform: rotate(180deg);
+  margin-left: -6px;
+}
+
+.cards_box {
+  display: grid;
+  grid-template-rows: 1fr 1fr;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 20px;
+  max-width: 1240px;
+  margin: 34px 0 64px;
+  align-self: center;
+}
+
+.card {
+  width: 400px;
+  height: 220px;
+  cursor: pointer;
+  transition: var(--common-transition);
+  border-radius: 20px;
+}
+
+.string {
+  background-image: url("../../images/string.svg");
+}
+
+.string:hover {
+  background-image: url("../../images/string-hover.svg");
+}
+
+.fibonacci {
+  background-image: url("../../images/fibonacci.svg");
+}
+
+.fibonacci:hover {
+  background-image: url("../../images/fibonacci-hover.svg");
+}
+
+.arr {
+  background-image: url("../../images/arr.svg");
+}
+
+.arr:hover {
+  background-image: url("../../images/arr-hover.svg");
+}
+
+.stack {
+  background-image: url("../../images/stack.svg");
+}
+
+.stack:hover {
+  background-image: url("../../images/stack-hover.svg");
+}
+
+.queue {
+  background-image: url("../../images/queue.svg");
+}
+
+.queue:hover {
+  background-image: url("../../images/queue-hover.svg");
+}
+
+.list {
+  background-image: url("../../images/list.svg");
+}
+
+.list:hover {
+  background-image: url("../../images/list-hover.svg");
+}
+
+.ticker {
+  background-color: var(--text-color-h1);
+  height: 60px;
+  overflow: hidden;
+}
+
+.dot_box {
+  margin: 0 auto;
+  padding: 0 78px;
+}
+
+.dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background-color: var(--text-color-secondary);
+}
+
+.copyright {
+  margin: 28px auto 0;
+  text-align: right;
+  padding-bottom: 18px;
+  max-width: 1240px;
+  min-width: 1240px;
+}
