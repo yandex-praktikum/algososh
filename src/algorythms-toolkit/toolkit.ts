@@ -1,5 +1,6 @@
+import { stringCharsProps } from './../types/types';
 export const swapChars = (
-  arr: string[],
+  arr: stringCharsProps[],
   firstIndex: number,
   secondIndex: number
 ): void => {
@@ -8,7 +9,7 @@ export const swapChars = (
   arr[secondIndex] = temp;
 };
 
-export const reverseString = (arr: string[]) : string[] => {
+export const reverseString = (arr: stringCharsProps[]) : stringCharsProps[] => {
   let startIdx = 0;
   let endIdx = arr.length - 1;
   while(endIdx > startIdx) {
