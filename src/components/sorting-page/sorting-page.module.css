@@ -1,0 +1,14 @@
+.radioContainer {
+  margin-top: 18px;
+  display: flex;
+  gap: 40px;
+}
+
+.buttonsContainer {
+  display: flex;
+  gap: 12px
+}
+
+.buttonsContainer > button {
+  width: 205px;
+}
