@@ -18,12 +18,12 @@ export const FibonacciPage: React.FC = () => {
     // Блочим кнопку
     setInProgress(true);
     // Копируем последовательность в массив
-    const fiboCopy = [...fibIterative(number)];
+    const fiboCopy = [...fibIterative(number+1)];
     // Создаём массив куда постепенно будем помещать числа
     const inCycleArray: number[] = []
     // Постепенно помещаем числа и копируем их в стейт
     for (let el of fiboCopy) {
-      await waitForMe(10);
+      await waitForMe(SHORT_DELAY_IN_MS);
       inCycleArray.push(el)
       setArrayOfNumbers([...inCycleArray])
     };

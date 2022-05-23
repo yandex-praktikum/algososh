@@ -72,6 +72,7 @@ export const StringComponent: React.FC = () => {
           maxLength={11}
         />
         <Button
+          disabled={!inputValue}
           isLoader={inProgress}
           text="Развернуть"
           type="submit"
