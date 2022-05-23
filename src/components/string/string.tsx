@@ -65,8 +65,8 @@ export const StringComponent: React.FC = () => {
       <InputContainer>
         <Input
           value={inputValue}
-          onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
-            setInputValue(e.target.value)
+          onChange={(e: React.FormEvent<HTMLInputElement>) =>
+            setInputValue(e.currentTarget.value)
           }
           isLimitText={true}
           maxLength={11}
