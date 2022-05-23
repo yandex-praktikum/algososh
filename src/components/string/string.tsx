@@ -14,8 +14,11 @@ import styles from "./string.module.css";
 export const StringComponent: React.FC = () => {
   const [inputValue, setInputValue] = useState("");
   const [arrayOfLetters, setArrayOfLetters] = useState<stringCharsProps[]>([]);
+  const [inProgress, setInProgress] = useState(false);
 
   const swapWithAnimation = async (string: string) => {
+    // Блочим кнопку
+    setInProgress(true)
     // Создание массива объектов на основе строки и начальный рендер
     const arrayOfChars: stringCharsProps[] = [];
     string.split("").forEach((el) => {
@@ -32,6 +35,8 @@ export const StringComponent: React.FC = () => {
         arrayOfChars[startIdx].state = ElementStates.Modified;
         setArrayOfLetters([...arrayOfChars]);
         await waitForMe(SHORT_DELAY_IN_MS);
+        // Разблочим кнопку
+        setInProgress(false)
       // В противном случае делаем обычный свап
       } else {
         // Меняем стейт кружков на "Changing"
@@ -51,6 +56,8 @@ export const StringComponent: React.FC = () => {
         endIdx--;
       }
     }
+    // Разблочим кнопку
+    setInProgress(false)
   };
 
   return (
@@ -65,6 +72,7 @@ export const StringComponent: React.FC = () => {
           maxLength={11}
         />
         <Button
+          isLoader={inProgress}
           text="Развернуть"
           type="submit"
           onClick={() => swapWithAnimation(inputValue)}
