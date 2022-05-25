@@ -21,3 +21,7 @@
 .modified {
   background-color: var(--modified-color);
 }
+
+.chosen {
+  background-color: var(--chosen-color);
+}

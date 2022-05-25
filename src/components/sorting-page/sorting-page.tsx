@@ -8,6 +8,9 @@ import { Button } from "../ui/button/button";
 import { Column } from "../ui/column/column";
 import { columnObject, radioButtonState } from "../../types/types";
 import { ElementStates } from "../../types/element-states";
+import { swapChars, swapNums } from "../../algorythms-toolkit/toolkit";
+import { waitForMe } from "../../utils/utils";
+import { SHORT_DELAY_IN_MS } from "../../constants/delays";
 
 export const SortingPage: React.FC = () => {
   const [arrayToSort, setArrayToSort] = useState<columnObject[]>([]);
@@ -25,9 +28,39 @@ export const SortingPage: React.FC = () => {
     setArrayToSort([...arr]);
   };
 
-  const sortAscending = () => {
-
-  }
+  const sortDescending = async () => {
+    // Копируем массив из стейта
+    const arr = [...arrayToSort];
+    const { length } = arr;
+    for (let i = 0; i < length - 1; i++) {
+      //
+      let maxInd = i;
+      arr[i].state = ElementStates.Chosen;
+      setArrayToSort([...arr]);
+      await waitForMe(SHORT_DELAY_IN_MS);
+      for (let j = i + 1; j < length; j++) {
+        //
+        arr[j].state = ElementStates.Changing;
+        setArrayToSort([...arr]);
+        await waitForMe(SHORT_DELAY_IN_MS);
+        if (arr[maxInd].num < arr[j].num) {
+          maxInd = j;
+          arr[maxInd].state = ElementStates.Default;
+          arr[j].state = ElementStates.Chosen;
+          setArrayToSort([...arr]);
+          await waitForMe(SHORT_DELAY_IN_MS);
+        }
+        arr[j].state = maxInd === j
+          ? ElementStates.Chosen
+          : ElementStates.Default;
+      }
+      swapNums(arr, i, maxInd);
+      arr[i].state = ElementStates.Modified;
+      arr[maxInd].state = ElementStates.Default;
+      setArrayToSort([...arr]);
+      await waitForMe(SHORT_DELAY_IN_MS);
+    }
+  };
 
   return (
     <SolutionLayout title="Сортировка массива">
@@ -54,7 +87,7 @@ export const SortingPage: React.FC = () => {
               isLoader={false}
               text="По возрастанию"
               type="submit"
-              onClick={() => null}
+              onClick={() => sortDescending()}
             />
             <Button
               sorting={Direction.Descending}
@@ -75,7 +108,7 @@ export const SortingPage: React.FC = () => {
         </InputContainer>
         <ul className={styles.columnList}>
           {arrayToSort.map((column, idx) => {
-            return <Column index={column.num} key={idx} />;
+            return <Column index={column.num} state={column.state} key={idx} />;
           })}
         </ul>
       </div>
