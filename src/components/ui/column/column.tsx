@@ -2,7 +2,7 @@ import React from "react";
 import styles from "./column.module.css";
 import { ElementStates } from "../../../types/element-states";
 
-interface ColumnProps {
+export interface ColumnProps {
   index: number;
   state?: ElementStates;
   extraClass?: string;
