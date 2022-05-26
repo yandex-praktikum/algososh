@@ -19,6 +19,11 @@ export const SortingPage: React.FC = () => {
   const [ascendingRunning, setAscendingRunning] = useState(false);
   const [descendingRunning, setDescendingRunning] = useState(false);
 
+  const sortAndWait = async (arr: columnObject[]) => {
+    setArrayToSort([...arr]);
+    await waitForMe(SHORT_DELAY_IN_MS);
+  };
+
   const generateArray = () => {
     const arr: columnObject[] = [];
     const size = Math.random() * (17 - 3) + 3;
@@ -31,6 +36,57 @@ export const SortingPage: React.FC = () => {
     setArrayToSort([...arr]);
   };
 
+  const bubbleSort = async (mode: "ascending" | "descending") => {
+    // Лочим кнопки
+    setInProgress(true);
+    mode === "ascending"
+      ? setAscendingRunning(true)
+      : setDescendingRunning(true);
+    //Копируем массив из стейта и делаем все элементы дефолтными
+    const arr = [...arrayToSort];
+    arr.forEach((el) => (el.state = ElementStates.Default));
+    await sortAndWait(arr);
+    // Начинаем цикл
+    const { length } = arr;
+    // Флаг свапа
+    let swapped: boolean;
+    do {
+      swapped = false;
+      for (let i = 0; i < length - 1; i++) {
+        // Подсвечиваем выбранные элементы
+        arr[i].state = ElementStates.Changing;
+        arr[i + 1].state = ElementStates.Changing;
+        await sortAndWait(arr);
+        // Если один больше (меньше) другого - свапаем их
+        if (
+          (mode === "ascending" ? arr[i].num : arr[i + 1].num) >
+          (mode === "ascending" ? arr[i + 1].num : arr[i].num)
+        ) {
+          arr[i].state = ElementStates.Chosen;
+          arr[i + 1].state = ElementStates.Chosen;
+          await sortAndWait(arr);
+          swapNums(arr, i, i + 1);
+          arr[i].state = ElementStates.Chosen;
+          arr[i + 1].state = ElementStates.Chosen;
+          await sortAndWait(arr);
+          swapped = true;
+        }
+        // После визуальной сортировки меняем цвет текущего элемента, но не
+        // рисуем его (не сортируем массив) он будет отрисован на следующем шаге
+        arr[i].state = ElementStates.Default;
+        arr[i + 1].state = ElementStates.Default;
+      }
+    } while (swapped);
+    // Массив отсортирован
+    arr.forEach((el) => (el.state = ElementStates.Modified));
+    setArrayToSort([...arr]);
+    // Анлочим кнопки
+    setInProgress(false);
+    mode === "ascending"
+      ? setAscendingRunning(false)
+      : setDescendingRunning(false);
+  };
+
   const selectionSort = async (mode: "ascending" | "descending") => {
     // Лочим кнопки
     setInProgress(true);
@@ -38,14 +94,9 @@ export const SortingPage: React.FC = () => {
       ? setAscendingRunning(true)
       : setDescendingRunning(true);
 
-    const sortAndWait = async () => {
-      setArrayToSort([...arr]);
-      await waitForMe(SHORT_DELAY_IN_MS);
-    };
-
     //Копируем массив из стейта и делаем все элементы дефолтными
     const arr = [...arrayToSort];
-    arr.forEach(el => el.state = ElementStates.Default)
+    arr.forEach((el) => (el.state = ElementStates.Default));
     setArrayToSort([...arr]);
     // Начинаем цикл
     const { length } = arr;
@@ -54,12 +105,12 @@ export const SortingPage: React.FC = () => {
       let swapInd = i;
       // Подсвечиваем элемент рыжим, который будет отсортирован
       arr[i].state = ElementStates.Chosen;
-      await sortAndWait();
+      await sortAndWait(arr);
       // Начинаем цикл по оставшимся элементам
       for (let j = i + 1; j < length; j++) {
         // Подсвечиваем кандидата на свап фиолетовым
         arr[j].state = ElementStates.Changing;
-        await sortAndWait();
+        await sortAndWait(arr);
         if (
           (mode === "ascending" ? arr[swapInd].num : arr[j].num) >
           (mode === "ascending" ? arr[j].num : arr[swapInd].num)
@@ -70,26 +121,26 @@ export const SortingPage: React.FC = () => {
           arr[j].state = ElementStates.Chosen;
           arr[swapInd].state =
             i === swapInd ? ElementStates.Chosen : ElementStates.Default;
-            swapInd = j;
-          await sortAndWait();
+          swapInd = j;
+          await sortAndWait(arr);
         }
         // После визуальной сортировки меняем цвет текущего элемента, но не
         // рисуем его (не сортируем массив) он будет отрисован на следующем шаге
         arr[j].state =
-        swapInd === j ? ElementStates.Chosen : ElementStates.Default;
+          swapInd === j ? ElementStates.Chosen : ElementStates.Default;
       }
       // Если сортируемый элемент сам является экстремумом - рисуем его как "modified"
       if (i === swapInd) {
         arr[i].state = ElementStates.Modified;
-        await sortAndWait();
+        await sortAndWait(arr);
       }
       // В противном случае нужен свап и замена цветов (нужно 2 рендера)
       else {
         swapNums(arr, i, swapInd);
-        await sortAndWait();
+        await sortAndWait(arr);
         arr[i].state = ElementStates.Modified;
         arr[swapInd].state = ElementStates.Default;
-        await sortAndWait();
+        await sortAndWait(arr);
       }
     }
     // Анлочим кнопки
@@ -126,7 +177,11 @@ export const SortingPage: React.FC = () => {
               isLoader={ascendingRunning}
               text="По возрастанию"
               type="submit"
-              onClick={() => selectionSort("ascending")}
+              onClick={() =>
+                checked === "selection"
+                  ? selectionSort("ascending")
+                  : bubbleSort("ascending")
+              }
             />
             <Button
               sorting={Direction.Descending}
@@ -134,7 +189,11 @@ export const SortingPage: React.FC = () => {
               isLoader={descendingRunning}
               text="По убыванию"
               type="submit"
-              onClick={() => selectionSort("descending")}
+              onClick={() =>
+                checked === "selection"
+                  ? selectionSort("descending")
+                  : bubbleSort("descending")
+              }
             />
           </div>
           <Button
