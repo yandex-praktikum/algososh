@@ -15,6 +15,9 @@ import { SHORT_DELAY_IN_MS } from "../../constants/delays";
 export const SortingPage: React.FC = () => {
   const [arrayToSort, setArrayToSort] = useState<columnObject[]>([]);
   const [checked, setChecked] = useState<radioButtonState>("selection");
+  const [inProgress, setInProgress] = useState(false);
+  const [ascendingRunning, setAscendingRunning] = useState(false);
+  const [descendingRunning, setDescendingRunning] = useState(false);
 
   const generateArray = () => {
     const arr: columnObject[] = [];
@@ -28,38 +31,72 @@ export const SortingPage: React.FC = () => {
     setArrayToSort([...arr]);
   };
 
-  const sortDescending = async () => {
-    // Копируем массив из стейта
+  const selectionSort = async (mode: "ascending" | "descending") => {
+    // Лочим кнопки
+    setInProgress(true);
+    mode === "ascending"
+      ? setAscendingRunning(true)
+      : setDescendingRunning(true);
+
+    const sortAndWait = async () => {
+      setArrayToSort([...arr]);
+      await waitForMe(SHORT_DELAY_IN_MS);
+    };
+
+    //Копируем массив из стейта и делаем все элементы дефолтными
     const arr = [...arrayToSort];
+    arr.forEach(el => el.state = ElementStates.Default)
+    setArrayToSort([...arr]);
+    // Начинаем цикл
     const { length } = arr;
-    for (let i = 0; i < length - 1; i++) {
-      //
-      let maxInd = i;
+    for (let i = 0; i < length; i++) {
+      // Инициализация счётчика
+      let swapInd = i;
+      // Подсвечиваем элемент рыжим, который будет отсортирован
       arr[i].state = ElementStates.Chosen;
-      setArrayToSort([...arr]);
-      await waitForMe(SHORT_DELAY_IN_MS);
+      await sortAndWait();
+      // Начинаем цикл по оставшимся элементам
       for (let j = i + 1; j < length; j++) {
-        //
+        // Подсвечиваем кандидата на свап фиолетовым
         arr[j].state = ElementStates.Changing;
-        setArrayToSort([...arr]);
-        await waitForMe(SHORT_DELAY_IN_MS);
-        if (arr[maxInd].num < arr[j].num) {
-          maxInd = j;
-          arr[maxInd].state = ElementStates.Default;
+        await sortAndWait();
+        if (
+          (mode === "ascending" ? arr[swapInd].num : arr[j].num) >
+          (mode === "ascending" ? arr[j].num : arr[swapInd].num)
+        ) {
+          // Если кандидат больше (меньше) текущего экстремума - то мы нашли второй элемент на свап,
+          // подсвечиваем его рыжим, а старого кандидата либо делаем дефолтным,
+          // либо оставляем рыжим (если это i-й элемент, для которого мы ищем кандидата)
           arr[j].state = ElementStates.Chosen;
-          setArrayToSort([...arr]);
-          await waitForMe(SHORT_DELAY_IN_MS);
+          arr[swapInd].state =
+            i === swapInd ? ElementStates.Chosen : ElementStates.Default;
+            swapInd = j;
+          await sortAndWait();
         }
-        arr[j].state = maxInd === j
-          ? ElementStates.Chosen
-          : ElementStates.Default;
+        // После визуальной сортировки меняем цвет текущего элемента, но не
+        // рисуем его (не сортируем массив) он будет отрисован на следующем шаге
+        arr[j].state =
+        swapInd === j ? ElementStates.Chosen : ElementStates.Default;
       }
-      swapNums(arr, i, maxInd);
-      arr[i].state = ElementStates.Modified;
-      arr[maxInd].state = ElementStates.Default;
-      setArrayToSort([...arr]);
-      await waitForMe(SHORT_DELAY_IN_MS);
+      // Если сортируемый элемент сам является экстремумом - рисуем его как "modified"
+      if (i === swapInd) {
+        arr[i].state = ElementStates.Modified;
+        await sortAndWait();
+      }
+      // В противном случае нужен свап и замена цветов (нужно 2 рендера)
+      else {
+        swapNums(arr, i, swapInd);
+        await sortAndWait();
+        arr[i].state = ElementStates.Modified;
+        arr[swapInd].state = ElementStates.Default;
+        await sortAndWait();
+      }
     }
+    // Анлочим кнопки
+    setInProgress(false);
+    mode === "ascending"
+      ? setAscendingRunning(false)
+      : setDescendingRunning(false);
   };
 
   return (
@@ -68,12 +105,14 @@ export const SortingPage: React.FC = () => {
         <InputContainer>
           <div className={styles.radioContainer}>
             <RadioInput
+              disabled={inProgress}
               checked={checked === "selection"}
               onChange={() => setChecked("selection")}
               value="selection"
               label="Выбор"
             />
             <RadioInput
+              disabled={inProgress}
               checked={checked === "bubble"}
               onChange={() => setChecked("bubble")}
               value="bubble"
@@ -83,23 +122,23 @@ export const SortingPage: React.FC = () => {
           <div className={styles.buttonsContainer}>
             <Button
               sorting={Direction.Ascending}
-              disabled={false}
-              isLoader={false}
+              disabled={inProgress}
+              isLoader={ascendingRunning}
               text="По возрастанию"
               type="submit"
-              onClick={() => sortDescending()}
+              onClick={() => selectionSort("ascending")}
             />
             <Button
               sorting={Direction.Descending}
-              disabled={false}
-              isLoader={false}
+              disabled={inProgress}
+              isLoader={descendingRunning}
               text="По убыванию"
               type="submit"
-              onClick={() => null}
+              onClick={() => selectionSort("descending")}
             />
           </div>
           <Button
-            disabled={false}
+            disabled={inProgress}
             isLoader={false}
             text="Новый массив"
             type="submit"
