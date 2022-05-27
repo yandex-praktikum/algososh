@@ -1,0 +1,12 @@
+.circleList {
+  list-style-type: none;
+  margin-top: 120px;
+  padding: 0;
+  display: flex;
+  justify-content: center;
+  gap: 16px;
+}
+
+.resetButton {
+  margin-left: 100px;
+}

@@ -17,6 +17,7 @@ export const StringComponent: React.FC = () => {
   const [inProgress, setInProgress] = useState(false);
 
   const swapWithAnimation = async (string: string) => {
+    setInputValue("");
     // Блочим кнопку
     setInProgress(true)
     // Создание массива объектов на основе строки и начальный рендер

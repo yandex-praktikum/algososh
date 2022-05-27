@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { InputContainer } from "../input-container/input-container";
 import { SolutionLayout } from "../ui/solution-layout/solution-layout";
 import { RadioInput } from "../ui/radio-input/radio-input";
@@ -18,6 +18,10 @@ export const SortingPage: React.FC = () => {
   const [inProgress, setInProgress] = useState(false);
   const [ascendingRunning, setAscendingRunning] = useState(false);
   const [descendingRunning, setDescendingRunning] = useState(false);
+
+  useEffect(() => {
+    generateArray();
+  }, []);
 
   const sortAndWait = async (arr: columnObject[]) => {
     setArrayToSort([...arr]);

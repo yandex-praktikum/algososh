@@ -23,5 +23,5 @@
 }
 
 .chosen {
-  border: 3px solid var(--chosen-color);
+  background-color: var(--chosen-color);
 }

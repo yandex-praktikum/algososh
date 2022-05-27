@@ -15,6 +15,7 @@ export const FibonacciPage: React.FC = () => {
   const [inProgress, setInProgress] = useState(false);
 
   const renderFib = async (number: number) => {
+    setInputValue(0);
     // Блочим кнопку
     setInProgress(true);
     // Копируем последовательность в массив

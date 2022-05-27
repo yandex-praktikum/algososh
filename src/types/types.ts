@@ -1,6 +1,7 @@
 import { ElementStates } from "./element-states";
 
 export interface stringCharsProps {
+  head?: string;
   char: string;
   state: ElementStates;
 }
