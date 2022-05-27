@@ -16,20 +16,20 @@ export const QueuePage: React.FC = () => {
   const basicState: stringCharsProps[] = [];
   for (let i = 0; i <= maxNum; i++) {
     basicState.push({
-      tail: "",
-      head: "",
       char: "",
       state: ElementStates.Default,
     });
   }
 
   const [inputValue, setInputValue] = useState<string>("");
-  const [isEmpty, setIsEmpty] = useState(true);
   const [arrayOfLetters, setArrayOfLetters] =
     useState<stringCharsProps[]>(basicState);
-  const [inProgress, setInProgress] = useState(false);
+  const [adding, setAdding] = useState(false);
+  const [deleting, setDeleting] = useState(false);
   const [headIdx, setHeadIdx] = useState(0);
   const [tailIdx, setTailIdx] = useState(0);
+
+  console.log(headIdx, tailIdx);
 
   const sortAndWait = async (arr: stringCharsProps[]) => {
     setArrayOfLetters([...arr]);
@@ -37,26 +37,39 @@ export const QueuePage: React.FC = () => {
   };
 
   const enqueue = async () => {
-    const copyArr = [...basicState];
-    setArrayOfLetters([...copyArr]);
-    copyArr[tailIdx] = {
-      ...copyArr[tailIdx],
-      char: inputValue,
-      tail: "tail",
-    };
-    copyArr[headIdx] = {
-      ...copyArr[headIdx],
-      head: "head",
-    };
-    arrayOfLetters[tailIdx].state = ElementStates.Changing;
+    setAdding(true);
+    const copyArr = [...arrayOfLetters];
+    copyArr[tailIdx].char = inputValue;
+    copyArr[tailIdx].state = ElementStates.Changing;
     await sortAndWait(copyArr);
-    arrayOfLetters[tailIdx].state = ElementStates.Default;
-    await sortAndWait(copyArr);
-    setInputValue("");
+    copyArr[tailIdx].state = ElementStates.Default;
     setTailIdx((prev) => prev + 1);
+    setInputValue("");
+    setAdding(false);
   };
 
-  const dequeue = () => {};
+  const dequeue = async () => {
+    setDeleting(true);
+    const copyArr = [...arrayOfLetters];
+    copyArr[headIdx].state = ElementStates.Changing;
+    await sortAndWait(copyArr);
+    if (tailIdx - 1 === headIdx) {
+      clear();
+    } else {
+      copyArr[headIdx].char = "";
+      copyArr[headIdx].state = ElementStates.Default;
+      setHeadIdx((prev) => prev + 1);
+      setInputValue("");
+    }
+    setDeleting(false);
+  };
+
+  const clear = () => {
+    setArrayOfLetters([...basicState]);
+    setTailIdx(0);
+    setHeadIdx(0);
+    setInputValue("");
+  };
 
   return (
     <SolutionLayout title="Очередь">
@@ -72,29 +85,25 @@ export const QueuePage: React.FC = () => {
           maxLength={4}
         />
         <Button
-          disabled={!inputValue || tailIdx > 6}
-          isLoader={inProgress}
+          disabled={!inputValue || deleting || tailIdx > 6}
+          isLoader={adding}
           text="Добавить"
           type="button"
           onClick={() => enqueue()}
         />
         <Button
-          isLoader={inProgress}
-          disabled={false}
+          isLoader={deleting}
+          disabled={adding || tailIdx === 0}
           text="Удалить"
           type="button"
           onClick={() => dequeue()}
         />
         <Button
-          isLoader={inProgress}
           extraClass={styles.resetButton}
-          disabled={false}
+          disabled={adding || deleting || tailIdx === 0}
           text="Очистить"
           type="button"
-          onClick={() => {
-            setArrayOfLetters([...basicState]);
-            setIsEmpty(true);
-          }}
+          onClick={() => clear()}
         />
       </InputContainer>
       <ul className={styles.circleList}>
@@ -105,8 +114,8 @@ export const QueuePage: React.FC = () => {
               letter={char.char}
               index={idx}
               key={idx}
-              head={char.head}
-              tail={char.tail}
+              head={tailIdx !== 0 && idx === headIdx ? "head" : ""}
+              tail={idx === tailIdx - 1 ? "tail" : ""}
             />
           );
         })}

@@ -13,11 +13,12 @@ import styles from "./stack-page.module.css";
 export const StackPage: React.FC = () => {
   const [inputValue, setInputValue] = useState<string>("");
   const [arrayOfLetters, setArrayOfLetters] = useState<stringCharsProps[]>([]);
-  const [inProgress, setInProgress] = useState(false);
+  const [pushing, setPushing] = useState(false);
+  const [popping, setPopping] = useState(false);
 
   const push = async () => {
     setInputValue("");
-    setInProgress(true);
+    setPushing(true);
     arrayOfLetters.forEach((el) => {
       el.state = ElementStates.Default;
       el.head = "";
@@ -31,11 +32,11 @@ export const StackPage: React.FC = () => {
     await waitForMe(SHORT_DELAY_IN_MS);
     arrayOfLetters[arrayOfLetters.length - 1].state = ElementStates.Default;
     setArrayOfLetters([...arrayOfLetters]);
-    setInProgress(false);
+    setPushing(false);
   };
 
   const pop = async () => {
-    setInProgress(true);
+    setPopping(true);
     if (arrayOfLetters.length > 1) {
       arrayOfLetters.pop();
       setArrayOfLetters([...arrayOfLetters]);
@@ -44,7 +45,7 @@ export const StackPage: React.FC = () => {
       arrayOfLetters[arrayOfLetters.length - 1].head = "top";
       setArrayOfLetters([...arrayOfLetters]);
     } else setArrayOfLetters([]);
-    setInProgress(false);
+    setPopping(false);
   };
 
   return (
@@ -61,23 +62,22 @@ export const StackPage: React.FC = () => {
           maxLength={4}
         />
         <Button
-          disabled={!inputValue || arrayOfLetters.length > 12}
-          isLoader={inProgress}
+          disabled={!inputValue || popping || arrayOfLetters.length > 12}
+          isLoader={pushing}
           text="Добавить"
           type="button"
           onClick={() => push()}
         />
         <Button
-          isLoader={inProgress}
-          disabled={!arrayOfLetters.length}
+          isLoader={popping}
+          disabled={!arrayOfLetters.length || pushing}
           text="Удалить"
           type="button"
           onClick={() => pop()}
         />
         <Button
-          isLoader={inProgress}
           extraClass={styles.resetButton}
-          disabled={!arrayOfLetters.length}
+          disabled={!arrayOfLetters.length || pushing || popping}
           text="Очистить"
           type="button"
           onClick={() => setArrayOfLetters([])}
