@@ -1,8 +1,9 @@
 import { ElementStates } from "./element-states";
 
 export interface stringCharsProps {
+  tail?: string;
   head?: string;
-  char: string;
+  char?: string;
   state: ElementStates;
 }
 
@@ -11,5 +12,4 @@ export interface columnObject {
   state: ElementStates;
 }
 
-export type radioButtonState = 'selection' | 'bubble'
-
+export type radioButtonState = "selection" | "bubble";
