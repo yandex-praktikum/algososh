@@ -1,6 +1,6 @@
 .circleList {
   list-style-type: none;
-  margin-top: 90px;
+  margin-top: 120px;
   padding: 0;
   display: flex;
   justify-content: center;
@@ -21,4 +21,23 @@
 
 .input {
   min-width: 204px;
+}
+
+.block {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.upperCircle {
+  position: absolute;
+  top: -70px;
+  left: 12px;
+}
+
+.lowerCircle {
+  position: absolute;
+  top: 120px;
+  left: 12px;
 }
