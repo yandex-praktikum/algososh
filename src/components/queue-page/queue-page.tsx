@@ -28,9 +28,6 @@ export const QueuePage: React.FC = () => {
   const [deleting, setDeleting] = useState(false);
   const [headIdx, setHeadIdx] = useState(0);
   const [tailIdx, setTailIdx] = useState(0);
-
-  console.log(headIdx, tailIdx);
-
   const sortAndWait = async (arr: stringCharsProps[]) => {
     setArrayOfLetters([...arr]);
     await waitForMe(SHORT_DELAY_IN_MS);

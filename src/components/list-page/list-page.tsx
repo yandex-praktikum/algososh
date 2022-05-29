@@ -12,10 +12,11 @@ import { SolutionLayout } from "../ui/solution-layout/solution-layout";
 import styles from "./list-page.module.css";
 
 export const ListPage: React.FC = () => {
-  const maxNum = 6;
+  const maxNum = 12;
+  const minNum = 4;
 
   const basicState: stringCharsProps[] = [];
-  for (let i = 0; i <= maxNum; i++) {
+  for (let i = 0; i < minNum; i++) {
     basicState.push({
       char: `${Math.floor(Math.random() * 100)}`,
       state: ElementStates.Default,
@@ -32,9 +33,6 @@ export const ListPage: React.FC = () => {
   const [deletingFromTail, setDeletingFromTail] = useState(false);
   const [addingByIdx, setAddingByIdx] = useState(false);
   const [deletingByIdx, setDeletingByIdx] = useState(false);
-  const [deleting, setDeleting] = useState(false);
-  const [headIdx, setHeadIdx] = useState(0);
-  const [tailIdx, setTailIdx] = useState(0);
   const [inProgress, setInProgress] = useState(false);
 
   const sortAndWait = async (arr: stringCharsProps[]) => {
@@ -68,9 +66,9 @@ export const ListPage: React.FC = () => {
     await sortAndWait([...copyArr]);
     // Меняем стейт головы
     copyArr[0].state = ElementStates.Default;
-    await sortAndWait([...copyArr]);
     setInProgress(false);
     setAddingToHead(false);
+    setValue("");
   };
 
   const deleteFromHead = async () => {
@@ -94,7 +92,6 @@ export const ListPage: React.FC = () => {
     await sortAndWait([...copyArr]);
     // Убираем подсветку с новой головы
     copyArr[0].state = ElementStates.Default;
-    await sortAndWait([...copyArr]);
     setInProgress(false);
     setDeletingFromHead(false);
   };
@@ -122,7 +119,6 @@ export const ListPage: React.FC = () => {
     await sortAndWait([...copyArr]);
     // Убираем подсветку с нового хвоста
     copyArr[length - 2].state = ElementStates.Default;
-    await sortAndWait([...copyArr]);
     setInProgress(false);
     setDeletingFromTail(false);
   };
@@ -154,9 +150,9 @@ export const ListPage: React.FC = () => {
     await sortAndWait([...copyArr]);
     // Меняем стейт головы
     copyArr[length].state = ElementStates.Default;
-    await sortAndWait([...copyArr]);
     setInProgress(false);
     setAddingToTail(false);
+    setValue("");
   };
 
   const addByIdx = async () => {
@@ -194,9 +190,10 @@ export const ListPage: React.FC = () => {
     await sortAndWait([...copyArr]);
     // Убираем подсветку
     copyArr.forEach((el) => (el.state = ElementStates.Default));
-    await sortAndWait([...copyArr]);
     setInProgress(false);
     setAddingByIdx(false);
+    setValue("");
+    setIdx(undefined);
   };
 
   const deleteByIdx = async () => {
@@ -207,7 +204,7 @@ export const ListPage: React.FC = () => {
     // Запускаем перебор по элементам массива
     for (let i = 0; i <= idx!; i++) {
       copyArr[i].state = ElementStates.Changing;
-      if (i === idx) copyArr[i].deleting = true;
+      if (i === idx) copyArr[i].noArrow = true;
       await sortAndWait([...copyArr]);
     }
     // Показываем удаляемый элемент
@@ -224,9 +221,10 @@ export const ListPage: React.FC = () => {
     copyArr.splice(idx!, 1);
     // Убираем подсветку
     copyArr.forEach((el) => (el.state = ElementStates.Default));
-    await sortAndWait([...copyArr]);
     setInProgress(false);
     setDeletingByIdx(false);
+    setIdx(undefined);
+    await sortAndWait([...copyArr]);
   };
 
   return (
@@ -246,7 +244,7 @@ export const ListPage: React.FC = () => {
           />
           <Button
             extraClass={styles.button}
-            disabled={inProgress || deleting || tailIdx > 6}
+            disabled={inProgress || !value || arrayOfCircles.length > 13}
             isLoader={addingToHead}
             text="Добавить в head"
             type="button"
@@ -255,14 +253,14 @@ export const ListPage: React.FC = () => {
           <Button
             extraClass={styles.button}
             isLoader={addingToTail}
-            disabled={inProgress}
+            disabled={inProgress || !value || arrayOfCircles.length > 13}
             text="Добавить в tail"
             type="button"
             onClick={() => addToTail()}
           />
           <Button
             extraClass={styles.button}
-            disabled={inProgress}
+            disabled={inProgress || arrayOfCircles.length <= 1}
             isLoader={deletingFromHead}
             text="Удалить из head"
             type="button"
@@ -270,7 +268,7 @@ export const ListPage: React.FC = () => {
           />
           <Button
             extraClass={styles.button}
-            disabled={inProgress}
+            disabled={inProgress || arrayOfCircles.length <= 1}
             isLoader={deletingFromTail}
             text="Удалить из tail"
             type="button"
@@ -290,7 +288,9 @@ export const ListPage: React.FC = () => {
           <Button
             style={{ minWidth: "362px" }}
             extraClass={styles.button}
-            disabled={!value || inProgress}
+            disabled={
+              !value || !idx || inProgress || idx > arrayOfCircles.length - 2
+            }
             isLoader={addingByIdx}
             text="Добавить по индексу"
             type="button"
@@ -300,7 +300,7 @@ export const ListPage: React.FC = () => {
             style={{ minWidth: "362px" }}
             extraClass={styles.button}
             isLoader={deletingByIdx}
-            disabled={inProgress}
+            disabled={!idx || inProgress || idx > arrayOfCircles.length - 2}
             text="Удалить по индексу"
             type="button"
             onClick={() => deleteByIdx()}
@@ -327,7 +327,7 @@ export const ListPage: React.FC = () => {
               {idx !== arrayOfCircles.length - 1 && (
                 <ArrowIcon
                   fill={
-                    char.state === ElementStates.Changing && !char.deleting
+                    char.state === ElementStates.Changing && !char.noArrow
                       ? "#d252e1"
                       : "#0032FF"
                   }

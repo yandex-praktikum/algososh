@@ -3,6 +3,7 @@ import { ElementStates } from "./element-states";
 export interface stringCharsProps {
   adding?: boolean;
   deleting?: boolean;
+  noArrow?: boolean;
   tail?: string;
   head?: string;
   char?: string;
