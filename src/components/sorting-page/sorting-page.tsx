@@ -8,8 +8,8 @@ import { Button } from "../ui/button/button";
 import { Column } from "../ui/column/column";
 import { columnObject, radioButtonState } from "../../types/types";
 import { ElementStates } from "../../types/element-states";
-import { swapChars, swapNums } from "../../algorythms-toolkit/toolkit";
-import { waitForMe } from "../../utils/utils";
+import { swapElements } from "../../algorythms-toolkit/toolkit";
+import { getNumber, waitForMe } from "../../utils/utils";
 import { SHORT_DELAY_IN_MS } from "../../constants/delays";
 
 export const SortingPage: React.FC = () => {
@@ -29,14 +29,11 @@ export const SortingPage: React.FC = () => {
   };
 
   const generateArray = () => {
-    const arr: columnObject[] = [];
     const size = Math.random() * (17 - 3) + 3;
-    while (arr.length < size) {
-      arr.push({
-        num: Math.floor(Math.random() * 100) + 1,
-        state: ElementStates.Default,
-      });
-    }
+    const arr: columnObject[] = Array.from({ length: size }, () => ({
+      num: getNumber(),
+      state: ElementStates.Default,
+    }));
     setArrayToSort([...arr]);
   };
 
@@ -69,7 +66,7 @@ export const SortingPage: React.FC = () => {
           arr[i].state = ElementStates.Chosen;
           arr[i + 1].state = ElementStates.Chosen;
           await sortAndWait(arr);
-          swapNums(arr, i, i + 1);
+          swapElements(arr, i, i + 1);
           arr[i].state = ElementStates.Chosen;
           arr[i + 1].state = ElementStates.Chosen;
           await sortAndWait(arr);
@@ -140,7 +137,7 @@ export const SortingPage: React.FC = () => {
       }
       // В противном случае нужен свап и замена цветов (нужно 2 рендера)
       else {
-        swapNums(arr, i, swapInd);
+        swapElements(arr, i, swapInd);
         await sortAndWait(arr);
         arr[i].state = ElementStates.Modified;
         arr[swapInd].state = ElementStates.Default;

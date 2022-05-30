@@ -10,6 +10,9 @@ import { SolutionLayout } from "../ui/solution-layout/solution-layout";
 import styles from "./fibonacci-page.module.css";
 
 export const FibonacciPage: React.FC = () => {
+
+  const maxLength = 19;
+
   const [inputValue, setInputValue] = useState<number>();
   const [arrayOfNumbers, setArrayOfNumbers] = useState<number[]>([]);
   const [inProgress, setInProgress] = useState(false);
@@ -45,10 +48,10 @@ export const FibonacciPage: React.FC = () => {
           }
           isLimitText={true}
           maxLength={2}
-          max={19}
+          max={maxLength}
         />
         <Button
-          disabled={inputValue ? inputValue > 19 : true}
+          disabled={inputValue ? inputValue > maxLength : true}
           isLoader={inProgress}
           text="Развернуть"
           type="submit"

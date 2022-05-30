@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { SHORT_DELAY_IN_MS } from "../../constants/delays";
 import { ElementStates } from "../../types/element-states";
 import { stringCharsProps } from "../../types/types";
-import { waitForMe } from "../../utils/utils";
+import { getNumber, waitForMe } from "../../utils/utils";
 import { InputContainer } from "../input-container/input-container";
 import { Button } from "../ui/button/button";
 import { Circle } from "../ui/circle/circle";
@@ -18,7 +18,7 @@ export const ListPage: React.FC = () => {
   const basicState: stringCharsProps[] = [];
   for (let i = 0; i < minNum; i++) {
     basicState.push({
-      char: `${Math.floor(Math.random() * 100)}`,
+      char: `${getNumber()}`,
       state: ElementStates.Default,
     });
   }

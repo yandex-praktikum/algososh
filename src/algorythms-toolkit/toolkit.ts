@@ -1,16 +1,7 @@
 import { stringCharsProps, columnObject } from "./../types/types";
-export const swapChars = (
-  arr: stringCharsProps[],
-  firstIndex: number,
-  secondIndex: number
-): void => {
-  const temp = arr[firstIndex];
-  arr[firstIndex] = arr[secondIndex];
-  arr[secondIndex] = temp;
-};
 
-export const swapNums = (
-  arr: columnObject[],
+export const swapElements = (
+  arr: columnObject[] | stringCharsProps[],
   firstIndex: number,
   secondIndex: number
 ): void => {

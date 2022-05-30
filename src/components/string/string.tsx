@@ -1,5 +1,5 @@
 import React, { useRef, useState } from "react";
-import { swapChars } from "../../algorythms-toolkit/toolkit";
+import { swapElements } from "../../algorythms-toolkit/toolkit";
 import { SHORT_DELAY_IN_MS } from "../../constants/delays";
 import { ElementStates } from "../../types/element-states";
 import { stringCharsProps } from "../../types/types";
@@ -46,7 +46,7 @@ export const StringComponent: React.FC = () => {
         setArrayOfLetters([...arrayOfChars]);
         await waitForMe(SHORT_DELAY_IN_MS);
         // Меняем местами выбранные кружки
-        swapChars(arrayOfChars, startIdx, endIdx);
+        swapElements(arrayOfChars, startIdx, endIdx);
         // Меняем стейт кружков на "Modified"
         arrayOfChars[startIdx].state = ElementStates.Modified;
         arrayOfChars[endIdx].state = ElementStates.Modified;
