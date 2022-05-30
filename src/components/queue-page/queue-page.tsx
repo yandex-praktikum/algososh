@@ -2,24 +2,23 @@ import React, { useEffect, useState } from "react";
 import { SHORT_DELAY_IN_MS } from "../../constants/delays";
 import { ElementStates } from "../../types/element-states";
 import { stringCharsProps } from "../../types/types";
-import { waitForMe } from "../../utils/utils";
+import { delay, getNumber } from "../../utils/utils";
 import { InputContainer } from "../input-container/input-container";
 import { Button } from "../ui/button/button";
 import { Circle } from "../ui/circle/circle";
 import { Input } from "../ui/input/input";
 import { SolutionLayout } from "../ui/solution-layout/solution-layout";
 import styles from "./queue-page.module.css";
+import { clear, dequeue, enqueue } from "./utils";
 
 export const QueuePage: React.FC = () => {
-  const maxNum = 6;
+  const minNum = 6;
+  const maxNum = 5;
 
-  const basicState: stringCharsProps[] = [];
-  for (let i = 0; i <= maxNum; i++) {
-    basicState.push({
-      char: "",
-      state: ElementStates.Default,
-    });
-  }
+  const basicState: stringCharsProps[] = Array.from({ length: minNum }, () => ({
+    char: ``,
+    state: ElementStates.Default,
+  }));
 
   const [inputValue, setInputValue] = useState<string>("");
   const [arrayOfLetters, setArrayOfLetters] =
@@ -28,45 +27,6 @@ export const QueuePage: React.FC = () => {
   const [deleting, setDeleting] = useState(false);
   const [headIdx, setHeadIdx] = useState(0);
   const [tailIdx, setTailIdx] = useState(0);
-  const sortAndWait = async (arr: stringCharsProps[]) => {
-    setArrayOfLetters([...arr]);
-    await waitForMe(SHORT_DELAY_IN_MS);
-  };
-
-  const enqueue = async () => {
-    setAdding(true);
-    const copyArr = [...arrayOfLetters];
-    copyArr[tailIdx].char = inputValue;
-    copyArr[tailIdx].state = ElementStates.Changing;
-    await sortAndWait(copyArr);
-    copyArr[tailIdx].state = ElementStates.Default;
-    setTailIdx((prev) => prev + 1);
-    setInputValue("");
-    setAdding(false);
-  };
-
-  const dequeue = async () => {
-    setDeleting(true);
-    const copyArr = [...arrayOfLetters];
-    copyArr[headIdx].state = ElementStates.Changing;
-    await sortAndWait(copyArr);
-    if (tailIdx - 1 === headIdx) {
-      clear();
-    } else {
-      copyArr[headIdx].char = "";
-      copyArr[headIdx].state = ElementStates.Default;
-      setHeadIdx((prev) => prev + 1);
-      setInputValue("");
-    }
-    setDeleting(false);
-  };
-
-  const clear = () => {
-    setArrayOfLetters([...basicState]);
-    setTailIdx(0);
-    setHeadIdx(0);
-    setInputValue("");
-  };
 
   return (
     <SolutionLayout title="Очередь">
@@ -82,25 +42,55 @@ export const QueuePage: React.FC = () => {
           maxLength={4}
         />
         <Button
-          disabled={!inputValue || deleting || tailIdx > 6}
+          disabled={!inputValue || deleting || tailIdx > maxNum}
           isLoader={adding}
           text="Добавить"
           type="button"
-          onClick={() => enqueue()}
+          onClick={() =>
+            enqueue(
+              setAdding,
+              setArrayOfLetters,
+              setTailIdx,
+              setInputValue,
+              arrayOfLetters,
+              inputValue,
+              tailIdx
+            )
+          }
         />
         <Button
           isLoader={deleting}
           disabled={adding || tailIdx === 0}
           text="Удалить"
           type="button"
-          onClick={() => dequeue()}
+          onClick={() =>
+            dequeue(
+              setDeleting,
+              setArrayOfLetters,
+              setHeadIdx,
+              setTailIdx,
+              setInputValue,
+              basicState,
+              arrayOfLetters,
+              tailIdx,
+              headIdx
+            )
+          }
         />
         <Button
           extraClass={styles.resetButton}
           disabled={adding || deleting || tailIdx === 0}
           text="Очистить"
           type="button"
-          onClick={() => clear()}
+          onClick={() =>
+            clear(
+              setArrayOfLetters,
+              basicState,
+              setHeadIdx,
+              setTailIdx,
+              setInputValue
+            )
+          }
         />
       </InputContainer>
       <ul className={styles.circleList}>

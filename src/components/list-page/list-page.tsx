@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { SHORT_DELAY_IN_MS } from "../../constants/delays";
 import { ElementStates } from "../../types/element-states";
 import { stringCharsProps } from "../../types/types";
-import { getNumber, waitForMe } from "../../utils/utils";
+import { getNumber, delay } from "../../utils/utils";
 import { InputContainer } from "../input-container/input-container";
 import { Button } from "../ui/button/button";
 import { Circle } from "../ui/circle/circle";
@@ -10,18 +10,23 @@ import { ArrowIcon } from "../ui/icons/arrow-icon";
 import { Input } from "../ui/input/input";
 import { SolutionLayout } from "../ui/solution-layout/solution-layout";
 import styles from "./list-page.module.css";
+import {
+  addByIdx,
+  addToHead,
+  addToTail,
+  deleteByIdx,
+  deleteFromHead,
+  deleteFromTail,
+} from "./utils";
 
 export const ListPage: React.FC = () => {
   const maxNum = 12;
   const minNum = 4;
 
-  const basicState: stringCharsProps[] = [];
-  for (let i = 0; i < minNum; i++) {
-    basicState.push({
-      char: `${getNumber()}`,
-      state: ElementStates.Default,
-    });
-  }
+  const basicState: stringCharsProps[] = Array.from({ length: minNum }, () => ({
+    char: `${getNumber()}`,
+    state: ElementStates.Default,
+  }));
 
   const [value, setValue] = useState<string>("");
   const [idx, setIdx] = useState<number>();
@@ -35,197 +40,7 @@ export const ListPage: React.FC = () => {
   const [deletingByIdx, setDeletingByIdx] = useState(false);
   const [inProgress, setInProgress] = useState(false);
 
-  const sortAndWait = async (arr: stringCharsProps[]) => {
-    setArrayCircles([...arr]);
-    await waitForMe(SHORT_DELAY_IN_MS);
-  };
 
-  const addToHead = async () => {
-    const copyArr = [...arrayOfCircles];
-    setInProgress(true);
-    setAddingToHead(true);
-    // Подсвечиваем голову
-    copyArr[0] = {
-      ...copyArr[0],
-      adding: true,
-      extraCircle: {
-        char: value,
-      },
-    };
-    await sortAndWait([...copyArr]);
-    // Убираем подсветку и добавляем новую голову
-    copyArr[0] = {
-      ...copyArr[0],
-      adding: false,
-      extraCircle: undefined,
-    };
-    copyArr.unshift({
-      char: value,
-      state: ElementStates.Modified,
-    });
-    await sortAndWait([...copyArr]);
-    // Меняем стейт головы
-    copyArr[0].state = ElementStates.Default;
-    setInProgress(false);
-    setAddingToHead(false);
-    setValue("");
-  };
-
-  const deleteFromHead = async () => {
-    const copyArr = [...arrayOfCircles];
-    const deletingValue = copyArr[0].char;
-    setInProgress(true);
-    setDeletingFromHead(true);
-    // Смещаем голову в нижний кружок
-    copyArr[0] = {
-      ...copyArr[0],
-      char: "",
-      deleting: true,
-      extraCircle: {
-        char: deletingValue ? deletingValue : "",
-      },
-    };
-    await sortAndWait([...copyArr]);
-    // Удаляем элемент и подсвечиваем новую голову
-    copyArr.shift();
-    copyArr[0].state = ElementStates.Modified;
-    await sortAndWait([...copyArr]);
-    // Убираем подсветку с новой головы
-    copyArr[0].state = ElementStates.Default;
-    setInProgress(false);
-    setDeletingFromHead(false);
-  };
-
-  const deleteFromTail = async () => {
-    const copyArr = [...arrayOfCircles];
-    const { length } = copyArr;
-    const deletingValue = copyArr[length - 1].char;
-
-    setInProgress(true);
-    setDeletingFromTail(true);
-    // Смещаем хвост в нижний кружок
-    copyArr[length - 1] = {
-      ...copyArr[length - 1],
-      char: "",
-      deleting: true,
-      extraCircle: {
-        char: deletingValue ? deletingValue : "",
-      },
-    };
-    await sortAndWait([...copyArr]);
-    // Удаляем элемент и подсвечиваем новый хвост
-    copyArr.pop();
-    copyArr[length - 2].state = ElementStates.Modified;
-    await sortAndWait([...copyArr]);
-    // Убираем подсветку с нового хвоста
-    copyArr[length - 2].state = ElementStates.Default;
-    setInProgress(false);
-    setDeletingFromTail(false);
-  };
-
-  const addToTail = async () => {
-    const copyArr = [...arrayOfCircles];
-    const { length } = copyArr;
-    setInProgress(true);
-    setAddingToTail(true);
-    // Подсвечиваем хвост
-    copyArr[length - 1] = {
-      ...copyArr[length - 1],
-      adding: true,
-      extraCircle: {
-        char: value,
-      },
-    };
-    await sortAndWait([...copyArr]);
-    // Убираем подсветку и добавляем новый хвост
-    copyArr[length - 1] = {
-      ...copyArr[length - 1],
-      adding: false,
-      extraCircle: undefined,
-    };
-    copyArr.push({
-      char: value,
-      state: ElementStates.Modified,
-    });
-    await sortAndWait([...copyArr]);
-    // Меняем стейт головы
-    copyArr[length].state = ElementStates.Default;
-    setInProgress(false);
-    setAddingToTail(false);
-    setValue("");
-  };
-
-  const addByIdx = async () => {
-    const copyArr = [...arrayOfCircles];
-    setInProgress(true);
-    setAddingByIdx(true);
-    // Запускаем перебор по элементам массива
-    for (let i = 0; i <= idx!; i++) {
-      copyArr[i] = {
-        ...copyArr[i],
-        adding: true,
-        extraCircle: {
-          char: value,
-        },
-      };
-      if (i > 0)
-        copyArr[i - 1] = {
-          ...copyArr[i - 1],
-          adding: false,
-          extraCircle: undefined,
-          state: ElementStates.Changing,
-        };
-      await sortAndWait([...copyArr]);
-    }
-    // Добавляем элемент по индексу
-    copyArr[idx!] = {
-      ...copyArr[idx!],
-      adding: false,
-      extraCircle: undefined,
-    };
-    copyArr.splice(idx!, 0, {
-      char: value,
-      state: ElementStates.Modified,
-    });
-    await sortAndWait([...copyArr]);
-    // Убираем подсветку
-    copyArr.forEach((el) => (el.state = ElementStates.Default));
-    setInProgress(false);
-    setAddingByIdx(false);
-    setValue("");
-    setIdx(undefined);
-  };
-
-  const deleteByIdx = async () => {
-    const copyArr = [...arrayOfCircles];
-    const deletingValue = copyArr[idx!].char;
-    setInProgress(true);
-    setDeletingByIdx(true);
-    // Запускаем перебор по элементам массива
-    for (let i = 0; i <= idx!; i++) {
-      copyArr[i].state = ElementStates.Changing;
-      if (i === idx) copyArr[i].noArrow = true;
-      await sortAndWait([...copyArr]);
-    }
-    // Показываем удаляемый элемент
-    copyArr[idx!] = {
-      ...copyArr[idx!],
-      char: "",
-      deleting: true,
-      extraCircle: {
-        char: deletingValue ? deletingValue : "",
-      },
-    };
-    await sortAndWait([...copyArr]);
-    // Удаляем элемент
-    copyArr.splice(idx!, 1);
-    // Убираем подсветку
-    copyArr.forEach((el) => (el.state = ElementStates.Default));
-    setInProgress(false);
-    setDeletingByIdx(false);
-    setIdx(undefined);
-    await sortAndWait([...copyArr]);
-  };
 
   return (
     <SolutionLayout title="Связный список">
@@ -244,19 +59,37 @@ export const ListPage: React.FC = () => {
           />
           <Button
             extraClass={styles.button}
-            disabled={inProgress || !value || arrayOfCircles.length > 13}
+            disabled={inProgress || !value || arrayOfCircles.length > maxNum}
             isLoader={addingToHead}
             text="Добавить в head"
             type="button"
-            onClick={() => addToHead()}
+            onClick={() =>
+              addToHead(
+                setInProgress,
+                setAddingToHead,
+                setValue,
+                value,
+                arrayOfCircles,
+                setArrayCircles
+              )
+            }
           />
           <Button
             extraClass={styles.button}
             isLoader={addingToTail}
-            disabled={inProgress || !value || arrayOfCircles.length > 13}
+            disabled={inProgress || !value || arrayOfCircles.length > maxNum}
             text="Добавить в tail"
             type="button"
-            onClick={() => addToTail()}
+            onClick={() =>
+              addToTail(
+                setInProgress,
+                setAddingToTail,
+                setValue,
+                value,
+                arrayOfCircles,
+                setArrayCircles
+              )
+            }
           />
           <Button
             extraClass={styles.button}
@@ -264,7 +97,14 @@ export const ListPage: React.FC = () => {
             isLoader={deletingFromHead}
             text="Удалить из head"
             type="button"
-            onClick={() => deleteFromHead()}
+            onClick={() =>
+              deleteFromHead(
+                setInProgress,
+                setDeletingFromHead,
+                arrayOfCircles,
+                setArrayCircles
+              )
+            }
           />
           <Button
             extraClass={styles.button}
@@ -272,7 +112,14 @@ export const ListPage: React.FC = () => {
             isLoader={deletingFromTail}
             text="Удалить из tail"
             type="button"
-            onClick={() => deleteFromTail()}
+            onClick={() =>
+              deleteFromTail(
+                setInProgress,
+                setDeletingFromTail,
+                arrayOfCircles,
+                setArrayCircles
+              )
+            }
           />
         </InputContainer>
         <InputContainer>
@@ -289,12 +136,27 @@ export const ListPage: React.FC = () => {
             style={{ minWidth: "362px" }}
             extraClass={styles.button}
             disabled={
-              !value || !idx || inProgress || idx > arrayOfCircles.length - 2
+              !value ||
+              !idx ||
+              inProgress ||
+              idx > arrayOfCircles.length - 2 ||
+              arrayOfCircles.length > maxNum
             }
             isLoader={addingByIdx}
             text="Добавить по индексу"
             type="button"
-            onClick={() => addByIdx()}
+            onClick={() =>
+              addByIdx(
+                setInProgress,
+                setAddingByIdx,
+                setValue,
+                setIdx,
+                idx,
+                value,
+                arrayOfCircles,
+                setArrayCircles
+              )
+            }
           />
           <Button
             style={{ minWidth: "362px" }}
@@ -303,7 +165,16 @@ export const ListPage: React.FC = () => {
             disabled={!idx || inProgress || idx > arrayOfCircles.length - 2}
             text="Удалить по индексу"
             type="button"
-            onClick={() => deleteByIdx()}
+            onClick={() =>
+              deleteByIdx(
+                setInProgress,
+                setDeletingByIdx,
+                setIdx,
+                idx,
+                arrayOfCircles,
+                setArrayCircles
+              )
+            }
           />
         </InputContainer>
       </div>
