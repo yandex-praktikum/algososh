@@ -9,13 +9,15 @@ import { Circle } from "../ui/circle/circle";
 import { Input } from "../ui/input/input";
 import { SolutionLayout } from "../ui/solution-layout/solution-layout";
 import styles from "./stack-page.module.css";
-import { pop, push } from "./utils";
+import { pop, push, Stack } from "./utils";
 
 export const StackPage: React.FC = () => {
   const [inputValue, setInputValue] = useState<string>("");
   const [arrayOfLetters, setArrayOfLetters] = useState<stringCharsProps[]>([]);
   const [pushing, setPushing] = useState(false);
   const [popping, setPopping] = useState(false);
+
+  const StackMethods = new Stack
 
   return (
     <SolutionLayout title="Стек">
