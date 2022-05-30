@@ -9,7 +9,7 @@ import { Circle } from "../ui/circle/circle";
 import { Input } from "../ui/input/input";
 import { SolutionLayout } from "../ui/solution-layout/solution-layout";
 import styles from "./stack-page.module.css";
-import { pop, push, Stack } from "./utils";
+import { Stack } from "./utils";
 
 export const StackPage: React.FC = () => {
   const [inputValue, setInputValue] = useState<string>("");
@@ -17,7 +17,13 @@ export const StackPage: React.FC = () => {
   const [pushing, setPushing] = useState(false);
   const [popping, setPopping] = useState(false);
 
-  const StackMethods = new Stack
+  const StackMethods = new Stack(
+    setInputValue,
+    setPushing,
+    setArrayOfLetters,
+    arrayOfLetters,
+    inputValue
+  );
 
   return (
     <SolutionLayout title="Стек">
@@ -38,7 +44,7 @@ export const StackPage: React.FC = () => {
           text="Добавить"
           type="button"
           onClick={() =>
-            push(
+            StackMethods.push(
               setInputValue,
               setPushing,
               setArrayOfLetters,
@@ -53,11 +59,7 @@ export const StackPage: React.FC = () => {
           text="Удалить"
           type="button"
           onClick={() =>
-            pop(
-              setPopping,
-              setArrayOfLetters,
-              arrayOfLetters
-            )
+            StackMethods.pop(setPopping, setArrayOfLetters, arrayOfLetters)
           }
         />
         <Button
@@ -65,7 +67,7 @@ export const StackPage: React.FC = () => {
           disabled={!arrayOfLetters.length || pushing || popping}
           text="Очистить"
           type="button"
-          onClick={() => setArrayOfLetters([])}
+          onClick={() => StackMethods.setArrayOfLetters([])}
         />
       </InputContainer>
       <ul className={styles.circleList}>

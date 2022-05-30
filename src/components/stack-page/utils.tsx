@@ -3,22 +3,26 @@ import { ElementStates } from "../../types/element-states";
 import { stringCharsProps } from "../../types/types";
 import { delay } from "../../utils/utils";
 
-export interface IStack<stringCharsProps> {
-  push: (
+export class Stack {
+  setInputValue: React.Dispatch<React.SetStateAction<string>>;
+  setPushing: React.Dispatch<React.SetStateAction<boolean>>;
+  setArrayOfLetters: React.Dispatch<React.SetStateAction<stringCharsProps[]>>;
+  arrayOfLetters: stringCharsProps[];
+  inputValue: string;
+
+  constructor(
     setInputValue: React.Dispatch<React.SetStateAction<string>>,
     setPushing: React.Dispatch<React.SetStateAction<boolean>>,
     setArrayOfLetters: React.Dispatch<React.SetStateAction<stringCharsProps[]>>,
     arrayOfLetters: stringCharsProps[],
     inputValue: string
-  ) => void;
-  pop: (
-    setPopping: React.Dispatch<React.SetStateAction<boolean>>,
-    setArrayOfLetters: React.Dispatch<React.SetStateAction<stringCharsProps[]>>,
-    arrayOfLetters: stringCharsProps[]
-  ) => void;
-}
-
-export class Stack<T> implements IStack<stringCharsProps> {
+  ) {
+    this.setInputValue = setInputValue;
+    this.setPushing = setPushing;
+    this.setArrayOfLetters = setArrayOfLetters;
+    this.arrayOfLetters = arrayOfLetters;
+    this.inputValue = inputValue;
+  }
 
   push = async (
     setInputValue: React.Dispatch<React.SetStateAction<string>>,
@@ -35,12 +39,12 @@ export class Stack<T> implements IStack<stringCharsProps> {
     });
     arrayOfLetters.push({
       char: inputValue,
-      state: ElementStates.Changing,
+      state: ElementStates.Default,
       head: "top",
     });
     setArrayOfLetters([...arrayOfLetters]);
     await delay(SHORT_DELAY_IN_MS);
-    arrayOfLetters[arrayOfLetters.length - 1].state = ElementStates.Default;
+    arrayOfLetters[arrayOfLetters.length - 1].state = ElementStates.Changing;
     setArrayOfLetters([...arrayOfLetters]);
     setPushing(false);
   };
@@ -63,6 +67,7 @@ export class Stack<T> implements IStack<stringCharsProps> {
   };
 }
 
+/*
 export const push = async (
   setInputValue: React.Dispatch<React.SetStateAction<string>>,
   setPushing: React.Dispatch<React.SetStateAction<boolean>>,
@@ -103,4 +108,4 @@ export const pop = async (
     setArrayOfLetters([...arrayOfLetters]);
   } else setArrayOfLetters([]);
   setPopping(false);
-};
+};*/
