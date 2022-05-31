@@ -1,7 +1,7 @@
 import { stringCharsProps, columnObject } from "./../types/types";
 
 export const swapElements = (
-  arr: columnObject[] | stringCharsProps[],
+  arr: columnObject[] | stringCharsProps[] | string[],
   firstIndex: number,
   secondIndex: number
 ): void => {

@@ -8,13 +8,31 @@ import { Circle } from "../ui/circle/circle";
 import { Input } from "../ui/input/input";
 import { SolutionLayout } from "../ui/solution-layout/solution-layout";
 import styles from "./fibonacci-page.module.css";
-import { renderFib } from "./utils";
+
 
 export const FibonacciPage: React.FC = () => {
   const maxLength = 19;
   const [inputValue, setInputValue] = useState<number>();
   const [arrayOfNumbers, setArrayOfNumbers] = useState<number[]>([]);
   const [inProgress, setInProgress] = useState(false);
+
+   const renderFib = async () => {
+    setInputValue(0);
+    // Блочим кнопку
+    setInProgress(true);
+    // Копируем последовательность в массив
+    const fiboCopy = [...fibIterative(inputValue! + 1)];
+    // Создаём массив куда постепенно будем помещать числа
+    const inCycleArray: number[] = [];
+    // Постепенно помещаем числа и копируем их в стейт
+    for (let el of fiboCopy) {
+      await delay(SHORT_DELAY_IN_MS);
+      inCycleArray.push(el);
+      setArrayOfNumbers([...inCycleArray]);
+    }
+    // Деблочим кнопку
+    setInProgress(false);
+  };
 
   return (
     <SolutionLayout title="Последовательность Фибоначчи">
@@ -38,12 +56,7 @@ export const FibonacciPage: React.FC = () => {
           type="submit"
           onClick={() =>
             inputValue &&
-            renderFib(
-              inputValue,
-              setInputValue,
-              setInProgress,
-              setArrayOfNumbers
-            )
+            renderFib()
           }
         />
       </InputContainer>

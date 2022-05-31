@@ -10,12 +10,49 @@ import { Circle } from "../ui/circle/circle";
 import { Input } from "../ui/input/input";
 import { SolutionLayout } from "../ui/solution-layout/solution-layout";
 import styles from "./string.module.css";
-import { swapWithAnimation } from "./utils";
+import { swapString } from "./utils";
 
 export const StringComponent: React.FC = () => {
   const [inputValue, setInputValue] = useState("");
   const [arrayOfLetters, setArrayOfLetters] = useState<stringCharsProps[]>([]);
   const [inProgress, setInProgress] = useState(false);
+
+  const swapStringBySteps = async () => {
+    setInputValue("");
+    // Блочим кнопку
+    setInProgress(true);
+    // Рендерим строку от пользователя
+    const arrayOfChars: stringCharsProps[] = [];
+    inputValue.split("").forEach((el) => {
+      arrayOfChars.push({ char: el, state: ElementStates.Default });
+    });
+    setArrayOfLetters([...arrayOfChars]);
+    await delay();
+    // Свапаем строку и сохраняем готовый результат
+    const numberOfSteps: number = swapString(inputValue).numberOfSteps;
+    // Начинаем "шагать", имея готовый результат
+    let step = 0;
+    while (step !== numberOfSteps) {
+      // Меняем стейт кружков на "Changing"
+      arrayOfChars[step].state = ElementStates.Changing;
+      arrayOfChars[inputValue.length - (step + 1)].state = ElementStates.Changing;
+      setArrayOfLetters([...arrayOfChars]);
+      await delay(SHORT_DELAY_IN_MS);
+      // Получаем нужный массив для нужного шага и
+      swapString(inputValue, step + 1).resultArray.forEach((el, idx) => {
+        arrayOfChars[idx].char = el
+      })
+      // меняем стейты кружков текущего шага - потом рендерим
+      arrayOfChars[step].state = ElementStates.Modified;
+      arrayOfChars[inputValue.length - (step + 1)].state = ElementStates.Modified;
+      setArrayOfLetters([...arrayOfChars]);
+      await delay(SHORT_DELAY_IN_MS);
+      // инкрементируем шаг
+      step++
+    }
+    // Aнблочим кнопку
+    setInProgress(false);
+  };
 
   return (
     <SolutionLayout title="Строка">
@@ -33,15 +70,7 @@ export const StringComponent: React.FC = () => {
           isLoader={inProgress}
           text="Развернуть"
           type="submit"
-          onClick={() =>
-            swapWithAnimation(
-              inputValue,
-              setInputValue,
-              setArrayOfLetters,
-              setInProgress,
-              arrayOfLetters
-            )
-          }
+          onClick={() => swapStringBySteps()}
         />
       </InputContainer>
       <ul className={styles.circleList}>
