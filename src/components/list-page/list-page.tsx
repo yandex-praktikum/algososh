@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { SHORT_DELAY_IN_MS } from "../../constants/delays";
 import { ElementStates } from "../../types/element-states";
 import { stringCharsProps } from "../../types/types";
@@ -10,28 +10,14 @@ import { ArrowIcon } from "../ui/icons/arrow-icon";
 import { Input } from "../ui/input/input";
 import { SolutionLayout } from "../ui/solution-layout/solution-layout";
 import styles from "./list-page.module.css";
-import {
-  addByIdx,
-  addToHead,
-  addToTail,
-  deleteByIdx,
-  deleteFromHead,
-  deleteFromTail,
-} from "./utils";
+import { LinkedList } from "./utils";
 
 export const ListPage: React.FC = () => {
   const maxNum = 12;
-  const minNum = 4;
-
-  const basicState: stringCharsProps[] = Array.from({ length: minNum }, () => ({
-    char: `${getNumber()}`,
-    state: ElementStates.Default,
-  }));
 
   const [value, setValue] = useState<string>("");
   const [idx, setIdx] = useState<number>();
-  const [arrayOfCircles, setArrayCircles] =
-    useState<stringCharsProps[]>(basicState);
+  const [arrayOfCircles, setArrayCircles] = useState<stringCharsProps[]>([]);
   const [addingToHead, setAddingToHead] = useState(false);
   const [addingToTail, setAddingToTail] = useState(false);
   const [deletingFromHead, setDeletingFromHead] = useState(false);
@@ -40,7 +26,25 @@ export const ListPage: React.FC = () => {
   const [deletingByIdx, setDeletingByIdx] = useState(false);
   const [inProgress, setInProgress] = useState(false);
 
+  const LinkedListMethods = new LinkedList(
+    setInProgress,
+    setAddingToHead,
+    setDeletingFromHead,
+    setAddingToTail,
+    setDeletingFromTail,
+    setAddingByIdx,
+    setDeletingByIdx,
+    setValue,
+    setIdx,
+    setArrayCircles,
+    idx,
+    value,
+    arrayOfCircles
+  );
 
+  useEffect(() => {
+    LinkedListMethods.initialize();
+  }, []);
 
   return (
     <SolutionLayout title="Связный список">
@@ -63,16 +67,7 @@ export const ListPage: React.FC = () => {
             isLoader={addingToHead}
             text="Добавить в head"
             type="button"
-            onClick={() =>
-              addToHead(
-                setInProgress,
-                setAddingToHead,
-                setValue,
-                value,
-                arrayOfCircles,
-                setArrayCircles
-              )
-            }
+            onClick={() => LinkedListMethods.addToHead()}
           />
           <Button
             extraClass={styles.button}
@@ -80,16 +75,7 @@ export const ListPage: React.FC = () => {
             disabled={inProgress || !value || arrayOfCircles.length > maxNum}
             text="Добавить в tail"
             type="button"
-            onClick={() =>
-              addToTail(
-                setInProgress,
-                setAddingToTail,
-                setValue,
-                value,
-                arrayOfCircles,
-                setArrayCircles
-              )
-            }
+            onClick={() => LinkedListMethods.addToTail()}
           />
           <Button
             extraClass={styles.button}
@@ -97,14 +83,7 @@ export const ListPage: React.FC = () => {
             isLoader={deletingFromHead}
             text="Удалить из head"
             type="button"
-            onClick={() =>
-              deleteFromHead(
-                setInProgress,
-                setDeletingFromHead,
-                arrayOfCircles,
-                setArrayCircles
-              )
-            }
+            onClick={() => LinkedListMethods.deleteFromHead()}
           />
           <Button
             extraClass={styles.button}
@@ -112,14 +91,7 @@ export const ListPage: React.FC = () => {
             isLoader={deletingFromTail}
             text="Удалить из tail"
             type="button"
-            onClick={() =>
-              deleteFromTail(
-                setInProgress,
-                setDeletingFromTail,
-                arrayOfCircles,
-                setArrayCircles
-              )
-            }
+            onClick={() => LinkedListMethods.deleteFromTail()}
           />
         </InputContainer>
         <InputContainer>
@@ -133,8 +105,7 @@ export const ListPage: React.FC = () => {
             }
           />
           <Button
-            style={{ minWidth: "362px" }}
-            extraClass={styles.button}
+            extraClass={styles.bigButton}
             disabled={
               !value ||
               !idx ||
@@ -145,36 +116,15 @@ export const ListPage: React.FC = () => {
             isLoader={addingByIdx}
             text="Добавить по индексу"
             type="button"
-            onClick={() =>
-              addByIdx(
-                setInProgress,
-                setAddingByIdx,
-                setValue,
-                setIdx,
-                idx,
-                value,
-                arrayOfCircles,
-                setArrayCircles
-              )
-            }
+            onClick={() => LinkedListMethods.addByIdx()}
           />
           <Button
-            style={{ minWidth: "362px" }}
-            extraClass={styles.button}
+            extraClass={styles.bigButton}
             isLoader={deletingByIdx}
             disabled={!idx || inProgress || idx > arrayOfCircles.length - 2}
             text="Удалить по индексу"
             type="button"
-            onClick={() =>
-              deleteByIdx(
-                setInProgress,
-                setDeletingByIdx,
-                setIdx,
-                idx,
-                arrayOfCircles,
-                setArrayCircles
-              )
-            }
+            onClick={() => LinkedListMethods.deleteByIdx()}
           />
         </InputContainer>
       </div>

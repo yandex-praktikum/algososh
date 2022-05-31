@@ -19,6 +19,7 @@ export const StackPage: React.FC = () => {
 
   const StackMethods = new Stack(
     setInputValue,
+    setPopping,
     setPushing,
     setArrayOfLetters,
     arrayOfLetters,
@@ -44,13 +45,7 @@ export const StackPage: React.FC = () => {
           text="Добавить"
           type="button"
           onClick={() =>
-            StackMethods.push(
-              setInputValue,
-              setPushing,
-              setArrayOfLetters,
-              arrayOfLetters,
-              inputValue
-            )
+            StackMethods.push()
           }
         />
         <Button
@@ -59,7 +54,7 @@ export const StackPage: React.FC = () => {
           text="Удалить"
           type="button"
           onClick={() =>
-            StackMethods.pop(setPopping, setArrayOfLetters, arrayOfLetters)
+            StackMethods.pop()
           }
         />
         <Button

@@ -1,32 +1,41 @@
 import React, { useEffect, useState } from "react";
-import { SHORT_DELAY_IN_MS } from "../../constants/delays";
 import { ElementStates } from "../../types/element-states";
 import { stringCharsProps } from "../../types/types";
-import { delay, getNumber } from "../../utils/utils";
 import { InputContainer } from "../input-container/input-container";
 import { Button } from "../ui/button/button";
 import { Circle } from "../ui/circle/circle";
 import { Input } from "../ui/input/input";
 import { SolutionLayout } from "../ui/solution-layout/solution-layout";
 import styles from "./queue-page.module.css";
-import { clear, dequeue, enqueue } from "./utils";
+import { Queue } from "./utils";
 
 export const QueuePage: React.FC = () => {
-  const minNum = 6;
   const maxNum = 5;
-
-  const basicState: stringCharsProps[] = Array.from({ length: minNum }, () => ({
-    char: ``,
-    state: ElementStates.Default,
-  }));
 
   const [inputValue, setInputValue] = useState<string>("");
   const [arrayOfLetters, setArrayOfLetters] =
-    useState<stringCharsProps[]>(basicState);
+    useState<stringCharsProps[]>([]);
   const [adding, setAdding] = useState(false);
   const [deleting, setDeleting] = useState(false);
   const [headIdx, setHeadIdx] = useState(0);
   const [tailIdx, setTailIdx] = useState(0);
+
+  const QueueMethods = new Queue(
+    setAdding,
+    setDeleting,
+    setArrayOfLetters,
+    setTailIdx,
+    setHeadIdx,
+    setInputValue,
+    arrayOfLetters,
+    inputValue,
+    tailIdx,
+    headIdx
+  );
+
+  useEffect(() => {
+    QueueMethods.initialize()
+  }, [])
 
   return (
     <SolutionLayout title="Очередь">
@@ -46,51 +55,21 @@ export const QueuePage: React.FC = () => {
           isLoader={adding}
           text="Добавить"
           type="button"
-          onClick={() =>
-            enqueue(
-              setAdding,
-              setArrayOfLetters,
-              setTailIdx,
-              setInputValue,
-              arrayOfLetters,
-              inputValue,
-              tailIdx
-            )
-          }
+          onClick={() => QueueMethods.enqueue()}
         />
         <Button
           isLoader={deleting}
           disabled={adding || tailIdx === 0}
           text="Удалить"
           type="button"
-          onClick={() =>
-            dequeue(
-              setDeleting,
-              setArrayOfLetters,
-              setHeadIdx,
-              setTailIdx,
-              setInputValue,
-              basicState,
-              arrayOfLetters,
-              tailIdx,
-              headIdx
-            )
-          }
+          onClick={() => QueueMethods.dequeue()}
         />
         <Button
           extraClass={styles.resetButton}
           disabled={adding || deleting || tailIdx === 0}
           text="Очистить"
           type="button"
-          onClick={() =>
-            clear(
-              setArrayOfLetters,
-              basicState,
-              setHeadIdx,
-              setTailIdx,
-              setInputValue
-            )
-          }
+          onClick={() => QueueMethods.clear()}
         />
       </InputContainer>
       <ul className={styles.circleList}>
