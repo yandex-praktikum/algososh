@@ -10,7 +10,8 @@ import { columnObject, radioButtonState } from "../../types/types";
 import { ElementStates } from "../../types/element-states";
 import { getNumber, delay } from "../../utils/utils";
 import { SHORT_DELAY_IN_MS } from "../../constants/delays";
-import { bubbleSort, selectionSort } from "./utils";
+import { selectionSortAlgo } from "./utils";
+import { swapElements } from "../../algorythms-toolkit/toolkit";
 
 export const SortingPage: React.FC = () => {
   const [arrayToSort, setArrayToSort] = useState<columnObject[]>([]);
@@ -30,6 +31,92 @@ export const SortingPage: React.FC = () => {
       state: ElementStates.Default,
     }));
     setArrayToSort([...arr]);
+  };
+
+  const sortAndWait = async (
+    arr: columnObject[],
+    setArrayToSort: React.Dispatch<React.SetStateAction<columnObject[]>>
+  ) => {
+    setArrayToSort([...arr]);
+    await delay(SHORT_DELAY_IN_MS);
+  };
+
+  const bubbleSort = async (mode: "ascending" | "descending") => {
+    // Лочим кнопки
+    setInProgress(true);
+    mode === "ascending"
+      ? setAscendingRunning(true)
+      : setDescendingRunning(true);
+    //Копируем массив из стейта и делаем все элементы дефолтными
+    const arr = [...arrayToSort];
+    arr.forEach((el) => (el.state = ElementStates.Default));
+    await sortAndWait(arr, setArrayToSort);
+    // Начинаем цикл
+    const { length } = arr;
+    // Флаг свапа
+    let swapped: boolean;
+    do {
+      swapped = false;
+      for (let i = 0; i < length - 1; i++) {
+        // Подсвечиваем выбранные элементы
+        arr[i].state = ElementStates.Changing;
+        arr[i + 1].state = ElementStates.Changing;
+        await sortAndWait(arr, setArrayToSort);
+        // Если один больше (меньше) другого - свапаем их
+        if (
+          (mode === "ascending" ? arr[i].num : arr[i + 1].num) >
+          (mode === "ascending" ? arr[i + 1].num : arr[i].num)
+        ) {
+          arr[i].state = ElementStates.Chosen;
+          arr[i + 1].state = ElementStates.Chosen;
+          await sortAndWait(arr, setArrayToSort);
+          swapElements(arr, i, i + 1);
+          arr[i].state = ElementStates.Chosen;
+          arr[i + 1].state = ElementStates.Chosen;
+          await sortAndWait(arr, setArrayToSort);
+          swapped = true;
+        }
+        // После визуальной сортировки меняем цвет текущего элемента, но не
+        // рисуем его (не сортируем массив) он будет отрисован на следующем шаге
+        arr[i].state = ElementStates.Default;
+        arr[i + 1].state = ElementStates.Default;
+      }
+    } while (swapped);
+    // Массив отсортирован
+    arr.forEach((el) => (el.state = ElementStates.Modified));
+    setArrayToSort([...arr]);
+    // Анлочим кнопки
+    setInProgress(false);
+    mode === "ascending"
+      ? setAscendingRunning(false)
+      : setDescendingRunning(false);
+  };
+
+  const selectionSort = async (mode: "ascending" | "descending") => {
+    // Лочим кнопки
+    setInProgress(true);
+    mode === "ascending"
+      ? setAscendingRunning(true)
+      : setDescendingRunning(true);
+
+    //Копируем массив из стейта и делаем все элементы дефолтными
+    const arr = [...arrayToSort];
+    arr.forEach((el) => (el.state = ElementStates.Default));
+    setArrayToSort([...arr]);
+    // Начинаем считать шаги
+    let stepCounter = 0;
+    while (stepCounter !== selectionSortAlgo(mode, arr).numberOfSteps) {
+      await sortAndWait(
+        selectionSortAlgo(mode, arr, stepCounter).resultArray,
+        setArrayToSort
+      );
+      stepCounter++
+    }
+    // Анлочим кнопки
+    setInProgress(false);
+    mode === "ascending"
+      ? setAscendingRunning(false)
+      : setDescendingRunning(false);
   };
 
   return (
@@ -61,22 +148,8 @@ export const SortingPage: React.FC = () => {
               type="submit"
               onClick={() =>
                 checked === "selection"
-                  ? selectionSort(
-                      "ascending",
-                      setInProgress,
-                      setAscendingRunning,
-                      setDescendingRunning,
-                      setArrayToSort,
-                      arrayToSort
-                    )
-                  : bubbleSort(
-                      "ascending",
-                      setInProgress,
-                      setAscendingRunning,
-                      setDescendingRunning,
-                      setArrayToSort,
-                      arrayToSort
-                    )
+                  ? selectionSort("ascending")
+                  : bubbleSort("ascending")
               }
             />
             <Button
@@ -87,22 +160,8 @@ export const SortingPage: React.FC = () => {
               type="submit"
               onClick={() =>
                 checked === "selection"
-                  ? selectionSort(
-                      "descending",
-                      setInProgress,
-                      setAscendingRunning,
-                      setDescendingRunning,
-                      setArrayToSort,
-                      arrayToSort
-                    )
-                  : bubbleSort(
-                      "descending",
-                      setInProgress,
-                      setAscendingRunning,
-                      setDescendingRunning,
-                      setArrayToSort,
-                      arrayToSort
-                    )
+                  ? selectionSort("descending")
+                  : bubbleSort("descending")
               }
             />
           </div>
@@ -111,7 +170,7 @@ export const SortingPage: React.FC = () => {
             isLoader={false}
             text="Новый массив"
             type="submit"
-            onClick={() => generateArray()}
+            onClick={() => console.log(selectionSort("descending"))}
           />
         </InputContainer>
         <ul className={styles.columnList}>
