@@ -10,7 +10,7 @@ import { columnObject, radioButtonState } from "../../types/types";
 import { ElementStates } from "../../types/element-states";
 import { getNumber, delay } from "../../utils/utils";
 import { SHORT_DELAY_IN_MS } from "../../constants/delays";
-import { selectionSortAlgo } from "./utils";
+import { bubbleSortAlgo, selectionSortAlgo } from "./utils";
 import { swapElements } from "../../algorythms-toolkit/toolkit";
 
 export const SortingPage: React.FC = () => {
@@ -33,10 +33,7 @@ export const SortingPage: React.FC = () => {
     setArrayToSort([...arr]);
   };
 
-  const sortAndWait = async (
-    arr: columnObject[],
-    setArrayToSort: React.Dispatch<React.SetStateAction<columnObject[]>>
-  ) => {
+  const sortAndWait = async (arr: columnObject[]) => {
     setArrayToSort([...arr]);
     await delay(SHORT_DELAY_IN_MS);
   };
@@ -50,41 +47,12 @@ export const SortingPage: React.FC = () => {
     //Копируем массив из стейта и делаем все элементы дефолтными
     const arr = [...arrayToSort];
     arr.forEach((el) => (el.state = ElementStates.Default));
-    await sortAndWait(arr, setArrayToSort);
-    // Начинаем цикл
-    const { length } = arr;
-    // Флаг свапа
-    let swapped: boolean;
-    do {
-      swapped = false;
-      for (let i = 0; i < length - 1; i++) {
-        // Подсвечиваем выбранные элементы
-        arr[i].state = ElementStates.Changing;
-        arr[i + 1].state = ElementStates.Changing;
-        await sortAndWait(arr, setArrayToSort);
-        // Если один больше (меньше) другого - свапаем их
-        if (
-          (mode === "ascending" ? arr[i].num : arr[i + 1].num) >
-          (mode === "ascending" ? arr[i + 1].num : arr[i].num)
-        ) {
-          arr[i].state = ElementStates.Chosen;
-          arr[i + 1].state = ElementStates.Chosen;
-          await sortAndWait(arr, setArrayToSort);
-          swapElements(arr, i, i + 1);
-          arr[i].state = ElementStates.Chosen;
-          arr[i + 1].state = ElementStates.Chosen;
-          await sortAndWait(arr, setArrayToSort);
-          swapped = true;
-        }
-        // После визуальной сортировки меняем цвет текущего элемента, но не
-        // рисуем его (не сортируем массив) он будет отрисован на следующем шаге
-        arr[i].state = ElementStates.Default;
-        arr[i + 1].state = ElementStates.Default;
-      }
-    } while (swapped);
-    // Массив отсортирован
-    arr.forEach((el) => (el.state = ElementStates.Modified));
-    setArrayToSort([...arr]);
+    // Начинаем считать шаги в цикле и рендерить результат для каждого шага
+    let stepCounter = 1;
+    while (stepCounter !== bubbleSortAlgo(mode, arr).numberOfSteps) {
+      await sortAndWait(bubbleSortAlgo(mode, arr, stepCounter).resultArray);
+      stepCounter++;
+    }
     // Анлочим кнопки
     setInProgress(false);
     mode === "ascending"
@@ -98,19 +66,13 @@ export const SortingPage: React.FC = () => {
     mode === "ascending"
       ? setAscendingRunning(true)
       : setDescendingRunning(true);
-
     //Копируем массив из стейта и делаем все элементы дефолтными
     const arr = [...arrayToSort];
-    arr.forEach((el) => (el.state = ElementStates.Default));
-    setArrayToSort([...arr]);
-    // Начинаем считать шаги
-    let stepCounter = 0;
+    // Начинаем считать шаги в цикле и рендерить результат для каждого шага
+    let stepCounter = 1;
     while (stepCounter !== selectionSortAlgo(mode, arr).numberOfSteps) {
-      await sortAndWait(
-        selectionSortAlgo(mode, arr, stepCounter).resultArray,
-        setArrayToSort
-      );
-      stepCounter++
+      await sortAndWait(selectionSortAlgo(mode, arr, stepCounter).resultArray);
+      stepCounter++;
     }
     // Анлочим кнопки
     setInProgress(false);
@@ -170,7 +132,7 @@ export const SortingPage: React.FC = () => {
             isLoader={false}
             text="Новый массив"
             type="submit"
-            onClick={() => console.log(selectionSort("descending"))}
+            onClick={() => generateArray()}
           />
         </InputContainer>
         <ul className={styles.columnList}>
