@@ -1,41 +1,105 @@
 import React, { useEffect, useState } from "react";
+import { collapseTextChangeRangesAcrossMultipleVersions } from "typescript";
+import { SHORT_DELAY_IN_MS } from "../../constants/delays";
 import { ElementStates } from "../../types/element-states";
 import { stringCharsProps } from "../../types/types";
+import { delay } from "../../utils/utils";
 import { InputContainer } from "../input-container/input-container";
 import { Button } from "../ui/button/button";
 import { Circle } from "../ui/circle/circle";
 import { Input } from "../ui/input/input";
 import { SolutionLayout } from "../ui/solution-layout/solution-layout";
 import styles from "./queue-page.module.css";
-import { Queue } from "./utils";
+import { IQueue, Queue } from "./utils";
 
 export const QueuePage: React.FC = () => {
-  const maxNum = 5;
+  const maxNum = 6;
+
+  const newQueue = new Queue<string>(maxNum);
+
+  const basicState: stringCharsProps[] = Array.from({ length: maxNum }, () => ({
+    char: "",
+    state: ElementStates.Default,
+  }));
 
   const [inputValue, setInputValue] = useState<string>("");
   const [arrayOfLetters, setArrayOfLetters] =
-    useState<stringCharsProps[]>([]);
+    useState<stringCharsProps[]>(basicState);
   const [adding, setAdding] = useState(false);
   const [deleting, setDeleting] = useState(false);
-  const [headIdx, setHeadIdx] = useState(0);
-  const [tailIdx, setTailIdx] = useState(0);
+  const [queue, setQueue] = useState<IQueue<string>>(newQueue);
+  const [headIdx, setHeadIdx] = useState<number | null>(null);
+  const sortAndWait = async (arr: stringCharsProps[]) => {
+    setArrayOfLetters([...arr]);
+    await delay(SHORT_DELAY_IN_MS);
+  };
 
-  const QueueMethods = new Queue(
-    setAdding,
-    setDeleting,
-    setArrayOfLetters,
-    setTailIdx,
-    setHeadIdx,
-    setInputValue,
-    arrayOfLetters,
-    inputValue,
-    tailIdx,
-    headIdx
-  );
+  const enqueue = async () => {
+    // Лочим кнопки, копируем массив
+    setAdding(true);
+    setInputValue("");
+    const copyArr = [...arrayOfLetters];
+    // Добавляем элемент в очередь
+    queue.enqueue(inputValue);
+    // Получаем новые голову и хвост из класса
+    const newHead = queue.getHead();
+    const newTail = queue.getTail();
+    // обновляем массив для стейта - меняем голову
+    copyArr[newHead.index].char = newHead.value!;
+    copyArr[newHead.index].head = "head";
+    setHeadIdx(newHead.index);
+    // обнуляем старый хвост если надо
+    if (newTail.index > 0) copyArr[newTail.index - 1].tail = "";
+    // добавляем новый хвост
+    copyArr[newTail.index].char = newTail.value!;
+    copyArr[newTail.index].tail = "tail";
+    copyArr[newTail.index].state = ElementStates.Changing;
+    await sortAndWait(copyArr);
+    copyArr[newTail.index].state = ElementStates.Default;
+    // Анлочим кнопки
+    setAdding(false);
+  };
 
-  useEffect(() => {
-    QueueMethods.initialize()
-  }, [])
+  const dequeue = async () => {
+    // Лочим кнопки, копируем массив
+    setDeleting(true);
+    const copyArr = [...arrayOfLetters];
+    // Проверяем, догнала ли голова хвост, если да - сброс
+    const head = queue.getHead();
+    const tail = queue.getTail();
+    if (head.index === tail.index) clearQueue();
+    else {
+      // Удаляем элементы из головы очереди
+      queue.dequeue();
+      // Получаем новые голову и хвост из класса
+      const newHead = queue.getHead();
+      const newTail = queue.getTail();
+      console.log(newHead.index, newTail.index);
+      //если голова догнала хвост - сбрасываем
+
+      // обнуляем старую голову если надо
+      if (newHead.index > 0) {
+        copyArr[newHead.index - 1].head = "";
+        copyArr[newHead.index - 1].char = "";
+      }
+      // добавляем новую голову
+      copyArr[newHead.index].char = newHead.value!;
+      copyArr[newHead.index].head = "head";
+      copyArr[newHead.index].state = ElementStates.Changing;
+      await sortAndWait(copyArr);
+      copyArr[newHead.index].state = ElementStates.Default;
+    }
+    // Анлочим кнопки
+    setDeleting(false);
+  };
+
+  const clearQueue = () => {
+    // всё сбрасываем
+    const newQueue = new Queue<string>(maxNum);
+    setQueue(newQueue);
+    setHeadIdx(null);
+    setArrayOfLetters([...basicState]);
+  };
 
   return (
     <SolutionLayout title="Очередь">
@@ -51,25 +115,29 @@ export const QueuePage: React.FC = () => {
           maxLength={4}
         />
         <Button
-          disabled={!inputValue || deleting || tailIdx > maxNum}
+          disabled={
+            !inputValue ||
+            deleting ||
+            arrayOfLetters[arrayOfLetters.length - 1].char !== ""
+          }
           isLoader={adding}
           text="Добавить"
           type="button"
-          onClick={() => QueueMethods.enqueue()}
+          onClick={() => enqueue()}
         />
         <Button
           isLoader={deleting}
-          disabled={adding || tailIdx === 0}
+          disabled={adding || headIdx === null}
           text="Удалить"
           type="button"
-          onClick={() => QueueMethods.dequeue()}
+          onClick={() => dequeue()}
         />
         <Button
           extraClass={styles.resetButton}
-          disabled={adding || deleting || tailIdx === 0}
+          disabled={adding || deleting || headIdx === null}
           text="Очистить"
           type="button"
-          onClick={() => QueueMethods.clear()}
+          onClick={() => clearQueue()}
         />
       </InputContainer>
       <ul className={styles.circleList}>
@@ -80,8 +148,8 @@ export const QueuePage: React.FC = () => {
               letter={char.char}
               index={idx}
               key={idx}
-              head={tailIdx !== 0 && idx === headIdx ? "head" : ""}
-              tail={idx === tailIdx - 1 ? "tail" : ""}
+              head={char.head}
+              tail={char.tail}
             />
           );
         })}
