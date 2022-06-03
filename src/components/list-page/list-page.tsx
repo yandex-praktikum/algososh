@@ -10,14 +10,32 @@ import { ArrowIcon } from "../ui/icons/arrow-icon";
 import { Input } from "../ui/input/input";
 import { SolutionLayout } from "../ui/solution-layout/solution-layout";
 import styles from "./list-page.module.css";
-import { LinkedList } from "./utils";
+import { ILinkedList, LinkedList } from "./utils";
 
 export const ListPage: React.FC = () => {
   const maxNum = 12;
+  const minNum = 6;
+
+  useEffect(() => {
+    const stringsArray = Array.from({ length: minNum }, () => `${getNumber()}`);
+    const basicState: stringCharsProps[] = [];
+    const newLinkedList = new LinkedList<string>(stringsArray);
+    stringsArray.forEach((el) => {
+      basicState.push({
+        char: el,
+        state: ElementStates.Default,
+      });
+    });
+
+    setLinkedList(newLinkedList);
+    setArrayCircles(basicState);
+    console.log(newLinkedList)
+  }, []);
 
   const [value, setValue] = useState<string>("");
   const [idx, setIdx] = useState<number>();
   const [arrayOfCircles, setArrayCircles] = useState<stringCharsProps[]>([]);
+  const [linkedList, setLinkedList] = useState<ILinkedList<string>>();
   const [addingToHead, setAddingToHead] = useState(false);
   const [addingToTail, setAddingToTail] = useState(false);
   const [deletingFromHead, setDeletingFromHead] = useState(false);
@@ -26,25 +44,56 @@ export const ListPage: React.FC = () => {
   const [deletingByIdx, setDeletingByIdx] = useState(false);
   const [inProgress, setInProgress] = useState(false);
 
-  const LinkedListMethods = new LinkedList(
-    setInProgress,
-    setAddingToHead,
-    setDeletingFromHead,
-    setAddingToTail,
-    setDeletingFromTail,
-    setAddingByIdx,
-    setDeletingByIdx,
-    setValue,
-    setIdx,
-    setArrayCircles,
-    idx,
-    value,
-    arrayOfCircles
-  );
+  const sortAndWait = async (arr: stringCharsProps[]) => {
+    setArrayCircles([...arr]);
+    await delay(SHORT_DELAY_IN_MS);
+  };
 
-  useEffect(() => {
-    LinkedListMethods.initialize();
-  }, []);
+  const addToHead = async () => {
+    const copyArr = [...arrayOfCircles];
+    setInProgress(true);
+    setAddingToHead(true);
+    // Подсвечиваем голову
+    copyArr[0] = {
+      ...copyArr[0],
+      adding: true,
+      extraCircle: {
+        char: value,
+      },
+    };
+    // Добавляем в голову списка новый элемент
+    console.log(linkedList)
+    linkedList?.insertAt(value, 0);
+    await sortAndWait([...copyArr]);
+    // Извлекаем для рендера из списка новый элемент
+    const headValue = linkedList?.getNodeByIndex(0);
+    // Убираем подсветку и добавляем новую голову
+    copyArr[0] = {
+      ...copyArr[0],
+      adding: false,
+      extraCircle: undefined,
+    };
+    copyArr.unshift({
+      char: headValue ? headValue : "",
+      state: ElementStates.Modified,
+    });
+    await sortAndWait([...copyArr]);
+    // Меняем стейт головы
+    copyArr[0].state = ElementStates.Default;
+    setInProgress(false);
+    setAddingToHead(false);
+    setValue("");
+  };
+
+  const addToTail = async () => {};
+
+  const removeFromHead = async () => {};
+
+  const removeFromTail = async () => {};
+
+  const addByIdx = async () => {};
+
+  const removeByIdx = async () => {};
 
   return (
     <SolutionLayout title="Связный список">
@@ -67,7 +116,7 @@ export const ListPage: React.FC = () => {
             isLoader={addingToHead}
             text="Добавить в head"
             type="button"
-            onClick={() => LinkedListMethods.addToHead()}
+            onClick={() => addToHead()}
           />
           <Button
             extraClass={styles.button}
@@ -75,7 +124,7 @@ export const ListPage: React.FC = () => {
             disabled={inProgress || !value || arrayOfCircles.length > maxNum}
             text="Добавить в tail"
             type="button"
-            onClick={() => LinkedListMethods.addToTail()}
+            onClick={() => addToTail()}
           />
           <Button
             extraClass={styles.button}
@@ -83,7 +132,7 @@ export const ListPage: React.FC = () => {
             isLoader={deletingFromHead}
             text="Удалить из head"
             type="button"
-            onClick={() => LinkedListMethods.deleteFromHead()}
+            onClick={() => removeFromHead()}
           />
           <Button
             extraClass={styles.button}
@@ -91,7 +140,7 @@ export const ListPage: React.FC = () => {
             isLoader={deletingFromTail}
             text="Удалить из tail"
             type="button"
-            onClick={() => LinkedListMethods.deleteFromTail()}
+            onClick={() => removeFromTail()}
           />
         </InputContainer>
         <InputContainer>
@@ -116,7 +165,7 @@ export const ListPage: React.FC = () => {
             isLoader={addingByIdx}
             text="Добавить по индексу"
             type="button"
-            onClick={() => LinkedListMethods.addByIdx()}
+            onClick={() => addByIdx()}
           />
           <Button
             extraClass={styles.bigButton}
@@ -124,7 +173,7 @@ export const ListPage: React.FC = () => {
             disabled={!idx || inProgress || idx > arrayOfCircles.length - 2}
             text="Удалить по индексу"
             type="button"
-            onClick={() => LinkedListMethods.deleteByIdx()}
+            onClick={() => removeByIdx()}
           />
         </InputContainer>
       </div>
