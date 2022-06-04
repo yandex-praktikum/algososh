@@ -18,6 +18,7 @@ export interface ILinkedList<T> {
   insertAt: (element: T, index: number) => void;
   getSize: () => number;
   print: () => void;
+  removeFromPosition: (index: number) => T | null;
 }
 
 export class LinkedList<T> implements ILinkedList<T> {
@@ -451,6 +452,47 @@ export class LinkedList {
     await this.sortAndWait([...copyArr]);
   };
 }
+
+const addToTail = async () => {
+    const copyArr = [...arrayOfCircles];
+    setInProgress(true);
+    setAddingToTail(true);
+    const { length } = copyArr;
+    linkedList!.print();
+    // Добавляем элемент в хвост
+    linkedList!.addToTail(value);
+    // Получаем размер списка (он же индекс хвоста)
+    const tailIdx = linkedList!.getSize() - 1;
+    // Сразу извлекаем из хвоста списка новый элемент
+    const TailValue = linkedList!.getNodeByIndex(tailIdx);
+    linkedList!.print();
+    // Подсвечиваем хвост
+    copyArr[length - 1] = {
+      ...copyArr[length - 1],
+      adding: true,
+      extraCircle: {
+        char: TailValue ? TailValue : "",
+      },
+    };
+    // Добавляем в хвост списка новый элемент
+    await sortAndWait([...copyArr]);
+    // Убираем подсветку и добавляем новую голову
+    copyArr[length - 1] = {
+      ...copyArr[length - 1],
+      adding: false,
+      extraCircle: undefined,
+    };
+    copyArr.push({
+      char: TailValue ? TailValue : "",
+      state: ElementStates.Modified,
+    });
+    await sortAndWait([...copyArr]);
+    // Меняем стейт хвоста
+    copyArr[length].state = ElementStates.Default;
+    setInProgress(false);
+    setAddingToTail(false);
+    setValue("");
+  };
 
 /*
 const sortAndWait = async (
