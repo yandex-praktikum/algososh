@@ -1,0 +1,14 @@
+.fibList {
+  list-style-type: none;
+  margin: 0 auto;
+  margin-top: 120px;
+  padding: 0;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: center;
+  align-content: flex-start;
+  column-gap: 16px;
+  row-gap: 48px;
+  width: 944px;
+}
