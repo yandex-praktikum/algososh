@@ -1,5 +1,4 @@
-import React, { useRef, useState } from "react";
-import { swapElements } from "../../algorythms-toolkit/toolkit";
+import React, { useState } from "react";
 import { SHORT_DELAY_IN_MS } from "../../constants/delays";
 import { ElementStates } from "../../types/element-states";
 import { stringCharsProps } from "../../types/types";

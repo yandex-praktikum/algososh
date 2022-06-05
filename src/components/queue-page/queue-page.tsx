@@ -74,7 +74,6 @@ export const QueuePage: React.FC = () => {
       // Получаем новые голову и хвост из класса
       const newHead = queue.getHead();
       const newTail = queue.getTail();
-      console.log(newHead.index, newTail.index);
       //если голова догнала хвост - сбрасываем
 
       // обнуляем старую голову если надо

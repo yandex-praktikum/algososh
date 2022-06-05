@@ -11,7 +11,6 @@ import { ElementStates } from "../../types/element-states";
 import { getNumber, delay } from "../../utils/utils";
 import { SHORT_DELAY_IN_MS } from "../../constants/delays";
 import { bubbleSortAlgo, selectionSortAlgo } from "./utils";
-import { swapElements } from "../../algorythms-toolkit/toolkit";
 
 export const SortingPage: React.FC = () => {
   const [arrayToSort, setArrayToSort] = useState<columnObject[]>([]);

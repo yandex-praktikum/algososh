@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useState } from "react";
+import React, { useState } from "react";
 import { SHORT_DELAY_IN_MS } from "../../constants/delays";
 import { ElementStates } from "../../types/element-states";
 import { stringCharsProps } from "../../types/types";
@@ -49,7 +49,6 @@ export const StackPage: React.FC = () => {
     await sortAndWait(arrayOfLetters);
     // Анлочим кнопки
     setPushing(false);
-    console.log(arrayOfLetters);
   };
 
   const popAndRender = async () => {
@@ -59,7 +58,6 @@ export const StackPage: React.FC = () => {
     stack!.pop();
     // Теперь пикáем, если элементов не осталось - рендерим пустой массив
     const size = stack.getSize();
-    console.log(size);
     if (size !== 0) {
       arrayOfLetters.pop();
       setArrayOfLetters([...arrayOfLetters]);

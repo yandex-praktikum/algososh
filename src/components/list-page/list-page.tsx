@@ -241,7 +241,6 @@ export const ListPage: React.FC = () => {
 
   const removeByIdx = async (idx: number) => {
     const copyArr = [...arrayOfCircles];
-    const deletingValue = copyArr[idx!].char;
     setInProgress(true);
     setDeletingByIdx(true);
     linkedList!.print();
