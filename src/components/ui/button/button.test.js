@@ -1,8 +1,7 @@
 import { Button } from "./button";
 import React from "react";
 import renderer from "react-test-renderer";
-import {render, fireEvent, waitFor, screen} from '@testing-library/react';
-
+import { render, fireEvent, waitFor, screen } from "@testing-library/react";
 
 describe("Проверка рендера кнопки", () => {
   it("Кнопка с текстом рендерится без ошибок", () => {
@@ -26,4 +25,10 @@ describe("Проверка рендера кнопки", () => {
   });
 });
 
-
+it("У кнопки корректно срабатывает коллбэк", () => {
+  window.alert = jest.fn();
+  render(<Button text="button" onClick={alert("Sample alert")} />);
+  const button = screen.getByText("button");
+  fireEvent.click(button);
+  expect(window.alert).toHaveBeenCalledWith("Sample alert");
+});
