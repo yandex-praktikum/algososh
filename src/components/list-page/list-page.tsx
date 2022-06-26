@@ -278,6 +278,7 @@ export const ListPage: React.FC = () => {
       <div className={styles.container}>
         <InputContainer>
           <Input
+            name="value"
             extraClass={styles.input}
             placeholder="Введите значение"
             min={1}
@@ -323,6 +324,7 @@ export const ListPage: React.FC = () => {
         </InputContainer>
         <InputContainer>
           <Input
+            name="index"
             type="text"
             extraClass={styles.input}
             placeholder="Введите индекс"
