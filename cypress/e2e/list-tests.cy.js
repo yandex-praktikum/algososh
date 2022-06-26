@@ -51,6 +51,7 @@ describe("Тесты страницы связного списка", () => {
           }
         });
     });
+
     it("Корректно добавляется элемент в head", function () {
       cy.get('input[name="value"]').type("123");
       cy.contains("Добавить в head").click();
@@ -80,6 +81,7 @@ describe("Тесты страницы связного списка", () => {
 
       cy.get("[class*=circle_content]").each(($el, index) => {
         if (index === 0) {
+          expect($el).to.contain("head");
           cy.wrap($el)
             .find("[class*=circle_circle]")
             .should("have.css", "border", "4px solid rgb(0, 50, 255)")
@@ -87,22 +89,62 @@ describe("Тесты страницы связного списка", () => {
         }
       });
     });
-  });
 
-  /*  describe("Проверка работы анимации изменения структуры данных", function () {
-    it("Корректно добавляет несколько элементов", function () {
-      // Добавляем и смотрим за первым элементом
-      cy.get("input").type("new1");
-      cy.contains("Добавить").click();
+    it("Корректно добавляется элемент в tail", function () {
+      cy.get('input[name="value"]').type("123");
+      cy.contains("Добавить в tail").click();
+
+      for (let i = 0; i <= 6; i++) {
+        cy.get("[class*=circle_content]").each(($el, index) => {
+          let currentIdx = i;
+          if (index < currentIdx)
+            cy.wrap($el)
+              .find("[class*=circle_circle]")
+              .should("have.css", "border", "4px solid rgb(210, 82, 225)");
+          if (index === currentIdx) {
+            cy.wrap($el)
+              .siblings()
+              .find("[class*=circle_small]")
+              .should("have.css", "border", "4px solid rgb(210, 82, 225)")
+              .should("have.text", "123");
+          }
+        });
+
+        cy.wait(500);
+      }
+
       cy.get("[class*=circle_content]").each(($el, index) => {
-        if (index === 0) {
-          expect($el).to.contain("new1");
-          expect($el).to.contain("0");
-          expect($el).to.contain("head");
+        if (index === 6) {
+          cy.wrap($el)
+            .find("[class*=circle_circle]")
+            .should("have.css", "border", "4px solid rgb(127, 224, 81)")
+            .should("have.text", "123");
+        }
+      });
+
+      cy.wait(500);
+
+      cy.get("[class*=circle_content]").each(($el, index) => {
+        if (index === 6) {
+          cy.wrap($el)
+            .find("[class*=circle_circle]")
+            .should("have.css", "border", "4px solid rgb(0, 50, 255)")
+            .should("have.text", "123");
           expect($el).to.contain("tail");
+        }
+      });
+    });
+
+    it("Корректно удаляется элемент из head", function () {
+      cy.contains("Удалить из head").click();
+
+      cy.get("[class*=circle_content]").each(($el, index) => {
+        if (index === 0) {
           cy.wrap($el)
-            .find("[class*=circle_circle]")
-            .should("have.css", "border", "4px solid rgb(210, 82, 225)");
+            .siblings()
+            .find("[class*=circle_small]")
+            .should("have.css", "border", "4px solid rgb(210, 82, 225)")
+            .should("not.have.text", "");
         }
       });
 
@@ -112,48 +154,49 @@ describe("Тесты страницы связного списка", () => {
         if (index === 0) {
           cy.wrap($el)
             .find("[class*=circle_circle]")
-            .should("have.css", "border", "4px solid rgb(0, 50, 255)");
+            .should("have.css", "border", "4px solid rgb(127, 224, 81)");
         }
       });
 
       cy.wait(500);
 
-      // Добавляем и смотрим за вторым элементом
-      cy.get("input").type("new2");
-      cy.contains("Добавить").click();
       cy.get("[class*=circle_content]").each(($el, index) => {
         if (index === 0) {
-          expect($el).to.contain("new1");
-          expect($el).to.contain("0");
           expect($el).to.contain("head");
           cy.wrap($el)
             .find("[class*=circle_circle]")
             .should("have.css", "border", "4px solid rgb(0, 50, 255)");
         }
-        if (index === 1) {
-          expect($el).to.contain("new2");
-          expect($el).to.contain("1");
-          expect($el).to.contain("tail");
+      });
+    });
+
+    it("Корректно удаляется элемент из tail", function () {
+      cy.contains("Удалить из tail").click();
+
+      cy.get("[class*=circle_content]").each(($el, index) => {
+        if (index === 5) {
           cy.wrap($el)
-            .find("[class*=circle_circle]")
-            .should("have.css", "border", "4px solid rgb(210, 82, 225)");
+            .siblings()
+            .find("[class*=circle_small]")
+            .should("have.css", "border", "4px solid rgb(210, 82, 225)")
+            .should("not.have.text", "");
         }
       });
 
       cy.wait(500);
 
       cy.get("[class*=circle_content]").each(($el, index) => {
-        if (index === 0) {
-          expect($el).to.contain("new1");
-          expect($el).to.contain("0");
-          expect($el).to.contain("head");
+        if (index === 5) {
           cy.wrap($el)
             .find("[class*=circle_circle]")
-            .should("have.css", "border", "4px solid rgb(0, 50, 255)");
+            .should("have.css", "border", "4px solid rgb(127, 224, 81)");
         }
-        if (index === 1) {
-          expect($el).to.contain("new2");
-          expect($el).to.contain("1");
+      });
+
+      cy.wait(500);
+
+      cy.get("[class*=circle_content]").each(($el, index) => {
+        if (index === 5) {
           expect($el).to.contain("tail");
           cy.wrap($el)
             .find("[class*=circle_circle]")
@@ -162,140 +205,84 @@ describe("Тесты страницы связного списка", () => {
       });
     });
 
-    it("Корректно удаляет несколько элементов", function () {
-      // Добавляем 2 элемента
-      cy.get("input").type("new1");
-      cy.contains("Добавить").click();
-      cy.get("input").type("new2");
-      cy.contains("Добавить").click();
+    it("Корректно добавляется элемент по индексу", function () {
+      cy.get('input[name="value"]').type("123");
+      cy.get('input[name="index"]').type("2");
+      cy.contains("Добавить по индексу").click();
 
-      cy.wait(500);
+      for (let i = 0; i <= 2; i++) {
+        cy.get("[class*=circle_content]").each(($el, index) => {
+          let currentIdx = i;
+          if (index < currentIdx)
+            cy.wrap($el)
+              .find("[class*=circle_circle]")
+              .should("have.css", "border", "4px solid rgb(210, 82, 225)");
+          if (index === currentIdx) {
+            cy.wrap($el)
+              .siblings()
+              .find("[class*=circle_small]")
+              .should("have.css", "border", "4px solid rgb(210, 82, 225)")
+              .should("have.text", "123");
+          }
+        });
 
-      cy.get("[class*=circle_content]").each(($el, index) => {
-        if (index === 0) {
-          expect($el).to.contain("new1");
-          expect($el).to.contain("0");
-          expect($el).to.contain("head");
-          cy.wrap($el)
-            .find("[class*=circle_circle]")
-            .should("have.css", "border", "4px solid rgb(0, 50, 255)");
-        }
-        if (index === 1) {
-          expect($el).to.contain("new2");
-          expect($el).to.contain("1");
-          expect($el).to.contain("tail");
-          cy.wrap($el)
-            .find("[class*=circle_circle]")
-            .should("have.css", "border", "4px solid rgb(0, 50, 255)");
-        }
-      });
-
-      //Удаляем первый
-
-      cy.contains("Удалить").click();
-      cy.get("[class*=circle_content]").each(($el, index) => {
-        if (index === 0) {
-          expect($el).to.not.contain("new1");
-          expect($el).to.contain("0");
-          expect($el).to.not.contain("head");
-          cy.wrap($el)
-            .find("[class*=circle_circle]")
-            .should("have.css", "border", "4px solid rgb(0, 50, 255)");
-        }
-        if (index === 1) {
-          expect($el).to.contain("new2");
-          expect($el).to.contain("1");
-          expect($el).to.contain("head");
-          expect($el).to.contain("tail");
-          cy.wrap($el)
-            .find("[class*=circle_circle]")
-            .should("have.css", "border", "4px solid rgb(210, 82, 225)");
-        }
-      });
-
-      cy.wait(500);
+        cy.wait(500);
+      }
 
       cy.get("[class*=circle_content]").each(($el, index) => {
-        if (index === 0) {
-          expect($el).to.not.contain("new1");
-          expect($el).to.contain("0");
-          expect($el).to.not.contain("head");
-          cy.wrap($el)
-            .find("[class*=circle_circle]")
-            .should("have.css", "border", "4px solid rgb(0, 50, 255)");
-        }
-        if (index === 1) {
-          expect($el).to.contain("new2");
-          expect($el).to.contain("1");
-          expect($el).to.contain("head");
-          expect($el).to.contain("tail");
-          cy.wrap($el)
-            .find("[class*=circle_circle]")
-            .should("have.css", "border", "4px solid rgb(0, 50, 255)");
-        }
-      });
-
-      //Удаляем второй
-      cy.contains("Удалить").click();
-      cy.get("[class*=circle_content]").each(($el) => {
-        expect($el).to.not.contain("new2");
-        expect($el).to.not.contain("new1");
-        expect($el).to.not.contain("head");
-        expect($el).to.not.contain("tail");
-        cy.wrap($el)
-          .find("[class*=circle_circle]")
-          .should("have.css", "border", "4px solid rgb(0, 50, 255)");
-      });
-    });
-
-    it("Корректно работает кнопка 'очистить'", function () {
-      // Добавляем 2 элемента
-      cy.get("input").type("new1");
-      cy.contains("Добавить").click();
-      cy.get("input").type("new2");
-      cy.contains("Добавить").click();
-      cy.get("input").type("new3");
-      cy.contains("Добавить").click();
-
-      cy.wait(500);
-
-      cy.get("[class*=circle_content]").each(($el, index) => {
-        if (index === 0) {
-          expect($el).to.contain("new1");
-          expect($el).to.contain("0");
-          expect($el).to.contain("head");
-          cy.wrap($el)
-            .find("[class*=circle_circle]")
-            .should("have.css", "border", "4px solid rgb(0, 50, 255)");
-        }
-        if (index === 1) {
-          expect($el).to.contain("new2");
-          expect($el).to.contain("1");
-          cy.wrap($el)
-            .find("[class*=circle_circle]")
-            .should("have.css", "border", "4px solid rgb(0, 50, 255)");
-        }
         if (index === 2) {
-          expect($el).to.contain("new3");
-          expect($el).to.contain("2");
-          expect($el).to.contain("tail");
           cy.wrap($el)
             .find("[class*=circle_circle]")
-            .should("have.css", "border", "4px solid rgb(0, 50, 255)");
+            .should("have.css", "border", "4px solid rgb(127, 224, 81)")
+            .should("have.text", "123");
         }
       });
 
-      cy.contains("Очистить").click();
-      cy.get("[class*=circle_content]").each(($el) => {
-        expect($el).to.not.contain("new3");
-        expect($el).to.not.contain("new2");
-        expect($el).to.not.contain("new1");
-        expect($el).to.not.contain("head");
-        expect($el).to.not.contain("tail");
+      cy.wait(500);
+
+      cy.get("[class*=circle_content]").each(($el, index) => {
+        if (index === 2) {
+          cy.wrap($el)
+            .find("[class*=circle_circle]")
+            .should("have.css", "border", "4px solid rgb(0, 50, 255)")
+            .should("have.text", "123");
+          expect($el).to.contain("2");
+        }
+      });
+    });
+
+    it("Корректно удаляется элемент по индексу", function () {
+      cy.get('input[name="value"]').type("123");
+      cy.get('input[name="index"]').type("2");
+      cy.contains("Удалить по индексу").click();
+
+      for (let i = 0; i <= 2; i++) {
+        cy.get("[class*=circle_content]").each(($el, index) => {
+          let currentIdx = i;
+          if (index <= currentIdx)
+            cy.wrap($el)
+              .find("[class*=circle_circle]")
+              .should("have.css", "border", "4px solid rgb(210, 82, 225)");
+        });
+        cy.wait(500);
+      }
+      cy.get("[class*=circle_content]").each(($el, index) => {
+        if (index === 2) {
+          cy.wrap($el)
+            .siblings()
+            .find("[class*=circle_small]")
+            .should("have.css", "border", "4px solid rgb(210, 82, 225)")
+            .should("not.have.text", "");
+        }
+      });
+
+      cy.wait(500);
+
+      cy.get("[class*=circle_content]").each(($el, index) => {
         cy.wrap($el)
           .find("[class*=circle_circle]")
           .should("have.css", "border", "4px solid rgb(0, 50, 255)");
       });
     });
-  }); */
+  });
 });
