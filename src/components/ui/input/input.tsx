@@ -5,19 +5,21 @@ interface InputProps extends React.HTMLProps<HTMLInputElement> {
   placeholder?: string;
   extraClass?: string;
   isLimitText?: boolean;
+  isFib?: boolean;
 }
 
 export const Input: React.FC<InputProps> = ({
   placeholder = "Введите текст",
   extraClass = "",
   type = "text",
+  isFib,
   maxLength,
   max,
   isLimitText = false,
   ...rest
 }) => {
   const limitText =
-    type === "text"
+    type === "text" && !isFib
       ? `Максимум — ${maxLength} символа`
       : `Максимальное число — ${max}`;
 
