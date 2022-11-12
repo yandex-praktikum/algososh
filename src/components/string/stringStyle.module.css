@@ -1,0 +1,32 @@
+.container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.form {
+    display: flex;
+    gap: 0 12px;
+    max-width: 567px;
+    width: 100%;
+}
+
+.input {
+    max-width: 377px;
+    width: 100%;
+}
+
+.button {
+    max-width: 178px;
+    width: 100%;
+}
+
+.circle {
+    display: flex;
+    gap: 16px;
+    flex-wrap: wrap;
+    margin: 120px 0 0 0;
+    padding: 0;
+    list-style: none;
+}
+

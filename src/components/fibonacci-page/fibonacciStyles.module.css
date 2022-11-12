@@ -1,0 +1,18 @@
+.form {
+    display: flex;
+    max-width: 522px;
+    margin: 0 auto;
+    gap: 12px;
+    width: 100%;
+}
+
+.circles {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    row-gap: 48px;
+    width: 944px;
+    margin: auto;
+    margin-top: 50px;
+    justify-content: center;
+}
