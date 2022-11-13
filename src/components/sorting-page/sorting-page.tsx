@@ -5,7 +5,7 @@ import { Button } from "../ui/button/button";
 import { Column } from "../ui/column/column";
 import sortingStyle from "./sortingStyle.module.css";
 import { ElementStates } from '../../types/element-states';
-import {delay} from "../string/string";
+import {delay} from '../../utils/constDelay';
 
 type TSorting = {
   number: number;

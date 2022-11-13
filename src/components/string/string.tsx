@@ -1,65 +1,63 @@
 import React, {useState} from "react";
 import stringStyle from "./stringStyle.module.css";
-import { SolutionLayout } from "../ui/solution-layout/solution-layout";
-import { Input } from "../ui/input/input";
-import { Button } from "../ui/button/button";
-import { Circle } from "../ui/circle/circle";
-import { ElementStates } from "../../types/element-states";
+import {SolutionLayout} from "../ui/solution-layout/solution-layout";
+import {Input} from "../ui/input/input";
+import {Button} from "../ui/button/button";
+import {Circle} from "../ui/circle/circle";
+import {ElementStates} from "../../types/element-states";
+import {delay} from '../../utils/constDelay';
 
-export const delay = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms));
+export type TStringArray = {
+    value: string;
+    color: ElementStates;
+};
 
 export const StringComponent: React.FC = () => {
-    const [stringArr, setStringArr] = useState<Array<string>>([])
-    const [value, setValue] = useState<string>('');
+    const [stringArr, setStringArr] = useState<Array<TStringArray>>([])
+    const [input, setInput] = useState<string>('');
     const [isLoading, setIsLoading] = useState<boolean>(false);
-    const [currentReverseStep, setCurrentReverseStep] = useState(0);
 
     const handleChangeInput = (e: React.ChangeEvent<HTMLInputElement>) => {
-        setValue(e.target.value);
+        setInput(e.target.value);
+    };
+
+    //Функция swap меняет местами
+    const swap = (arr: TStringArray[], i: number, j: number): void => {
+        const temp = arr[i];
+        arr[i] = arr[j];
+        arr[j] = temp;
     };
 
     //Функция переворота
-    const reverseString = async (value: string) => {
-        const arr = value.split('');
-        setCurrentReverseStep(0);
+    const reverseString = async (arr: TStringArray[]) => {
         setIsLoading(true);
-        setStringArr([...arr]);
-        await delay(1000);
-        const string = [...arr];
-        if (arr.length <= 1) {
-            return [[...arr]];
-        }
-        const center = Math.ceil((arr.length - 1) / 2);
-        for (let i = 0; i < center; i++) {
+        for (let i = 0; i < Math.ceil(arr.length / 2); i++) {
             const j = arr.length - 1 - i;
-            //меняем местами swap
-            const temp = arr[i];
-            arr[i] = arr[j];
-            arr[j] = temp;
-            setCurrentReverseStep(i => i + 1);
-            string.push(...arr);
-            await delay(1000);
-            setIsLoading(false);
+
+            if (arr.length === 1) {
+                arr[i].color = ElementStates.Modified;
+            } else if (i < j) {
+
+                arr[i].color = ElementStates.Changing;
+                arr[j].color = ElementStates.Changing;
+                setStringArr([...arr]);
+                swap(arr, i, j);
+                await delay(1000);
+            }
+
+            arr[i].color = ElementStates.Modified;
+            arr[j].color = ElementStates.Modified;
+            setStringArr([...arr]);
         }
-        return string;
+        setIsLoading(false);
     }
 
-    // Функция отвечает за цвет при анимировании перехода
-    const getElement = (index: number, maxIndex: number, currentStep: number) => {
-        if (index < currentStep || index > maxIndex - currentStep) {
-            return ElementStates.Modified;
-        }
-        if (index === currentStep || index === maxIndex - currentStep) {
-            return ElementStates.Changing;
-        }
-        return ElementStates.Default;
+    const handleReverseString = () => {
+        const arr = input
+            .split('')
+            .map((value) => ({value, color: ElementStates.Default}));
+        reverseString(arr);
     };
-
-    const handleReverseString = (evt: React.FormEvent<HTMLButtonElement>) => {
-        evt.preventDefault();
-        reverseString(value);
-        setValue('');
-    }
 
     return (
       <SolutionLayout title="Строка">
@@ -69,13 +67,13 @@ export const StringComponent: React.FC = () => {
                   maxLength={11}
                   extraClass={stringStyle.input}
                   isLimitText={true}
-                  value={value}
+                  value={input}
                   onChange={handleChangeInput}
               />
               <Button
                   text="Развернуть"
                   extraClass={stringStyle.button}
-                  disabled={!value.length}
+                  disabled={!input}
                   isLoader={isLoading}
                   onClick={handleReverseString}
               />
@@ -84,9 +82,8 @@ export const StringComponent: React.FC = () => {
               {stringArr.map((item, index) => {
                   return <Circle
                       key={index}
-                      index={index + 1}
-                      letter={item}
-                      state={getElement(index, currentReverseStep, stringArr.length + 1)}
+                      letter={item.value}
+                      state={item.color}
                   />
               })}
           </ul>
