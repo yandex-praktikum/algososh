@@ -11,7 +11,7 @@ type TSorting = {
   number: number;
   state: ElementStates;
 };
-type TSortingLoader = {
+type TSortingLoading = {
   ascending: boolean;
   descending: boolean;
 }
@@ -20,7 +20,7 @@ export const SortingPage: React.FC = () => {
 
   const [sortingArr, setSortingArr] = useState<Array<TSorting>>([]);
   const [selectSort, setSelectSort] = useState<string>("select");
-  const [isLoading, setIsLoading] =  useState<TSortingLoader>({ascending: false, descending: false}
+  const [isLoading, setIsLoading] =  useState<TSortingLoading>({ascending: false, descending: false}
   );
 
   const handleChangeRadio = (e: React.ChangeEvent<HTMLInputElement>) => {

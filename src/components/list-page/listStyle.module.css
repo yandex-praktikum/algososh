@@ -1,0 +1,33 @@
+.container {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    max-width: 829px;
+    margin: 0 auto;
+}
+
+.form {
+    display: flex;
+    gap: 12px;
+}
+
+.form input {
+    width: 260px;
+    margin-bottom: 10px;
+}
+
+.form button {
+    width: 100%;
+}
+
+.list {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    margin: 120px auto 0;
+    max-width: 398px;
+    gap: 16px;
+    width: 100%;
+    list-style: none;
+}
