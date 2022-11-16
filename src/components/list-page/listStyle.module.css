@@ -21,13 +21,30 @@
 }
 
 .list {
+    margin: 0;
+    padding: 90px 0 0;
     display: flex;
-    flex-direction: row;
+    list-style-type: none;
     justify-content: center;
-    align-items: center;
-    margin: 120px auto 0;
-    max-width: 398px;
+    flex-wrap: wrap;
     gap: 16px;
-    width: 100%;
-    list-style: none;
+}
+
+.item {
+    position: relative;
+    display: flex;
+    align-items: center;
+    gap: 16px;
+}
+
+.upCircle {
+    position: absolute;
+    top: -67px;
+    left: 12px;
+}
+
+.downCircle {
+    position: absolute;
+    top: 110px;
+    left: 15px;
 }

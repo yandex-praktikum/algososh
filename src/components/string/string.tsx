@@ -40,13 +40,14 @@ export const StringComponent: React.FC = () => {
 
                 arr[i].color = ElementStates.Changing;
                 arr[j].color = ElementStates.Changing;
+                //Прорисовка
                 setStringArr([...arr]);
-                swap(arr, i, j);
                 await delay(1000);
             }
-
+            swap(arr, i, j);
             arr[i].color = ElementStates.Modified;
             arr[j].color = ElementStates.Modified;
+            //Прорисовка
             setStringArr([...arr]);
         }
         setIsLoading(false);
@@ -54,8 +55,7 @@ export const StringComponent: React.FC = () => {
 
     const handleReverseString = () => {
         const arr = input
-            .split('')
-            .map((value) => ({value, color: ElementStates.Default}));
+            .split('').map((value) => ({value, color: ElementStates.Default}));
         reverseString(arr);
     };
 
@@ -81,9 +81,7 @@ export const StringComponent: React.FC = () => {
           <ul className={stringStyle.circle}>
               {stringArr.map((item, index) => {
                   return <Circle
-                      key={index}
-                      letter={item.value}
-                      state={item.color}
+                      key={index} letter={item.value} state={item.color}
                   />
               })}
           </ul>
