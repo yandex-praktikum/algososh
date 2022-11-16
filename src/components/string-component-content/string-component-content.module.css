@@ -1,0 +1,21 @@
+.inputContainer {
+    max-width: 522px;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    margin: 0 auto;
+}
+
+.inputContainer__input {
+    max-width: 377px;
+}
+
+.circlesBox {
+    display: flex;
+    column-gap: 16px;
+    padding: 0;
+    justify-content: center;
+    list-style-type: none;
+    margin-top: 120px;
+
+}

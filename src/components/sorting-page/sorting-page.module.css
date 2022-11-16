@@ -1,0 +1,51 @@
+.buttonsContainer {
+    margin: 0 auto;
+    max-width: 922px;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+}
+
+.buttonsContainer__sortWay {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    max-width: 221px;
+    width: 100%;
+    align-items: center;
+}
+
+.buttonsContainer__filters {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    max-width: 683px;
+    width: 100%;
+}
+
+.column {
+    align-self: flex-end;
+}
+
+
+.buttonsContainer__ascDesc {
+    max-width: 422px;
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+}
+
+.buttonsContainer__button {
+    width: 205px;
+    margin: 0;
+}
+
+.sortingContainer {
+    list-style-type: none;
+    display: flex;
+    column-gap: 10px;
+    padding: 0;
+    margin: 48px auto 0 auto;
+    justify-content: center;
+    min-height: 346px;
+}
