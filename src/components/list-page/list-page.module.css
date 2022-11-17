@@ -1,0 +1,80 @@
+.mainContainer {
+    max-width: 952px;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    margin: 0 auto;
+    row-gap: 37px;
+}
+
+.manageContainer {
+    max-width: 952px;
+    width: 100%;
+    margin: 0 auto;
+}
+
+.manageContainer__item {
+    display: flex;
+    column-gap: 12px;
+    margin-bottom: 12px;
+}
+
+.input {
+    max-width: 204px;
+    width: 100%;
+}
+
+.indexButton {
+    max-width: 362px;
+    width: 100%;
+}
+
+.button {
+    max-width: 175px;
+    display: flex;
+    width: 100%;
+}
+
+.circlesContainer {
+    display: flex;
+    width: 100%;
+    list-style-type: none;
+    justify-content: center;
+    padding: 0;
+    margin: 0 auto;
+    column-gap: 16px;
+    max-width: 944px;
+}
+
+.circleItem {
+    display: grid;
+    row-gap: 8px;
+    column-gap: 16px;
+    align-items: center;
+    justify-items: center;
+    grid-template-columns: 80px 24px;
+    grid-template-rows: 56px 80px 56px;
+}
+
+.arrow {
+    grid-row: 2/3;
+    grid-column: 2/3;
+}
+
+.circle_position_top {
+    grid-row:1/2;
+    grid-column: 1/2;
+}
+
+.circle_position_bottom {
+    padding-top: 60px;
+    grid-row: 3/4;
+    grid-column: 1/2;
+}
+
+.circle_size_big {
+    grid-row: 2/3;
+    grid-column: 1/2;
+}
+
+

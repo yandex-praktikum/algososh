@@ -1,0 +1,46 @@
+.manageContainer {
+    max-width: 829px;
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    margin: 0 auto;
+}
+
+.manageContainer__stackButtons {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    max-width: 630px;
+    width: 100%;
+
+}
+.circlesBox {
+    display: flex;
+    column-gap: 16px;
+    padding: 0;
+    margin: 48px auto 0 auto;
+    max-width: 944px;
+    width: 100%;
+    flex-wrap: wrap;
+    list-style-type: none;
+    justify-content: center;
+    row-gap: 68px;
+}
+
+.input {
+    max-width: 377px;
+    width: 100%;
+}
+
+.addButton {
+    max-width: 121px;
+    width: 100%;
+    min-width: 0;
+}
+
+.removeButton {
+    max-width: 108px;
+    width: 100%;
+    min-width: 0px;
+}

@@ -5,11 +5,11 @@ export const delay = (ms: number) => {
 };
 
 export const getFibonacciNumbers = (n: number): number[] => {
-    let arr: number[] = [1, 1];
+    let array: number[] = [1, 1];
     for (let i = 2; i < n + 1; i++) {
-        arr.push(arr[i - 2] + arr[i - 1])
+        array.push(array[i - 2] + array[i - 1])
     }
-    return arr;
+    return array;
 };
 
 export const getRandomInt = (minLen: number, maxLen: number) => {
@@ -17,10 +17,11 @@ export const getRandomInt = (minLen: number, maxLen: number) => {
 };
 
 export const makeRandomArr = () => {
-    const arr = [];
+    const array = [];
     const length = getRandomInt(3, 17);
     for (let i = 0; i < length; i++) {
-        arr.push({ value: Math.round(Math.random() * 100), color: ElementStates.Default });
-    };
-    return arr;
+        array.push({ value: Math.round(Math.random() * 100), color: ElementStates.Default });
+    }
+    return array;
 };
+
