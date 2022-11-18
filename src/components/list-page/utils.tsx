@@ -20,11 +20,11 @@ export default class List<T> implements IList<T> {
     private head: Node<T> | null;
     private tail: Node<T> | null;
     private size: number;
-    constructor(array: T[]) {
+    constructor(array?: T[]) {
         this.head = null;
         this.tail = null;
         this.size = 0;
-        array.forEach(element => this.append(element))
+        array?.forEach(element => this.append(element))
     }
 
 
@@ -97,28 +97,23 @@ export default class List<T> implements IList<T> {
     // Удаление элемента по индексу
     deleteByIndex(index: number) {
         if (index < 0 || index > this.size) {
-            return null;
+            return;
         }
-        if (!this.head) {
-            return null;
-        }
+        let current = this.head;
         if (index === 0) {
-            return this.deleteHead();
+            if (this.head) this.head = this.head?.next;
+        } else {
+            let prev = null;
+            let currIndex = 0;
+            while (currIndex++ < index) {
+                prev = current;
+                if (current) {
+                    current = current.next;
+                }
+            }
+            if (prev?.next) prev.next = current?.next ? current.next : null;
         }
-        let currentNode = this.head;
-        let deleteNode= null;
-
-        let count = 0;
-        // перебрать элементы в списке до нужной позиции
-        while (count < index) {
-            deleteNode = currentNode;
-            currentNode = currentNode.next!;
-            count++;
-        }
-
-        deleteNode!.next = currentNode.next!;
         this.size--;
-        return currentNode.value;
     }
 
     //Удаление первого элемента из списка

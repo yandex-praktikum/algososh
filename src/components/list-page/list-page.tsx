@@ -14,18 +14,26 @@ export interface IListArr {
     state: ElementStates,
     add?: boolean;
     delete?: boolean;
+    smallCircle?: {
+        element?: string | null;
+    };
 }
 export const ListPage: React.FC = () => {
     //Формирования небольшого связного списка
     const initialArray = ["85", "13", "34", "1"];
     const defaultArr: IListArr[] = initialArray.map((item) => ({
         element: item,
-        state: ElementStates.Default
+        state: ElementStates.Default,
     }))
     const [input, setInput] = useState<string>('');
     const [inputIndex, setInputIndex] = useState<string>('');
     const [listArr, setListArr] = useState<IListArr[]>(defaultArr);
-    const [isLoading, setIsLoading] =  useState(false);
+    const [loaderAddHead, setLoaderAddHead] = useState<boolean>(false);
+    const [loaderAddTail, setLoaderAddTail] = useState<boolean>(false);
+    const [loaderDeleteHead, setLoaderDeleteHead] = useState<boolean>(false);
+    const [loaderDeleteTail, setLoaderDeleteTail] = useState<boolean>(false);
+    const [loaderAddIndex, setLoaderAddIndex] = useState<boolean>(false);
+    const [loaderDeleteIndex, setLoaderDeleteIndex] = useState<boolean>(false);
 
     const list = new List<string>(initialArray);
 
@@ -38,18 +46,24 @@ export const ListPage: React.FC = () => {
     };
     //Добавить в начало связного-списка head
     const addHead = async () => {
-        setIsLoading(true);
+        setLoaderAddHead(true);
         //Добавляем в начало списка новое значение
         list.prepend(input);
         listArr[0] = {
-            ...listArr[0], add:true
+            ...listArr[0], add:true,
+            smallCircle: {
+                element: input,
+            },
         }
         //Прорисовка
         setListArr([...listArr])
         await delay(500);
         //Убираем малый Circle
         listArr[0] = {
-            ...listArr[0], add: false
+            ...listArr[0], add: false,
+            smallCircle: {
+                element: null,
+            },
         }
         //Изменяем цвет
         listArr.unshift({
@@ -61,7 +75,7 @@ export const ListPage: React.FC = () => {
         await delay(500);
         //Изменяем цвет
         listArr[0].state= ElementStates.Default
-        setIsLoading(false);
+        setLoaderAddHead(false);
         //Очищаем поле
         setInput('')
     }
@@ -69,23 +83,30 @@ export const ListPage: React.FC = () => {
 
     //Добавить в конец связного-списка tail
     const addTail = async () => {
-        setIsLoading(true);
+        setLoaderAddTail(true);
         //Добавляем в конец списка новое значение
         list.append(input);
         //Длина списка
         const { length } = listArr;
         listArr[length - 1] = {
-            ...listArr[length - 1], add:true
+            ...listArr[length - 1], add:true,
+            smallCircle: {
+                element: input,
+            },
         }
         //Прорисовка
         setListArr([...listArr])
         await delay(500);
         //Убираем малый Circle
         listArr[length - 1] = {
-            ...listArr[length - 1], add: false
+            ...listArr[length - 1], add: false,
+            smallCircle: {
+                element: null,
+            },
         }
         //Изменяем цвет
         listArr.push({
+            add: false,
             element: input,
             state: ElementStates.Modified,
         });
@@ -94,20 +115,23 @@ export const ListPage: React.FC = () => {
         await delay(500);
         //Изменяем цвет
         listArr.map((item) => item.state= ElementStates.Default)
-        setIsLoading(false);
+        setLoaderAddTail(false);
         //Очищаем поле
         setInput('')
     }
 
     //Удалить из начала связного-списка head
     const deleteHead = async () => {
-        setIsLoading(true);
+        setLoaderDeleteHead(true);
         //
         listArr[0] = {
             ...listArr[0],
             element: "",
             state: ElementStates.Modified,
             delete: true,
+            smallCircle: {
+                element: listArr[0].element,
+            }
         };
         //Прорисовка
         setListArr([...listArr]);
@@ -116,16 +140,21 @@ export const ListPage: React.FC = () => {
         listArr.shift();
 
         setListArr([...listArr]);
-        setIsLoading(false);
+        setLoaderDeleteHead(false);
     }
 
     //Удалить из конца связного-списка tail
     const deleteTail = async () => {
-        setIsLoading(true);
+        setLoaderDeleteTail(true);
         //Длина списка
         const { length } = listArr;
         listArr[length - 1] = {
-            ...listArr[length - 1], delete: true
+            ...listArr[length - 1],
+            element: "",
+            delete: true,
+            smallCircle: {
+                element: listArr[listArr.length - 1].element,
+            },
         }
         //Прорисовка
         setListArr([...listArr]);
@@ -133,38 +162,45 @@ export const ListPage: React.FC = () => {
         //Удалим первый элемент в массиве
         listArr.pop();
         setListArr([...listArr]);
-        setIsLoading(false);
+        setLoaderDeleteTail(false);
     }
 
     //Добавить по индексу
     const addIndex = async (inputIndex: number) => {
-        setIsLoading(true);
+        setLoaderAddIndex(true);
         //Добавление нового элемента в список по заданному индексу
         list.addByIndex(input, inputIndex);
         //Передвижение малого Circle
         for (let i = 0; i <= inputIndex; i++) {
             listArr[i] = {
                 ...listArr[i],
-                add: true
+                add: true,
+                smallCircle: {
+                    element: input,
+                },
             };
-
-            //изменения состояния в связном-списке
+            //Изменение состояния в связном-списке
             if (i > 0) {
                 listArr[i - 1] = {
                     ...listArr[i - 1],
                     add: false,
                     state: ElementStates.Changing,
+                    smallCircle: {
+                        element: null,
+                    },
                 }
             }
                 //Прорисовка
                 setListArr([...listArr]);
                 await delay(1000)
-
              }
             // Вставка в связный-список нового элемента
             listArr[inputIndex] = {
                 ...listArr[inputIndex],
                 add: false,
+                smallCircle: {
+                    element: null,
+                },
             };
             listArr.splice(inputIndex, 0, {
                 element: input,
@@ -176,7 +212,7 @@ export const ListPage: React.FC = () => {
             //Прорисовка
             setListArr([...listArr]);
             await delay(1000);
-            setIsLoading(false);
+            setLoaderAddIndex(false);
             //Очищаем поле
             setInputIndex('');
     }
@@ -184,38 +220,31 @@ export const ListPage: React.FC = () => {
 
     //Удалить по индексу
     const deleteIndex = async (index: number) => {
-        setIsLoading(true);
+        setLoaderDeleteIndex(true);
         list.deleteByIndex(index);
         for (let i = 0; i <= index; i++) {
-            listArr[i] = {
-                ...listArr[i],
-                state: ElementStates.Changing,
-            }
+            listArr[i].state = ElementStates.Changing;
             await delay(1000);
             setListArr([...listArr]);
         }
         listArr[index] = {
             ...listArr[index],
             element: '',
-            state: ElementStates.Changing,
+            delete: true,
+            smallCircle: {
+                element: input,
+            },
         }
-        await delay(1000);
         setListArr([...listArr]);
+        await delay(1000);
+        //Прорисовка
         listArr.splice(index, 1)
-        listArr[index - 1] = {
-            ...listArr[index - 1],
-            element: listArr[index - 1].element,
-            state: ElementStates.Modified,
-
-        }
-        await delay(1000);
         setListArr([...listArr]);
+        await delay(1000);
         listArr.forEach((elem) => {
             elem.state = ElementStates.Default;
         })
-        await delay(1000);
-        setListArr([...listArr]);
-        setIsLoading(false);
+        setLoaderDeleteIndex(false);
     }
 
   return (
@@ -233,22 +262,29 @@ export const ListPage: React.FC = () => {
               text="Добавить в head"
               type="button"
               onClick={addHead}
-
+              disabled={!input.length}
+              isLoader={loaderAddHead}
           />
           <Button
               text="Добавить в tail"
               type="button"
               onClick={addTail}
+              disabled={!input.length}
+              isLoader={loaderAddTail}
           />
           <Button
               text="Удалить из head"
               type="button"
               onClick={deleteHead}
+              disabled={loaderAddTail || loaderAddHead}
+              isLoader={loaderDeleteHead}
           />
           <Button
               text="Удалить из tail"
               type="button"
               onClick={deleteTail}
+              disabled={loaderAddTail || loaderAddHead}
+              isLoader={loaderDeleteTail}
           />
       </div>
       <div className={listStyle.form}>
@@ -262,11 +298,15 @@ export const ListPage: React.FC = () => {
               text="Добавить по индексу"
               type="button"
               onClick={(index) => addIndex(Number(index))}
+              isLoader={loaderAddIndex}
+              disabled={!input || !inputIndex}
                   />
           <Button
               text="Удалить по индексу"
               type="button"
               onClick={(index) =>  deleteIndex(Number(index))}
+              isLoader={loaderDeleteIndex}
+              disabled={!inputIndex}
           />
 
       </div>
@@ -279,13 +319,15 @@ export const ListPage: React.FC = () => {
                       isSmall={true}
                       extraClass={listStyle.upCircle}
                       state={ElementStates.Changing}
-                      letter={item.element}
+                      letter={item.smallCircle?.element}
                   />
                       )}
                   <Circle
                       index={index}
                       state={item.state}
                       letter={item.element}
+                      head={index === 0 && !item.add && !item.delete ? "head" : ""}
+                      tail={index === listArr.length - 1 && !item.add && !item.delete ? "tail" : ""}
                   />
                   <ArrowIcon />
                       {item.delete && (
@@ -293,7 +335,7 @@ export const ListPage: React.FC = () => {
                       isSmall={true}
                       extraClass={listStyle.downCircle}
                       state={ElementStates.Changing}
-                      letter={item.element}
+                      letter={item.smallCircle?.element}
                   />
                       )}
               </li>
@@ -302,6 +344,5 @@ export const ListPage: React.FC = () => {
       </ul>
       </div>
     </SolutionLayout>
-
   );
 };
