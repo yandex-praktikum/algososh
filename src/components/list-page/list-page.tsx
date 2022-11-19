@@ -26,7 +26,7 @@ export const ListPage: React.FC = () => {
         state: ElementStates.Default,
     }))
     const [input, setInput] = useState<string>('');
-    const [inputIndex, setInputIndex] = useState<string>('');
+    const [inputIndex, setInputIndex] = useState<number>(1);
     const [listArr, setListArr] = useState<IListArr[]>(defaultArr);
     const [loaderAddHead, setLoaderAddHead] = useState<boolean>(false);
     const [loaderAddTail, setLoaderAddTail] = useState<boolean>(false);
@@ -42,7 +42,7 @@ export const ListPage: React.FC = () => {
     };
 
     const handleChangeIndex = (e: React.ChangeEvent<HTMLInputElement>) => {
-        setInputIndex(e.target.value);
+        setInputIndex(Number(e.target.value));
     };
     //Добавить в начало связного-списка head
     const addHead = async () => {
@@ -166,7 +166,7 @@ export const ListPage: React.FC = () => {
     }
 
     //Добавить по индексу
-    const addIndex = async (inputIndex: number) => {
+    const addIndex = async () => {
         setLoaderAddIndex(true);
         //Добавление нового элемента в список по заданному индексу
         list.addByIndex(input, inputIndex);
@@ -214,7 +214,7 @@ export const ListPage: React.FC = () => {
             await delay(1000);
             setLoaderAddIndex(false);
             //Очищаем поле
-            setInputIndex('');
+            setInputIndex(1);
     }
 
 
@@ -297,7 +297,7 @@ export const ListPage: React.FC = () => {
           <Button
               text="Добавить по индексу"
               type="button"
-              onClick={(index) => addIndex(Number(index))}
+              onClick={addIndex}
               isLoader={loaderAddIndex}
               disabled={!input || !inputIndex}
                   />

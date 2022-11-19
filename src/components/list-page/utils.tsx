@@ -28,7 +28,7 @@ export default class List<T> implements IList<T> {
     }
 
 
-    //Добавление узла в конец списка
+    //Добавление узла в начало списка
     append(element: T) {
     // Создаём новый узел
         const node = new Node(element);
@@ -49,7 +49,8 @@ export default class List<T> implements IList<T> {
         this.size++;
     }
 
-    //Добавление узла в начало списка
+
+    //Добавление узла в конец списка
     prepend(element: T): void {
     // Создаём новый узел, который будет новым head,
         const node = new Node(element, this.head);
@@ -63,7 +64,7 @@ export default class List<T> implements IList<T> {
 
     //Добавление элемента по индексу
     addByIndex(element: T, index: number) {
-        if (index < 0) {
+        if (index < 0 ) {
             console.log('Enter a valid index');
             return;
         } else {
@@ -74,22 +75,19 @@ export default class List<T> implements IList<T> {
             if (index === 0) {
                 node.next = this.head;
                 this.head = node;
-            } else {
+            } else if (this.head) {
                 let curr = this.head;
                 let currIndex = 0;
 
                 // перебираем элементы в списке до нужной позиции
-                while (currIndex < index) {
+                while (currIndex < index && curr.next) {
+                    curr = curr.next;
                     currIndex++;
-                    if (curr?.next && currIndex !== index) {
-                        curr = curr?.next;
-                    }
                 }
                 // добавляем элемент
-                if (curr) {
                     node.next = curr;
                     curr.next = node;
-                }
+                this.size++;
             }
         }
     }
