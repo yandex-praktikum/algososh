@@ -1,0 +1,17 @@
+.content {
+    display: flex;
+    justify-content: center;
+    max-width: 522px;
+    margin: 0 auto;
+  }
+  
+.list {
+    margin: 0;
+    padding: 0;
+    list-style-type: none;
+    position: relative;
+    display: flex;
+    justify-content: center;
+    margin-top: 120px;
+    gap: 16px;
+}
