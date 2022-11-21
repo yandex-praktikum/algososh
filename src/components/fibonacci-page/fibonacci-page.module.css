@@ -1,17 +1,21 @@
 .content {
-    display: flex;
-    justify-content: center;
-    max-width: 522px;
-    margin: 0 auto;
-  }
-  
+  display: flex;
+  justify-content: center;
+  max-width: 522px;
+  margin: 0 auto;
+}
+
 .list {
-    margin: 0;
-    padding: 0;
-    list-style-type: none;
-    position: relative;
-    display: flex;
-    justify-content: center;
-    margin-top: 120px;
-    gap: 16px;
+  margin: 0;
+  padding: 0;
+  list-style-type: none;
+  position: relative;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  margin-top: 50px;
+  padding: 0 148px;
+  row-gap: 40px;
+  column-gap: 16px;
+  padding: 0 100px;
 }

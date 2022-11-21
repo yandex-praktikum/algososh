@@ -32,7 +32,7 @@ export const FibonacciPage: React.FC = () => {
   } 
 
   const addFibonacci = async() => {
-    const arr = getFibonacciNumbers(Number(valueInput))
+    const arr = getFibonacciNumbers(Number(valueInput) + 1)
     const tempArr: Array<number> = [];
     while (arr.length) {
       const temp = arr.shift()!;
