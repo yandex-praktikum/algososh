@@ -1,4 +1,4 @@
-import { ElementStates } from "../element-states";
+import { ElementStates } from "./element-states";
 
 export type TElementState = {
     item: string | number;

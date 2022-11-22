@@ -1,7 +1,7 @@
 import React, { SyntheticEvent, useState } from "react";
 import { DELAY_IN_MS } from "../../constants/delays";
 import { ElementStates } from "../../types/element-states";
-import { TElementState } from "../../types/forString/types";
+import { TElementState } from "../../types/types";
 import { delay, swapString } from "../../utils/utils";
 import { Button } from "../ui/button/button";
 import { Circle } from "../ui/circle/circle";
