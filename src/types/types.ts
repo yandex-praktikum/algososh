@@ -10,3 +10,15 @@ export type TStack = {
   state?: ElementStates;
   head?: string;
 }
+
+export type TArrQueue = {
+  item: string;
+  state: ElementStates;
+  head: string;
+  tail: string;
+}
+
+export type TDisabled = {
+  push: boolean;
+  pop: boolean;
+}
