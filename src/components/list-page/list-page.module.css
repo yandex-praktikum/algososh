@@ -1,0 +1,49 @@
+.content {
+    display: flex;
+    justify-content: center;
+    margin: 0 auto;
+    max-width: 952px;
+  }
+  
+  .list {
+    margin: 0;
+    padding: 0;
+    list-style-type: none;
+    position: relative;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    margin-top: 120px;
+    row-gap: 40px;
+    column-gap: 16px;
+  }
+  
+  .block {
+    display: flex;
+    align-items: center;
+    gap: 17px;
+    position: relative;
+  }
+  
+  .add {
+    position: absolute;
+    bottom: 90px;
+    left: 14px;
+  }
+  
+  .dell {
+    position: absolute;
+    top: 110px;
+    left: 10px;
+  }
+  
+  .bigBtn {
+    width: 362px;
+  }
+  
+  .smallBtn {
+    width: 175px;
+  }
+  .input {
+    max-width: 204px;
+  }
