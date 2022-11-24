@@ -37,7 +37,7 @@ export const SortingPage: React.FC = () => {
         tempArr[j].state = ElementStates.Changing;
         setSortingArr([...tempArr]);
         await delay(SHORT_DELAY_IN_MS);
-        if ((bool && tempArr[i].item >= tempArr[j].item) || (!bool && tempArr[i].item <= tempArr[j].item)) {
+        if ((bool && tempArr[index].item > tempArr[j].item) || (!bool && tempArr[index].item < tempArr[j].item)) {
           if ( i !== index) {
             tempArr[index].state = ElementStates.Default;
           }
