@@ -1,0 +1,25 @@
+.form {
+    display: flex;
+    justify-content: space-between;
+    max-width: 829px;
+    margin: 0 auto;
+    flex-direction: row;
+    align-items: flex-start;
+}
+
+.container {
+    display: flex;
+    max-width: 630px;
+    gap: 12px;
+}
+
+.container input {
+    min-width: 377px;
+}
+
+.circles {
+    display: flex;
+    justify-content: center;
+    margin-top: 100px;
+    gap: 16px;
+}

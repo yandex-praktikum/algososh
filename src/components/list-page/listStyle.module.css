@@ -1,0 +1,50 @@
+.container {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    max-width: 829px;
+    margin: 0 auto;
+}
+
+.form {
+    display: flex;
+    gap: 12px;
+}
+
+.form input {
+    width: 260px;
+    margin-bottom: 10px;
+}
+
+.form button {
+    width: 100%;
+}
+
+.list {
+    margin: 0;
+    padding: 90px 0 0;
+    display: flex;
+    list-style-type: none;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 16px;
+}
+
+.item {
+    position: relative;
+    display: flex;
+    align-items: center;
+    gap: 16px;
+}
+
+.upCircle {
+    position: absolute;
+    top: -67px;
+    left: 12px;
+}
+
+.downCircle {
+    position: absolute;
+    top: 110px;
+    left: 15px;
+}
