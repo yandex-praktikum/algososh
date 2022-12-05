@@ -88,14 +88,15 @@ export const StackPage: React.FC = () => {
       <ul className={style.list}>
         {arr?.map((item, index) => {
           return (
-            <Circle
-              key={index}
+            <li key={index}>
+              <Circle
               letter={`${item.item}`}
               state={item.state}
               head={index === arr.length - 1 ? "top" : ""}
               index={index}
               extraClass={'mt-15'}
             />
+          </li>
           );
         })}
       </ul>

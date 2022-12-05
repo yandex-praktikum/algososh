@@ -120,8 +120,8 @@ export const QueuePage: FC = () => {
       <ul className={style.list}>
         {arrQueue?.map((item, index) => {
           return (
-            <Circle
-              key={index}
+            <li key={index}>
+              <Circle
               letter={item.item}
               state={item.state}
               head={item.head}
@@ -129,6 +129,8 @@ export const QueuePage: FC = () => {
               index={index}
               extraClass={'mt-15'}
             />
+            </li>
+
           );
         })}
       </ul>
