@@ -1,0 +1,39 @@
+.mainWrapper {
+  display: flex;
+  flex-direction: column;
+  align-content: center;
+  align-items: center;
+}
+
+.inputsWrapper {
+  display: flex;
+  align-items: center;
+  min-width: 980px;
+}
+
+.columnsWrapper {
+  display: flex;
+  padding-top: 48px;
+  align-items: flex-end;
+}
+
+.column {
+  padding-right: 10px;
+}
+
+.radioBtnWrapper {
+  display: flex;
+  min-width: 221px;
+  justify-content: space-between;
+  padding-right: 52px;
+}
+
+.sortingBtnWrapper {
+  padding-right: 80px;
+  display: flex;
+  gap: 12px;
+}
+
+.button {
+  min-width: 205px;
+}

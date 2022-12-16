@@ -1,0 +1,51 @@
+.mainContainer {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.circlesWrapper {
+  display: flex;
+  align-items: center;
+  padding-top: 120px;
+  gap: 16px;
+}
+
+.form {
+  display: flex;
+  flex-direction: column;
+  max-width: 829px;
+  gap: 12px;
+}
+
+.boxWrapper {
+  display: flex;
+  max-width: 952px;
+  gap: 12px;
+}
+
+.inputWrapper {
+  max-width: 204px;
+}
+
+.twoCirclesWrapper {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+  position: relative;
+}
+
+.topCircle {
+  position: absolute;
+  top: -70px;
+}
+
+.bottomCircle {
+  position: absolute;
+  bottom: -88px;
+}
+
+.buttonWrapper {
+  display: flex;
+}
