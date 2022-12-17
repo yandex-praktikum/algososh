@@ -4,23 +4,31 @@ import styles from "./stack-page.module.css";
 import { Input } from "../ui/input/input";
 import { Button } from "../ui/button/button";
 import { Circle } from "../ui/circle/circle";
-import { Stack } from "./Stack";
+import { IStackItem, Stack } from "./Stack";
 import { ElementStates } from "../../types/element-states";
 
-const stack = new Stack();
+const stack = new Stack<IStackItem>();
 
 export const StackPage: React.FC = () => {
   const [inputValue, setInputValue] = useState("");
   const [circleLetters, setCircleLetters] = useState<
     { item: string; state: ElementStates }[]
   >([]);
+  const [isLoader, setIsLoader] = useState({
+    addBtn: false,
+    deleteBtn: false,
+    clearBtn: false,
+  });
 
   const handleInput = (e: React.ChangeEvent<HTMLInputElement>) => {
+    e.preventDefault();
     setInputValue(e.target.value);
   };
 
   const handleAddClick = (e: React.MouseEvent<HTMLElement>) => {
     e.preventDefault();
+    setIsLoader({ addBtn: true, deleteBtn: false, clearBtn: false });
+
     stack.push({ item: inputValue, state: ElementStates.Changing });
     setCircleLetters(stack.elements);
     setTimeout(() => {
@@ -29,10 +37,13 @@ export const StackPage: React.FC = () => {
     }, 500);
 
     setInputValue("");
+    setIsLoader({ addBtn: false, deleteBtn: false, clearBtn: false });
   };
 
   const handleDeleteItemClick = (e: React.MouseEvent<HTMLElement>) => {
     e.preventDefault();
+    setIsLoader({ addBtn: false, deleteBtn: true, clearBtn: false });
+
     stack.setLastElementChanging();
     setCircleLetters(stack.elements);
 
@@ -40,13 +51,16 @@ export const StackPage: React.FC = () => {
       stack.pop();
       setCircleLetters(stack.elements);
     }, 500);
+    setIsLoader({ addBtn: false, deleteBtn: false, clearBtn: false });
   };
 
   const handleClearStackClick = (e: React.MouseEvent<HTMLElement>) => {
     e.preventDefault();
+    setIsLoader({ addBtn: false, deleteBtn: false, clearBtn: true });
 
     stack.clear();
     setCircleLetters(stack.elements);
+    setIsLoader({ addBtn: false, deleteBtn: false, clearBtn: false });
   };
 
   return (
@@ -54,8 +68,8 @@ export const StackPage: React.FC = () => {
       <div className={styles.mainContainer}>
         <form className={styles.form}>
           <Input
-            maxLength={4}
-            type="text"
+            max={4}
+            type="number"
             isLimitText={true}
             placeholder="Введите значение"
             value={inputValue.replace(/\D/g, "")}
@@ -65,16 +79,19 @@ export const StackPage: React.FC = () => {
             text="Добавить"
             onClick={handleAddClick}
             disabled={!inputValue}
+            isLoader={isLoader.addBtn}
           />
           <Button
             text="Удалить"
             onClick={handleDeleteItemClick}
             disabled={circleLetters.length === 0}
+            isLoader={isLoader.deleteBtn}
           />
           <Button
             text="Очистить"
             onClick={handleClearStackClick}
             disabled={circleLetters.length === 0}
+            isLoader={isLoader.clearBtn}
           />
         </form>
         <div className={styles.circlesWrapper}>

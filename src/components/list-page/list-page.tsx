@@ -4,12 +4,12 @@ import { Circle } from "../ui/circle/circle";
 import { Input } from "../ui/input/input";
 import { SolutionLayout } from "../ui/solution-layout/solution-layout";
 import styles from "./list-page.module.css";
-import { LinkedList } from "./LinkedList";
+import { LinkedList, LinkedListNode } from "./LinkedList";
 import { ArrowIcon } from "../ui/icons/arrow-icon";
 import { initialArray } from "./utils";
 import { ElementStates } from "../../types/element-states";
 
-const linkedList = new LinkedList(initialArray);
+const linkedList = new LinkedList<LinkedListNode>(initialArray);
 
 export const ListPage: React.FC = () => {
   const [inputValue, setInputValue] = useState("");
@@ -212,9 +212,6 @@ export const ListPage: React.FC = () => {
           setCircleLetters(linkedList.arrayedlistOfElements);
           setTopSmallCircleIndex(-1);
           setTopSmallCircleLetter("");
-          setInputValue("");
-          setInputValueByIndex("");
-
           setModifiedIndexes([Number(inputValueByIndex)]);
 
           setTimeout(() => {
@@ -233,6 +230,8 @@ export const ListPage: React.FC = () => {
         }, 1000);
       }
     }, 1000);
+    setInputValueByIndex("");
+    setInputValue("");
   };
 
   const handleDeleteByIndexClick = (e: React.MouseEvent<HTMLElement>) => {
@@ -278,8 +277,7 @@ export const ListPage: React.FC = () => {
           setCircleLetters(linkedList.arrayedlistOfElements);
           setBottomSmallCircleIndex(-1);
           setBottomSmallCircleLetter("");
-          setInputValue("");
-          setInputValueByIndex("");
+
           setChangedIndexes([]);
 
           setTimeout(() => {
@@ -300,6 +298,8 @@ export const ListPage: React.FC = () => {
         }, 1000);
       }
     }, 1000);
+    setInputValue("");
+    setInputValueByIndex("");
   };
 
   const getActualState = (index: number): ElementStates => {
@@ -316,8 +316,8 @@ export const ListPage: React.FC = () => {
             <div className={styles.inputWrapper}>
               <Input
                 placeholder="Введите значение"
-                maxLength={4}
-                type="text"
+                max={4}
+                type="number"
                 isLimitText={true}
                 value={inputValue}
                 onInput={handleInput}
@@ -366,12 +366,12 @@ export const ListPage: React.FC = () => {
             <div className={styles.inputWrapper}>
               <Input
                 placeholder="Введите индекс"
-                type="text"
+                type="number"
                 onInput={handleInputByIndex}
                 value={inputValueByIndex}
               />
             </div>
-            <div className={styles.buttonWrapper}>
+            <div className={styles.boxWrapper}>
               <Button
                 text="Добавить по индексу"
                 onClick={handleAddByIndexClick}
@@ -381,6 +381,7 @@ export const ListPage: React.FC = () => {
                   isDisabled.addByIndex
                 }
                 isLoader={isLoader.addByIndex}
+                extraClass="mr-6"
               />
               <Button
                 text="Удалить по индексу"

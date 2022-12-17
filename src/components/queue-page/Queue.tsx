@@ -1,6 +1,13 @@
 import { ElementStates } from "../../types/element-states";
 
-export class Queue<T = {}> {
+export class Queue<
+  T extends {
+    item: string | null;
+    state: ElementStates;
+    head: string | null;
+    tail: string | null;
+  }
+> {
   private _items: T[] = [];
   private _head: number = -1;
   private _tail: number = -1;
@@ -28,24 +35,21 @@ export class Queue<T = {}> {
   }
 
   public enqueue = (item: string) => {
-    console.log("this._tail ", this._tail);
-    console.log("this._size ", this._size);
-
     if (this._tail === this._size) {
       return;
     }
 
-    const enqueued: any = this._items.find(
-      (el: any, i) => el.item === null && i >= this._head
-    );
+    const enqueued: T = this._items.find(
+      (el: T, i: number) => el.item === null && i >= this._head
+    )!;
     if (enqueued) {
       enqueued.item = item;
       enqueued.state = ElementStates.Changing;
     }
 
-    const setHead: any = this._items.some((el: any) => el.head === "head");
+    const setHead: boolean = this._items.some((el: T) => el.head === "head");
     if (!setHead) {
-      enqueued.head = "head";
+      enqueued!.head = "head";
     }
 
     if (
@@ -66,19 +70,19 @@ export class Queue<T = {}> {
   };
 
   public dequeue = () => {
-    const top: any = this._items.find((el: any) => el.head === "head");
-    top.item = null;
-    top.state = ElementStates.Default;
-    top.head = null;
-    top.tail = null;
+    const top: T = this._items.find((el: T) => el.head === "head")!;
+    top!.item = null;
+    top!.state = ElementStates.Default;
+    top!.head = null;
+    top!.tail = null;
 
     this._head === -1 ? (this._head = this._head + 2) : this._head++;
     this._length--;
   };
 
   public setNewHead() {
-    const newHead: any = this._items.find(
-      (el: any) => el.head !== "head" && el.item !== null
+    const newHead = this._items.find(
+      (el: T) => el.head !== "head" && el.item !== null
     );
     if (newHead) newHead.head = "head";
   }
@@ -88,15 +92,15 @@ export class Queue<T = {}> {
       return;
     }
 
-    const clearedTail: any = this._items.find(
-      (el: any) => el.tail === "tail" && el.state === "default"
+    const clearedTail = this._items.find(
+      (el: T) => el.tail === "tail" && el.state === "default"
     );
 
     if (clearedTail) clearedTail.tail = null;
   }
 
   public clear() {
-    this._items.forEach((el: any) => {
+    this._items.forEach((el: T) => {
       el.item = null;
       el.head = null;
       el.tail = null;
@@ -106,13 +110,13 @@ export class Queue<T = {}> {
   }
 
   public setAllCirclesDefault() {
-    this._items = this._items.map((element) => {
+    this._items = this._items.map((element: T) => {
       return { ...element, state: ElementStates.Default };
     });
   }
 
   public setCircleChanging() {
-    const headEl: any = this._items.find((el: any) => el.head === "head");
-    headEl.state = ElementStates.Changing;
+    const headEl = this._items.find((el: T) => el.head === "head");
+    headEl!.state = ElementStates.Changing;
   }
 }

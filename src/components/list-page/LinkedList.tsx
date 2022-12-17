@@ -12,8 +12,8 @@ export class LinkedListNode {
   }
 }
 
-export class LinkedList implements ILinkedList {
-  public items: LinkedListNode[] = [];
+export class LinkedList<T> implements ILinkedList {
+  public items: T[] = [];
   private _headElement: LinkedListNode | null;
 
   private _head: number = 0;

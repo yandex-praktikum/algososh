@@ -6,8 +6,9 @@ import { Circle } from "../ui/circle/circle";
 import styles from "./string.module.css";
 import { StringReverse } from "./StringReverse";
 import { ElementStates } from "../../types/element-states";
+import { IReverseStringItem } from "./string.types";
 
-const stringReverse = new StringReverse();
+const stringReverse = new StringReverse<IReverseStringItem>();
 
 export const StringComponent: React.FC = () => {
   const [inputValue, setInputValue] = useState("");
@@ -54,8 +55,8 @@ export const StringComponent: React.FC = () => {
       <div className={styles.mainContainer}>
         <form className={styles.form} onSubmit={handleSubmit}>
           <Input
-            maxLength={11}
-            type="text"
+            max={11}
+            type="number"
             isLimitText={true}
             onInput={handleInput}
             value={inputValue}

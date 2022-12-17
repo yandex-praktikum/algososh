@@ -48,4 +48,5 @@
 
 .buttonWrapper {
   display: flex;
+  min-width: 736px;
 }

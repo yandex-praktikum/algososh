@@ -56,8 +56,8 @@ export const FibonacciPage: React.FC = () => {
       <div className={styles.mainContainer}>
         <form className={styles.form} onSubmit={handleSubmit}>
           <Input
-            maxLength={19}
-            type="text"
+            max={19}
+            type="number"
             isLimitText={true}
             value={inputValue.replace(/\D/g, "")}
             onInput={handleInput}

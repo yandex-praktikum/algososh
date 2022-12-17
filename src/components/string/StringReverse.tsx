@@ -1,7 +1,7 @@
 import { ElementStates } from "../../types/element-states";
 
-export class StringReverse {
-  lettersInArray: { letter: string; state: ElementStates }[] = [];
+export class StringReverse<T> {
+  lettersInArray: T[] | any = [];
   counter: number = 0;
 
   public stringIsReversed(counter: number): boolean {
@@ -13,7 +13,7 @@ export class StringReverse {
   }
 
   public changeLetters(counter: number): void {
-    let temp = this.lettersInArray[counter].letter;
+    let temp: string = this.lettersInArray[counter].letter;
     this.lettersInArray[counter].letter =
       this.lettersInArray[this.lettersInArray.length - 1 - counter].letter;
 
@@ -41,7 +41,7 @@ export class StringReverse {
   }
 
   public setAllCirlesModified(): void {
-    this.lettersInArray = this.lettersInArray.map((el) => {
+    this.lettersInArray = this.lettersInArray.map((el: T) => {
       return {
         ...el,
         state: ElementStates.Modified,
