@@ -22,6 +22,10 @@ export const QueuePage: React.FC = () => {
     setCircleLetters(queue.elements);
   }, []);
 
+  const handleSubmit = (e: React.ChangeEvent<HTMLFormElement>) => {
+    e.preventDefault();
+  };
+
   const handleInput = (e: React.ChangeEvent<HTMLInputElement>) => {
     e.preventDefault();
     setInputValue(e.target.value);
@@ -72,10 +76,10 @@ export const QueuePage: React.FC = () => {
   return (
     <SolutionLayout title="Очередь">
       <div className={styles.mainContainer}>
-        <form className={styles.form}>
+        <form className={styles.form} onSubmit={handleSubmit}>
           <Input
-            max={4}
-            type="number"
+            maxLength={4}
+            type="text"
             isLimitText={true}
             placeholder="Введите значение"
             value={inputValue.replace(/\D/g, "")}

@@ -316,8 +316,8 @@ export const ListPage: React.FC = () => {
             <div className={styles.inputWrapper}>
               <Input
                 placeholder="Введите значение"
-                max={4}
-                type="number"
+                maxLength={4}
+                type="text"
                 isLimitText={true}
                 value={inputValue}
                 onInput={handleInput}
@@ -367,6 +367,7 @@ export const ListPage: React.FC = () => {
               <Input
                 placeholder="Введите индекс"
                 type="number"
+                max={inputValue.length - 1}
                 onInput={handleInputByIndex}
                 value={inputValueByIndex}
               />

@@ -55,8 +55,8 @@ export const StringComponent: React.FC = () => {
       <div className={styles.mainContainer}>
         <form className={styles.form} onSubmit={handleSubmit}>
           <Input
-            max={11}
-            type="number"
+            maxLength={11}
+            type="text"
             isLimitText={true}
             onInput={handleInput}
             value={inputValue}

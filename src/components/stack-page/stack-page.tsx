@@ -25,6 +25,10 @@ export const StackPage: React.FC = () => {
     setInputValue(e.target.value);
   };
 
+  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+  };
+
   const handleAddClick = (e: React.MouseEvent<HTMLElement>) => {
     e.preventDefault();
     setIsLoader({ addBtn: true, deleteBtn: false, clearBtn: false });
@@ -66,10 +70,10 @@ export const StackPage: React.FC = () => {
   return (
     <SolutionLayout title="Стек">
       <div className={styles.mainContainer}>
-        <form className={styles.form}>
+        <form className={styles.form} onSubmit={handleSubmit}>
           <Input
-            max={4}
-            type="number"
+            maxLength={4}
+            type="text"
             isLimitText={true}
             placeholder="Введите значение"
             value={inputValue.replace(/\D/g, "")}
