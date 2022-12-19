@@ -38,10 +38,10 @@ export const StackPage: React.FC = () => {
     setTimeout(() => {
       stack.setAllCirclesDefault();
       setCircleLetters(stack.elements);
+      setIsLoader({ addBtn: false, deleteBtn: false, clearBtn: false });
     }, 500);
 
     setInputValue("");
-    setIsLoader({ addBtn: false, deleteBtn: false, clearBtn: false });
   };
 
   const handleDeleteItemClick = (e: React.MouseEvent<HTMLElement>) => {
@@ -54,8 +54,8 @@ export const StackPage: React.FC = () => {
     setTimeout(() => {
       stack.pop();
       setCircleLetters(stack.elements);
+      setIsLoader({ addBtn: false, deleteBtn: false, clearBtn: false });
     }, 500);
-    setIsLoader({ addBtn: false, deleteBtn: false, clearBtn: false });
   };
 
   const handleClearStackClick = (e: React.MouseEvent<HTMLElement>) => {

@@ -33,6 +33,7 @@ export const QueuePage: React.FC = () => {
 
   const handleAddClick = (e: React.MouseEvent<HTMLElement>) => {
     e.preventDefault();
+
     setIsLoader({ addBtn: true, deleteBtn: false, clearBtn: false });
     queue.clearTail();
 
@@ -43,10 +44,8 @@ export const QueuePage: React.FC = () => {
     setTimeout(() => {
       queue.setAllCirclesDefault();
       setCircleLetters(queue.elements);
-    }, 500);
-
-    setCircleLetters(queue.elements);
-    setIsLoader({ addBtn: false, deleteBtn: false, clearBtn: false });
+      setIsLoader({ addBtn: false, deleteBtn: false, clearBtn: false });
+    }, 1000);
   };
 
   const handleDeleteClick = (e: React.MouseEvent<HTMLElement>) => {
@@ -61,8 +60,8 @@ export const QueuePage: React.FC = () => {
       setCircleLetters(queue.elements);
       queue.setNewHead();
       setCircleLetters(queue.elements);
-    }, 500);
-    setIsLoader({ addBtn: false, deleteBtn: false, clearBtn: false });
+      setIsLoader({ addBtn: false, deleteBtn: false, clearBtn: false });
+    }, 1000);
   };
 
   const hadleClearClick = (e: React.MouseEvent<HTMLElement>) => {

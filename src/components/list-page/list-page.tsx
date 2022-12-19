@@ -367,7 +367,7 @@ export const ListPage: React.FC = () => {
               <Input
                 placeholder="Введите индекс"
                 type="number"
-                max={inputValue.length - 1}
+                max={circleLetters.length - 1}
                 onInput={handleInputByIndex}
                 value={inputValueByIndex}
               />
@@ -379,7 +379,9 @@ export const ListPage: React.FC = () => {
                 disabled={
                   (inputValue.length === 0 && inputValueByIndex.length === 0) ||
                   (inputValue.length === 0 && inputValueByIndex.length !== 0) ||
-                  isDisabled.addByIndex
+                  circleLetters.length - 1 < Number(inputValueByIndex) ||
+                  isDisabled.addByIndex ||
+                  inputValueByIndex === ""
                 }
                 isLoader={isLoader.addByIndex}
                 extraClass="mr-6"
@@ -389,7 +391,9 @@ export const ListPage: React.FC = () => {
                 onClick={handleDeleteByIndexClick}
                 disabled={
                   (inputValue.length === 0 && inputValueByIndex.length === 0) ||
-                  isDisabled.deleteByIndex
+                  isDisabled.deleteByIndex ||
+                  circleLetters.length - 1 < Number(inputValueByIndex) ||
+                  inputValueByIndex === ""
                 }
                 isLoader={isLoader.deleteByIndex}
               />

@@ -1,3 +1,4 @@
+import { log } from "console";
 import { ElementStates } from "../../types/element-states";
 
 export class Queue<
