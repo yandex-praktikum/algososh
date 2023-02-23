@@ -47,3 +47,24 @@
 .buttonWrapper_big {
     width: 213px;
 }
+
+.sortingList {
+    box-sizing: border-box;
+    margin: 48px auto 0 auto;
+    padding: 0;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: end;
+}
+
+.listItem {
+    margin: 0 10px 0 0;
+    padding: 0;
+    box-sizing: border-box;
+    list-style-type: none;
+}
+
+.listItem:last-child {
+    margin-right: 0;
+}

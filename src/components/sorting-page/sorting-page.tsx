@@ -5,6 +5,8 @@ import {RadioInput} from "../ui/radio-input/radio-input";
 import {Button} from "../ui/button/button";
 import {Direction} from "../../types/direction";
 import {randomArr} from "./utils/randomArr";
+import {nanoid} from "nanoid";
+import {Column} from "../ui/column/column";
 
 export const SortingPage: React.FC = () => {
     const [arr, setArr] = useState<Array<number>>([]);
@@ -41,6 +43,15 @@ export const SortingPage: React.FC = () => {
                     </div>
                 </div>
             </div>
+            <ul className={styles.sortingList}>
+                {arr?.map((char, idx) => {
+                    return (
+                        <li key={nanoid()} className={styles.listItem}>
+                            <Column index={char}/>
+                        </li>
+                    )
+                })}
+            </ul>
         </SolutionLayout>
     );
 };
