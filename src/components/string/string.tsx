@@ -6,8 +6,9 @@ import {Button} from "../ui/button/button";
 import {Circle} from "../ui/circle/circle";
 import {useForm} from "../../services/hooks/useForm";
 import {nanoid} from "nanoid";
-import {ElementStates} from "../../types/element-states";
 import {makeDelay} from "../../services/utils/makeDelay";
+import {defineCircleState} from "./utils/defineCircleState";
+import {swap} from "./utils/swap";
 
 interface Iindexes {
     start: number,
@@ -21,11 +22,6 @@ export const StringComponent: React.FC = () => {
     const [isLoading, setIsLoading] = useState<boolean | undefined>(false);
     let data: string | '' = values?.data;
 
-    const swap = (arr: string[], firstIndex: number, secondIndex: number): void => {
-        const temp = arr[firstIndex];
-        arr[firstIndex] = arr[secondIndex];
-        arr[secondIndex] = temp;
-    }
 
     const reverseString = async (str: string): Promise<string[]> => {
         const list = str.split('');
@@ -57,19 +53,6 @@ export const StringComponent: React.FC = () => {
             reverseString(data);
         }
         setValues({...values, data: ''});
-    }
-
-    const defineCircleState = (start: number, end: number, index: number): ElementStates => {
-        if (start === 0 && end === 0) {
-            return ElementStates.Default
-        }
-        if (index === start || index === end) {
-            return ElementStates.Changing
-        }
-        if (index < start || index > end) {
-            return ElementStates.Modified
-        }
-        return ElementStates.Default;
     }
 
     return (

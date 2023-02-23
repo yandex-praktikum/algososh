@@ -1,0 +1,49 @@
+.manageBar {
+    box-sizing: border-box;
+    margin: 0 auto;
+    padding: 0;
+    display: flex;
+    flex-direction: row;
+    justify-content: start;
+    height: 60px;
+    width: 980px;
+}
+
+.radioInputsWrapper {
+    box-sizing: border-box;
+    margin: 0 auto;
+    padding: 0;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    width: 221px;
+}
+
+.sortingButtonsWrapper {
+    box-sizing: border-box;
+    margin: 0 auto;
+    padding: 0;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    width: 430px;
+}
+
+.createArrayButtonWrapper {
+    box-sizing: border-box;
+    margin: 0 auto;
+    padding: 0;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+}
+
+.buttonWrapper {
+    box-sizing: border-box;
+    width: 205px;
+}
+
+.buttonWrapper_big {
+    width: 213px;
+}
