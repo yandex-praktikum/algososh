@@ -36,10 +36,9 @@ export const StringComponent: React.FC = () => {
         let i = 0, j = list.length - 1;
         await makeDelay(1000);
         while (j >= i) {
+            swap(list, i, j);
             setIndexes({start: i, end: j});
             setList([...list]);
-            swap(list, i, j);
-
             j--;
             i++;
             await makeDelay(1000);
