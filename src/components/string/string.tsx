@@ -1,4 +1,4 @@
-import React, {FormEvent, useEffect, useState} from "react";
+import React, {FormEvent, useState} from "react";
 import styles from './string.module.css';
 import {SolutionLayout} from "../ui/solution-layout/solution-layout";
 import {Input} from "../ui/input/input";
@@ -7,6 +7,7 @@ import {Circle} from "../ui/circle/circle";
 import {useForm} from "../../services/hooks/useForm";
 import {nanoid} from "nanoid";
 import {ElementStates} from "../../types/element-states";
+import {makeDelay} from "../../services/utils/makeDelay";
 
 interface Iindexes {
     start: number,
@@ -26,23 +27,25 @@ export const StringComponent: React.FC = () => {
         arr[secondIndex] = temp;
     }
 
-    const makeDelay = (time: number) => new Promise<void>(
-        resolve => setTimeout(resolve, time)
-    );
-
-    const reverseString = async (arr: string[]): Promise<string[]> => {
+    const reverseString = async (str: string): Promise<string[]> => {
+        const list = str.split('');
+        setList([...list]);
         setIsLoading(true);
-        let list = [...arr];
-        let i = 0, j = list.length - 1;
+        setIndexes({start: 0, end: 0});
+        let i = 0,
+            j = list.length - 1;
         await makeDelay(1000);
+
         while (j >= i) {
-            swap(list, i, j);
             setIndexes({start: i, end: j});
+            await makeDelay(500);
+            swap(list, i, j);
             setList([...list]);
             j--;
             i++;
-            await makeDelay(1000);
+            await makeDelay(500);
         }
+
         setIndexes({start: Infinity, end: -Infinity});
         setIsLoading(false);
         return list;
@@ -50,8 +53,8 @@ export const StringComponent: React.FC = () => {
 
     const handleSubmit = (e: FormEvent<HTMLFormElement> | FormEvent<HTMLButtonElement>): void => {
         e.preventDefault();
-        if (circlesList) {
-            reverseString(circlesList);
+        if (data) {
+            reverseString(data);
         }
         setValues({...values, data: ''});
     }
@@ -68,11 +71,6 @@ export const StringComponent: React.FC = () => {
         }
         return ElementStates.Default;
     }
-
-    useEffect(() => {
-        setList(data?.split(''));
-        setIndexes({start: 0, end: 0});
-    }, [values]);
 
     return (
         <SolutionLayout title="Строка">
