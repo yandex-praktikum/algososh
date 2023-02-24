@@ -8,7 +8,7 @@ import {useForm} from "../../services/hooks/useForm";
 import {nanoid} from "nanoid";
 import {makeDelay} from "../../services/utils/makeDelay";
 import {defineCircleState} from "./utils/defineCircleState";
-import {swap} from "./utils/swap";
+import {swap} from "../../services/utils/swap";
 
 interface Iindexes {
     start: number,
