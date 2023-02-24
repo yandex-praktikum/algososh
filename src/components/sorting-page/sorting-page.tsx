@@ -9,37 +9,72 @@ import {nanoid} from "nanoid";
 import {Column} from "../ui/column/column";
 import {swap} from "../../services/utils/swap";
 import {makeDelay} from "../../services/utils/makeDelay";
+import {ElementStates} from "../../types/element-states";
+
+interface Iindexes {
+    first: number,
+    counter: number
+
+}
 
 export const SortingPage: React.FC = () => {
     const [arr, setArr] = useState<Array<number>>([]);
     const [kindOfSorting, setKindOfSorting] = useState<string>('selection');
     const [isChecked, setIsChecked] = useState<boolean | undefined>(true);
+    const [indexes, setIndexes] = useState<Iindexes>({first: -Infinity, counter: -1});
+
 
     const createArrOnClick = () => {
         const arr = randomArr();
         setArr([...arr])
     }
 
+    const defineColumnState = (arr: number[], first: number, counter: number, index: number): ElementStates => {
+
+        if (index === first || index === first + 1) {
+            return ElementStates.Changing
+        }
+        if (index >= arr.length - counter) {
+            return ElementStates.Modified
+        }
+
+        return ElementStates.Default;
+    }
+
     const bubbleSort = async (arr: number[], state: string): Promise<number[]> => {
         await makeDelay(500);
-        console.log(state)
         for (let i = 1; i < arr.length; i++) {
             for (let j = 0; j < arr.length - i; j++) {
                 if (state === 'Ascending') {
                     if (arr[j] > arr[j + 1]) {
+                        setIndexes(prev => {
+                            return {...prev, first: j}
+                        })
+                        await makeDelay(500)
                         swap(arr, j, j + 1);
                         setArr([...arr]);
-                        await makeDelay(500)
                     }
                 } else {
                     if (arr[j] < arr[j + 1]) {
+                        setIndexes(prev => {
+                            return {...prev, first: j}
+                        })
                         swap(arr, j, j + 1);
                         setArr([...arr]);
                         await makeDelay(500);
                     }
                 }
+                if (j === arr.length - i - 1) {
+                    setIndexes({first: j, counter: i})
+                }
             }
         }
+        setIndexes(prev => {
+            return {first: -Infinity, counter: 100}
+        })
+        await makeDelay(3000);
+        setArr([]);
+        setIndexes({first: -Infinity, counter: -1})
         return arr;
     }
 
@@ -80,7 +115,6 @@ export const SortingPage: React.FC = () => {
         setKindOfSorting(target.value);
         setIsChecked(prev => !prev)
     }
-
 
     return (
         <SolutionLayout title="Сортировка массива">
@@ -128,7 +162,8 @@ export const SortingPage: React.FC = () => {
                 {arr?.map((char, idx) => {
                     return (
                         <li key={nanoid()} className={styles.listItem}>
-                            <Column index={char}/>
+                            <Column index={char}
+                                    state={defineColumnState(arr, indexes.first, indexes.counter, idx)}/>
                         </li>
                     )
                 })}
