@@ -14,6 +14,8 @@ import {resolveSrv} from "dns";
 export const SortingPage: React.FC = () => {
     const [arr, setArr] = useState<Array<number>>([]);
     const [upDown, setUpDown] = useState<string>('Ascending');
+    const [kindOfSorting, setKindOfSorting] = useState<string>('selection');
+    const [isChecked, setIsChecked] = useState<boolean | undefined>(true);
 
     const createArrOnClick = () => {
         const arr = randomArr();
@@ -34,13 +36,38 @@ export const SortingPage: React.FC = () => {
                     if (arr[j] < arr[j + 1]) {
                         swap(arr, j, j + 1);
                         setArr([...arr]);
-                        await makeDelay(500)
+                        await makeDelay(500);
                     }
                 }
             }
         }
         return arr;
     }
+
+    const selectionSort = async (arr: number[], state: string): Promise<number[]> => {
+        await makeDelay(500);
+        for (let i = 0; i < arr.length - 1; i++) {
+            let maxInd = i;
+            for (let j = i + 1; j < arr.length; j++) {
+                if (state === 'Ascending') {
+                    if (arr[maxInd] > arr[j]) {
+                        maxInd = j;
+                    }
+                    swap(arr, i, maxInd);
+                    setArr([...arr]);
+                    await makeDelay(500);
+                } else {
+                    if (arr[maxInd] < arr[j]) {
+                        maxInd = j;
+                    }
+                    swap(arr, i, maxInd);
+                    setArr([...arr]);
+                    await makeDelay(500);
+                }
+            }
+        }
+        return arr;
+    };
 
     const handleSubmit = (e: FormEvent<HTMLFormElement> | FormEvent<HTMLButtonElement>): void => {
         e.preventDefault();
@@ -49,22 +76,34 @@ export const SortingPage: React.FC = () => {
             setUpDown(target.name)
         }
         if (arr) {
-            bubbleSort(arr, upDown);
+            selectionSort(arr, upDown);
         }
     }
 
-    //const handleChange = (event: ChangeEvent<HTMLInputElement>) => {
-    //const {value, name} = event.target;
-    //setValues({...values, [name]: value});
-    //}
+    const handleChange = (event: ChangeEvent<HTMLInputElement>) => {
+        const target = event.target as HTMLInputElement;
+        setKindOfSorting(target.value);
+        setIsChecked(prev => !prev)
+    }
 
 
     return (
         <SolutionLayout title="Сортировка массива">
             <div className={styles.manageBar}>
                 <div className={styles.radioInputsWrapper}>
-                    <RadioInput label={'Выбор'} checked={true} name={'sortKind'}/>
-                    <RadioInput label={'Пузырёк'} name={'sortKind'}/>
+                    <RadioInput label={'Выбор'}
+                                name={'sortKind'}
+                                value={'selection'}
+                                onChange={handleChange}
+                                checked={isChecked}
+                    />
+                    <RadioInput label={'Пузырёк'}
+                                name={'sortKind'}
+                                value={'bubble'}
+                                onChange={handleChange}
+                                checked={!isChecked}
+
+                    />
                 </div>
                 <div className={styles.sortingButtonsWrapper}>
                     <div className={`${styles.buttonWrapper} ${styles.buttonWrapper_big}`}>
