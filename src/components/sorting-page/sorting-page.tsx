@@ -9,11 +9,9 @@ import {nanoid} from "nanoid";
 import {Column} from "../ui/column/column";
 import {swap} from "../../services/utils/swap";
 import {makeDelay} from "../../services/utils/makeDelay";
-import {resolveSrv} from "dns";
 
 export const SortingPage: React.FC = () => {
     const [arr, setArr] = useState<Array<number>>([]);
-    const [upDown, setUpDown] = useState<string>('Ascending');
     const [kindOfSorting, setKindOfSorting] = useState<string>('selection');
     const [isChecked, setIsChecked] = useState<boolean | undefined>(true);
 
@@ -24,6 +22,7 @@ export const SortingPage: React.FC = () => {
 
     const bubbleSort = async (arr: number[], state: string): Promise<number[]> => {
         await makeDelay(500);
+        console.log(state)
         for (let i = 1; i < arr.length; i++) {
             for (let j = 0; j < arr.length - i; j++) {
                 if (state === 'Ascending') {
@@ -47,22 +46,19 @@ export const SortingPage: React.FC = () => {
     const selectionSort = async (arr: number[], state: string): Promise<number[]> => {
         await makeDelay(500);
         for (let i = 0; i < arr.length - 1; i++) {
-            let maxInd = i;
             for (let j = i + 1; j < arr.length; j++) {
                 if (state === 'Ascending') {
-                    if (arr[maxInd] > arr[j]) {
-                        maxInd = j;
+                    if (arr[i] > arr[j]) {
+                        swap(arr, i, j);
+                        setArr([...arr]);
+                        await makeDelay(500);
                     }
-                    swap(arr, i, maxInd);
-                    setArr([...arr]);
-                    await makeDelay(500);
                 } else {
-                    if (arr[maxInd] < arr[j]) {
-                        maxInd = j;
+                    if (arr[i] < arr[j]) {
+                        swap(arr, i, j);
+                        setArr([...arr]);
+                        await makeDelay(500);
                     }
-                    swap(arr, i, maxInd);
-                    setArr([...arr]);
-                    await makeDelay(500);
                 }
             }
         }
@@ -71,12 +67,11 @@ export const SortingPage: React.FC = () => {
 
     const handleSubmit = (e: FormEvent<HTMLFormElement> | FormEvent<HTMLButtonElement>): void => {
         e.preventDefault();
-        const target = e.target as HTMLButtonElement;
-        if (target) {
-            setUpDown(target.name)
-        }
+        const target = e.currentTarget as HTMLButtonElement;
         if (arr) {
-            selectionSort(arr, upDown);
+            kindOfSorting === 'selection'
+                ? selectionSort(arr, target.name)
+                : bubbleSort(arr, target.name);
         }
     }
 
