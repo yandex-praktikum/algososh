@@ -24,7 +24,8 @@ export const SortingPage: React.FC = () => {
     const [isChecked, setIsChecked] = useState<boolean | undefined>(true);
     const [indexes, setIndexes] = useState<Iindexes>({first: -Infinity, second: -Infinity, counter: -1});
     const [isLoading, setIsLoading] = useState<boolean | undefined>(false);
-    const [isPressed, setIsPressed] = useState<boolean | undefined>(false);
+    const [isAscending, setIsAscending] = useState<boolean | undefined>(false);
+    const [isDescending, setIsDescending] = useState<boolean | undefined>(false);
 
 
     const createArrOnClick = () => {
@@ -44,6 +45,7 @@ export const SortingPage: React.FC = () => {
 
     const bubbleSort = async (arr: number[], state: string): Promise<number[]> => {
         setIsLoading(true);
+        state === 'Descending' ? setIsDescending(true) : setIsAscending(true);
         await makeDelay(500);
         for (let i = 1; i < arr.length; i++) {
             for (let j = 0; j < arr.length - i; j++) {
@@ -77,6 +79,7 @@ export const SortingPage: React.FC = () => {
         await makeDelay(3000);
         setArr([]);
         setIndexes({first: -Infinity, counter: -1});
+        state === 'Descending' ? setIsDescending(false) : setIsAscending(false);
         setIsLoading(false);
         return arr;
     }
@@ -93,6 +96,7 @@ export const SortingPage: React.FC = () => {
 
     const selectionSort = async (arr: number[], state: string): Promise<number[]> => {
         setIsLoading(true);
+        state === 'Descending' ? setIsDescending(true) : setIsAscending(true);
         await makeDelay(500);
         for (let i = 0; i < arr.length - 1; i++) {
             setIndexes({...indexes, first: i, second: -Infinity})
@@ -123,12 +127,13 @@ export const SortingPage: React.FC = () => {
         await makeDelay(3000);
         setArr([]);
         setIndexes({first: -Infinity, second: -Infinity, counter: -1})
+        state === 'Descending' ? setIsDescending(false) : setIsAscending(false);
         setIsLoading(false);
         return arr;
     };
 
     const handleSubmit = (e: FormEvent<HTMLFormElement> | FormEvent<HTMLButtonElement>): void => {
-        setIsPressed(true);
+
         e.preventDefault();
         const target = e.currentTarget as HTMLButtonElement;
         if (arr) {
@@ -171,7 +176,7 @@ export const SortingPage: React.FC = () => {
                                 type={'submit'}
                                 name={'Ascending'}
                                 onClick={handleSubmit}
-                                isLoader={isLoading}
+                                isLoader={isAscending}
                                 disabled={isLoading}
                         />
                     </div>
@@ -181,7 +186,7 @@ export const SortingPage: React.FC = () => {
                                 type={'submit'}
                                 name={'Descending'}
                                 onClick={handleSubmit}
-                                isLoader={isLoading}
+                                isLoader={isDescending}
                                 disabled={isLoading}
                         />
                     </div>
