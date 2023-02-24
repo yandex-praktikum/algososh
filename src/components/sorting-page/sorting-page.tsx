@@ -13,7 +13,8 @@ import {ElementStates} from "../../types/element-states";
 
 interface Iindexes {
     first: number,
-    counter: number
+    counter: number,
+    second?: number,
 
 }
 
@@ -21,7 +22,9 @@ export const SortingPage: React.FC = () => {
     const [arr, setArr] = useState<Array<number>>([]);
     const [kindOfSorting, setKindOfSorting] = useState<string>('selection');
     const [isChecked, setIsChecked] = useState<boolean | undefined>(true);
-    const [indexes, setIndexes] = useState<Iindexes>({first: -Infinity, counter: -1});
+    const [indexes, setIndexes] = useState<Iindexes>({first: -Infinity, second: -Infinity, counter: -1});
+    const [isLoading, setIsLoading] = useState<boolean | undefined>(false);
+    const [isPressed, setIsPressed] = useState<boolean | undefined>(false);
 
 
     const createArrOnClick = () => {
@@ -29,19 +32,18 @@ export const SortingPage: React.FC = () => {
         setArr([...arr])
     }
 
-    const defineColumnState = (arr: number[], first: number, counter: number, index: number): ElementStates => {
-
+    const defineColumnStateBubble = (arr: number[], first: number, counter: number, index: number): ElementStates => {
         if (index === first || index === first + 1) {
             return ElementStates.Changing
         }
         if (index >= arr.length - counter) {
             return ElementStates.Modified
         }
-
         return ElementStates.Default;
     }
 
     const bubbleSort = async (arr: number[], state: string): Promise<number[]> => {
+        setIsLoading(true);
         await makeDelay(500);
         for (let i = 1; i < arr.length; i++) {
             for (let j = 0; j < arr.length - i; j++) {
@@ -74,14 +76,30 @@ export const SortingPage: React.FC = () => {
         })
         await makeDelay(3000);
         setArr([]);
-        setIndexes({first: -Infinity, counter: -1})
+        setIndexes({first: -Infinity, counter: -1});
+        setIsLoading(false);
         return arr;
     }
 
+    const defineColumnStateSelection = (arr: number[], first: number, second: number, counter: number, index: number): ElementStates => {
+        if (index === first || index === second) {
+            return ElementStates.Changing
+        }
+        if (index < first) {
+            return ElementStates.Modified
+        }
+        return ElementStates.Default;
+    }
+
     const selectionSort = async (arr: number[], state: string): Promise<number[]> => {
+        setIsLoading(true);
         await makeDelay(500);
         for (let i = 0; i < arr.length - 1; i++) {
+            setIndexes({...indexes, first: i, second: -Infinity})
             for (let j = i + 1; j < arr.length; j++) {
+                setIndexes(prev => {
+                    return {...prev, second: j}
+                })
                 if (state === 'Ascending') {
                     if (arr[i] > arr[j]) {
                         swap(arr, i, j);
@@ -95,12 +113,22 @@ export const SortingPage: React.FC = () => {
                         await makeDelay(500);
                     }
                 }
+
+                if (j === arr.length - 1) {
+                    setIndexes({first: i, second: j, counter: i})
+                }
             }
         }
+        setIndexes({first: +Infinity, second: -Infinity, counter: -1})
+        await makeDelay(3000);
+        setArr([]);
+        setIndexes({first: -Infinity, second: -Infinity, counter: -1})
+        setIsLoading(false);
         return arr;
     };
 
     const handleSubmit = (e: FormEvent<HTMLFormElement> | FormEvent<HTMLButtonElement>): void => {
+        setIsPressed(true);
         e.preventDefault();
         const target = e.currentTarget as HTMLButtonElement;
         if (arr) {
@@ -125,12 +153,14 @@ export const SortingPage: React.FC = () => {
                                 value={'selection'}
                                 onChange={handleChange}
                                 checked={isChecked}
+                                disabled={isLoading}
                     />
                     <RadioInput label={'Пузырёк'}
                                 name={'sortKind'}
                                 value={'bubble'}
                                 onChange={handleChange}
                                 checked={!isChecked}
+                                disabled={isLoading}
 
                     />
                 </div>
@@ -141,6 +171,8 @@ export const SortingPage: React.FC = () => {
                                 type={'submit'}
                                 name={'Ascending'}
                                 onClick={handleSubmit}
+                                isLoader={isLoading}
+                                disabled={isLoading}
                         />
                     </div>
                     <div className={styles.buttonWrapper}>
@@ -149,12 +181,17 @@ export const SortingPage: React.FC = () => {
                                 type={'submit'}
                                 name={'Descending'}
                                 onClick={handleSubmit}
+                                isLoader={isLoading}
+                                disabled={isLoading}
                         />
                     </div>
                 </div>
                 <div className={styles.createArrayButtonWrapper}>
                     <div className={styles.buttonWrapper}>
-                        <Button onClick={createArrOnClick} text={'Новый массив'}/>
+                        <Button onClick={createArrOnClick}
+                                text={'Новый массив'}
+                                disabled={isLoading}
+                        />
                     </div>
                 </div>
             </div>
@@ -163,7 +200,9 @@ export const SortingPage: React.FC = () => {
                     return (
                         <li key={nanoid()} className={styles.listItem}>
                             <Column index={char}
-                                    state={defineColumnState(arr, indexes.first, indexes.counter, idx)}/>
+                                    state={kindOfSorting === 'bubble'
+                                        ? defineColumnStateBubble(arr, indexes.first, indexes.counter, idx)
+                                        : defineColumnStateSelection(arr, indexes.first, indexes.second as number, indexes.counter, idx)}/>
                         </li>
                     )
                 })}

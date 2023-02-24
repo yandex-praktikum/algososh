@@ -41,11 +41,11 @@
 
 .buttonWrapper {
     box-sizing: border-box;
-    width: 205px;
+    min-width: 205px;
 }
 
 .buttonWrapper_big {
-    width: 213px;
+    min-width: 213px;
 }
 
 .sortingList {
