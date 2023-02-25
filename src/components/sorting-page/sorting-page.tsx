@@ -9,13 +9,13 @@ import {nanoid} from "nanoid";
 import {Column} from "../ui/column/column";
 import {swap} from "../../services/utils/swap";
 import {makeDelay} from "../../services/utils/makeDelay";
-import {ElementStates} from "../../types/element-states";
+import {defineColumnStateBubble} from "./utils/defineColumnStateBubble";
+import {defineColumnStateSelection} from "./utils/defineColumnStateSelection";
 
 interface Iindexes {
     first: number,
     counter: number,
     second?: number,
-
 }
 
 export const SortingPage: React.FC = () => {
@@ -27,20 +27,9 @@ export const SortingPage: React.FC = () => {
     const [isAscending, setIsAscending] = useState<boolean | undefined>(false);
     const [isDescending, setIsDescending] = useState<boolean | undefined>(false);
 
-
     const createArrOnClick = () => {
         const arr = randomArr();
         setArr([...arr])
-    }
-
-    const defineColumnStateBubble = (arr: number[], first: number, counter: number, index: number): ElementStates => {
-        if (index === first || index === first + 1) {
-            return ElementStates.Changing
-        }
-        if (index >= arr.length - counter) {
-            return ElementStates.Modified
-        }
-        return ElementStates.Default;
     }
 
     const bubbleSort = async (arr: number[], state: string): Promise<number[]> => {
@@ -84,16 +73,6 @@ export const SortingPage: React.FC = () => {
         return arr;
     }
 
-    const defineColumnStateSelection = (arr: number[], first: number, second: number, counter: number, index: number): ElementStates => {
-        if (index === first || index === second) {
-            return ElementStates.Changing
-        }
-        if (index < first) {
-            return ElementStates.Modified
-        }
-        return ElementStates.Default;
-    }
-
     const selectionSort = async (arr: number[], state: string): Promise<number[]> => {
         setIsLoading(true);
         state === 'Descending' ? setIsDescending(true) : setIsAscending(true);
@@ -117,7 +96,6 @@ export const SortingPage: React.FC = () => {
                         await makeDelay(500);
                     }
                 }
-
                 if (j === arr.length - 1) {
                     setIndexes({first: i, second: j, counter: i})
                 }
@@ -133,7 +111,6 @@ export const SortingPage: React.FC = () => {
     };
 
     const handleSubmit = (e: FormEvent<HTMLFormElement> | FormEvent<HTMLButtonElement>): void => {
-
         e.preventDefault();
         const target = e.currentTarget as HTMLButtonElement;
         if (arr) {
@@ -206,8 +183,17 @@ export const SortingPage: React.FC = () => {
                         <li key={nanoid()} className={styles.listItem}>
                             <Column index={char}
                                     state={kindOfSorting === 'bubble'
-                                        ? defineColumnStateBubble(arr, indexes.first, indexes.counter, idx)
-                                        : defineColumnStateSelection(arr, indexes.first, indexes.second as number, indexes.counter, idx)}/>
+                                        ? defineColumnStateBubble(
+                                            arr,
+                                            indexes.first,
+                                            indexes.counter,
+                                            idx)
+                                        : defineColumnStateSelection(
+                                            arr,
+                                            indexes.first,
+                                            indexes.second as number,
+                                            indexes.counter,
+                                            idx)}/>
                         </li>
                     )
                 })}
