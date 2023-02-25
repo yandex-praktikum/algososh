@@ -25,6 +25,7 @@ export const StackPage: React.FC = () => {
     const [isClear, setIsClear] = useState<boolean | undefined>(false);
 
     let data: string | '' = values?.data;
+    let regex = /\D/g;
 
     useEffect(() => {
         setStack(new Stack());
@@ -34,8 +35,8 @@ export const StackPage: React.FC = () => {
     const pushStack = async (stack: Stack<string>, str: string): Promise<Stack<string>> => {
         setIsLoading(true);
         setIsPush(true);
-        let regex = /\D/g;
-        if (!regex.test(str) && stack.getSize() < 16) {
+
+        if (stack.getSize() < 16) {
             stack.push(str);
             if (circlesList) {
                 setList(stack.print);
@@ -117,20 +118,20 @@ export const StackPage: React.FC = () => {
                         extraClass={`${styles.button}`}
                         type={'submit'}
                         isLoader={isPush}
-                        disabled={!data}
+                        disabled={!data || regex.test(data)}
                 />
                 <Button text={'Удалить'}
                         type={'button'}
                         onClick={handlePop}
                         isLoader={isPop}
-                        disabled={isLoading}
+                        disabled={isLoading || !circlesList?.length}
                 />
                 <div className={styles.clearBtnWrapper}>
                     <Button text={'Очистить'}
                             type={'button'}
                             onClick={handleClear}
                             isLoader={isClear}
-                            disabled={isLoading}
+                            disabled={isLoading || !circlesList?.length}
                     />
                 </div>
             </form>
