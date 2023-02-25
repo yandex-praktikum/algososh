@@ -8,11 +8,10 @@ import {Circle} from "../ui/circle/circle";
 import {useForm} from "../../services/hooks/useForm";
 import {nanoid} from "nanoid";
 import {makeDelay} from "../../services/utils/makeDelay";
-import {swap} from "../../services/utils/swap";
+import {defineCircleState} from "./utils/defineCircleState";
 
 interface Iindexes {
     start: number,
-    end: number
 }
 
 export const StackPage: React.FC = () => {
@@ -20,6 +19,10 @@ export const StackPage: React.FC = () => {
     const [circlesList, setList] = useState<Array<string> | null>(null);
     const [stack, setStack] = useState<Stack<string> | null>(null);
     const [isLoading, setIsLoading] = useState<boolean | undefined>(false);
+    const [indexes, setIndexes] = useState<Iindexes>({start: -Infinity});
+    const [isPush, setIsPush] = useState<boolean | undefined>(false);
+    const [isPop, setIsPop] = useState<boolean | undefined>(false);
+    const [isClear, setIsClear] = useState<boolean | undefined>(false);
 
     let data: string | '' = values?.data;
 
@@ -30,16 +33,50 @@ export const StackPage: React.FC = () => {
 
     const pushStack = async (stack: Stack<string>, str: string): Promise<Stack<string>> => {
         setIsLoading(true);
-        await makeDelay(1000);
+        setIsPush(true);
         let regex = /\D/g;
         if (!regex.test(str) && stack.getSize() < 16) {
             stack.push(str);
             if (circlesList) {
                 setList(stack.print);
-                await makeDelay(1000);
+                setIndexes({start: circlesList.length});
+                await makeDelay(500);
             }
         }
+        setIndexes({start: -Infinity});
+        setIsPush(false);
+        setIsLoading(false);
+        return stack;
+    }
 
+    const popStack = async (stack: Stack<string>): Promise<Stack<string>> => {
+        setIsLoading(true);
+        setIsPop(true);
+        stack.pop();
+        if (circlesList) {
+            setIndexes({start: circlesList.length - 1});
+            await makeDelay(500);
+            setList(stack.print);
+        }
+
+        setIndexes({start: -Infinity});
+        setIsPop(false);
+        setIsLoading(false);
+        return stack;
+    }
+
+    const clearStack = async (stack: Stack<string>): Promise<Stack<string>> => {
+        setIsLoading(true);
+        setIsClear(true);
+        while (stack.peak()) {
+            stack.pop();
+        }
+        if (circlesList) {
+            await makeDelay(500);
+            setList(stack.print);
+        }
+
+        setIsClear(false);
         setIsLoading(false);
         return stack;
     }
@@ -52,6 +89,17 @@ export const StackPage: React.FC = () => {
         setValues({...values, data: ''});
     }
 
+    const handlePop = (e: FormEvent<HTMLFormElement> | FormEvent<HTMLButtonElement>): void => {
+        if (stack) {
+            popStack(stack);
+        }
+    }
+
+    const handleClear = (e: FormEvent<HTMLFormElement> | FormEvent<HTMLButtonElement>): void => {
+        if (stack) {
+            clearStack(stack);
+        }
+    }
 
     return (
         <SolutionLayout title="Стек">
@@ -63,24 +111,38 @@ export const StackPage: React.FC = () => {
                        onChange={handleChange}
                        name={'data'}
                        value={data || ""}
+                       disabled={isLoading}
                 />
                 <Button text={'Добавить'}
                         extraClass={`${styles.button}`}
                         type={'submit'}
-                        onSubmit={handlePush}
+                        isLoader={isPush}
+                        disabled={!data}
                 />
                 <Button text={'Удалить'}
-                        type={'submit'}/>
+                        type={'button'}
+                        onClick={handlePop}
+                        isLoader={isPop}
+                        disabled={isLoading}
+                />
                 <div className={styles.clearBtnWrapper}>
                     <Button text={'Очистить'}
-                            type={'submit'}/>
+                            type={'button'}
+                            onClick={handleClear}
+                            isLoader={isClear}
+                            disabled={isLoading}
+                    />
                 </div>
             </form>
             <ul className={styles.circleList}>
                 {circlesList?.map((char, idx) => {
                     return (
                         <li key={nanoid()} className={styles.listItem}>
-                            <Circle letter={`${char}`}/>
+                            <Circle letter={`${char}`}
+                                    index={idx}
+                                    head={idx === circlesList?.length - 1 ? 'top' : ''}
+                                    state={defineCircleState(indexes.start, idx)}
+                            />
                         </li>
                     )
                 })}
