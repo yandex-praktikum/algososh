@@ -90,13 +90,13 @@ export const StackPage: React.FC = () => {
         setValues({...values, data: ''});
     }
 
-    const handlePop = (e: FormEvent<HTMLFormElement> | FormEvent<HTMLButtonElement>): void => {
+    const handlePop = (): void => {
         if (stack) {
             popStack(stack);
         }
     }
 
-    const handleClear = (e: FormEvent<HTMLFormElement> | FormEvent<HTMLButtonElement>): void => {
+    const handleClear = (): void => {
         if (stack) {
             clearStack(stack);
         }

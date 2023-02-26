@@ -20,8 +20,8 @@ export const QueuePage: React.FC = () => {
     const [queue, setQueue] = useState<Queue<string> | null>(null);
     const [isLoading, setIsLoading] = useState<boolean | undefined>(false);
     const [indexes, setIndexes] = useState<Iindexes>({start: -Infinity});
-    const [isPush, setIsPush] = useState<boolean | undefined>(false);
-    const [isPop, setIsPop] = useState<boolean | undefined>(false);
+    const [isEnqueue, setIsEnqueue] = useState<boolean | undefined>(false);
+    const [isDequeue, setIsDequeue] = useState<boolean | undefined>(false);
     const [isClear, setIsClear] = useState<boolean | undefined>(false);
 
     let data: string | '' = values?.data;
@@ -38,40 +38,36 @@ export const QueuePage: React.FC = () => {
     }, [queue]);
 
 
-    console.log(circlesList)
-    // const pushStack = async (stack: Stack<string>, str: string): Promise<Stack<string>> => {
-    //     setIsLoading(true);
-    //     setIsPush(true);
-    //
-    //     if (stack.getSize() < 16) {
-    //         stack.push(str);
-    //         if (circlesList) {
-    //             setList(stack.print);
-    //             setIndexes({start: circlesList.length});
-    //             await makeDelay(500);
-    //         }
-    //     }
-    //     setIndexes({start: -Infinity});
-    //     setIsPush(false);
-    //     setIsLoading(false);
-    //     return stack;
-    // }
+    const enqueueQueue = async (queue: Queue<string>, str: string): Promise<Queue<string>> => {
+        setIsLoading(true);
+        setIsEnqueue(true);
+        queue.enqueue(str);
+        setList(queue.print);
+        //setIndexes({start: circlesList.length});
+        await makeDelay(500);
 
-    // const popStack = async (stack: Stack<string>): Promise<Stack<string>> => {
-    //     setIsLoading(true);
-    //     setIsPop(true);
-    //     stack.pop();
-    //     if (circlesList) {
-    //         setIndexes({start: circlesList.length - 1});
-    //         await makeDelay(500);
-    //         setList(stack.print);
-    //     }
 
-    //     setIndexes({start: -Infinity});
-    //     setIsPop(false);
-    //     setIsLoading(false);
-    //     return stack;
-    // }
+        //setIndexes({start: -Infinity});
+        setIsEnqueue(false);
+        setIsLoading(false);
+        return queue;
+    }
+
+    const dequeueQueue = async (queue: Queue<string>): Promise<Queue<string>> => {
+        setIsLoading(true);
+        setIsDequeue(true);
+        queue.dequeue();
+        if (queue.isEmpty()) {
+            queue.reset(7)
+        }
+        //setIndexes({start: circlesList.length - 1});
+        await makeDelay(500);
+        setList(queue.print);
+        //setIndexes({start: -Infinity});
+        setIsDequeue(false);
+        setIsLoading(false);
+        return queue;
+    }
 
     /*const clearStack = async (stack: Stack<string>): Promise<Stack<string>> => {
         setIsLoading(true);
@@ -89,29 +85,29 @@ export const QueuePage: React.FC = () => {
         return stack;
     }*/
 
-    /*const handlePush = (e: FormEvent<HTMLFormElement> | FormEvent<HTMLButtonElement>): void => {
+    const handleEnqueue = (e: FormEvent<HTMLFormElement> | FormEvent<HTMLButtonElement>): void => {
         e.preventDefault();
-        if (data && stack) {
-            pushStack(stack, data);
+        if (data && queue) {
+            enqueueQueue(queue, data);
         }
         setValues({...values, data: ''});
     }
 
-    const handlePop = (e: FormEvent<HTMLFormElement> | FormEvent<HTMLButtonElement>): void => {
-        if (stack) {
-            popStack(stack);
+    const handleDequeue = (): void => {
+        if (queue) {
+            dequeueQueue(queue);
         }
     }
 
-    const handleClear = (e: FormEvent<HTMLFormElement> | FormEvent<HTMLButtonElement>): void => {
-        if (stack) {
-            clearStack(stack);
-        }
-    }*/
+    /* const handleClear = (e: FormEvent<HTMLFormElement> | FormEvent<HTMLButtonElement>): void => {
+         if (stack) {
+             clearStack(stack);
+         }
+     }*/
 
     return (
         <SolutionLayout title="Очередь">
-            <form className={styles.container}>
+            <form className={styles.container} onSubmit={handleEnqueue}>
                 <Input type={'text'}
                        maxLength={4}
                        isLimitText={true}
@@ -124,21 +120,21 @@ export const QueuePage: React.FC = () => {
                 <Button text={'Добавить'}
                         extraClass={`${styles.button}`}
                         type={'submit'}
-                        isLoader={isPush}
-                        disabled={!data || regex.test(data)}
+                        isLoader={isEnqueue}
+                        disabled={!data || regex.test(data) || circlesList[6] !== ''}
                 />
                 <Button text={'Удалить'}
                         type={'button'}
-
-                        isLoader={isPop}
-                        disabled={isLoading || !circlesList?.length}
+                        onClick={handleDequeue}
+                        isLoader={isDequeue}
+                        disabled={isLoading || !circlesList?.some(el => el !== '')}
                 />
                 <div className={styles.clearBtnWrapper}>
                     <Button text={'Очистить'}
                             type={'button'}
 
                             isLoader={isClear}
-                            disabled={isLoading || !circlesList?.length}
+                            disabled={isLoading || !circlesList?.some(el => el !== '')}
                     />
                 </div>
             </form>
@@ -148,7 +144,6 @@ export const QueuePage: React.FC = () => {
                         <li key={nanoid()} className={styles.listItem}>
                             <Circle letter={`${char}`}
                                     index={idx}
-                                    head={idx === circlesList?.length - 1 ? 'top' : ''}
                                     state={defineCircleState(indexes.start, idx)}
                             />
                         </li>

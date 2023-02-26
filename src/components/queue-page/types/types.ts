@@ -1,12 +1,12 @@
 interface IQueue<T> {
     enqueue: (item: T) => void;
     dequeue: () => void;
-    peak: () => T | null;
-    print: () => (T | null)[];
+    peak: () => T | '';
+    print: () => (T | '')[];
 }
 
 export class Queue<T> implements IQueue<T> {
-    private container: (T | null)[] = [];
+    private container: (T | '')[] = [];
     private head = 0;
     private tail = 0;
     private readonly size: number = 0;
@@ -34,7 +34,7 @@ export class Queue<T> implements IQueue<T> {
         if (this.isEmpty()) {
             throw new Error("No elements in the queue");
         }
-        delete this.container[this.head % this.size];
+        this.container[this.head % this.size] = '';
         this.length--;
         if (this.head < this.size - 1) {
             this.head++;
@@ -43,18 +43,28 @@ export class Queue<T> implements IQueue<T> {
         }
     };
 
-    peak = (): T | null => {
+    peak = (): T | '' => {
         if (this.isEmpty()) {
             throw new Error("No elements in the queue");
         }
-        return this.container[this.head % this.size]; // Ваш код
+        return this.container[this.head % this.size];
     };
 
-    isEmpty = () => this.length === 0;
+    isEmpty = () => this.container.every((el) => {
+        return el === ''
+    });
 
-    print = (): (T | null)[] => {
+    print = (): (T | '')[] => {
         return this.container.map((element) => {
             return element
         })
     };
+
+    reset = (size: number): void => {
+        if (this.isEmpty()) {
+            this.head = 0;
+            this.tail = 0;
+            this.container = Array(size).fill('');
+        }
+    }
 }
