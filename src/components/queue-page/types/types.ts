@@ -3,6 +3,8 @@ interface IQueue<T> {
     dequeue: () => void;
     peak: () => T | '';
     print: () => (T | '')[];
+    clear: (size: number) => void;
+    showEdges: () => number[];
 }
 
 export class Queue<T> implements IQueue<T> {
@@ -25,8 +27,6 @@ export class Queue<T> implements IQueue<T> {
         this.length++;
         if (this.tail < this.size - 1) {
             this.tail++;
-        } else {
-            this.tail = 0;
         }
     };
 
@@ -36,10 +36,8 @@ export class Queue<T> implements IQueue<T> {
         }
         this.container[this.head % this.size] = '';
         this.length--;
-        if (this.head < this.size - 1) {
+        if (this.head < this.size - 1 && this.head < this.tail - 1) {
             this.head++;
-        } else {
-            this.head = 0;
         }
     };
 
@@ -60,17 +58,13 @@ export class Queue<T> implements IQueue<T> {
         })
     };
 
-    reset = (size: number): void => {
-        if (this.isEmpty()) {
-            this.head = 0;
-            this.tail = 0;
-            this.container = Array(size).fill('');
-        }
-    }
-
     clear = (size: number): void => {
         this.head = 0;
         this.tail = 0;
         this.container = Array(size).fill('');
+    }
+
+    showEdges = (): number[] => {
+        return [this.head, this.tail]
     }
 }

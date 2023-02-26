@@ -10,19 +10,17 @@ import {nanoid} from "nanoid";
 import {makeDelay} from "../../services/utils/makeDelay";
 import {defineCircleState} from "./utils/defineCircleState";
 
-interface Iindexes {
-    start: number,
-}
 
 export const QueuePage: React.FC = () => {
     const {values, handleChange, setValues} = useForm({});
     const [circlesList, setList] = useState<Array<string | null>>([]);
     const [queue, setQueue] = useState<Queue<string> | null>(null);
     const [isLoading, setIsLoading] = useState<boolean | undefined>(false);
-    const [indexes, setIndexes] = useState<Iindexes>({start: -Infinity});
+    const [index, setIndex] = useState<number>(-Infinity);
     const [isEnqueue, setIsEnqueue] = useState<boolean | undefined>(false);
     const [isDequeue, setIsDequeue] = useState<boolean | undefined>(false);
     const [isClear, setIsClear] = useState<boolean | undefined>(false);
+    const [edges, setEdges] = useState<number[]>([0, 0]);
 
     let data: string | '' = values?.data;
     let regex = /\D/g;
@@ -37,17 +35,20 @@ export const QueuePage: React.FC = () => {
         }
     }, [queue]);
 
+    useEffect(() => {
+        if (queue) {
+            setEdges(queue.showEdges);
+        }
+    }, [circlesList]);
 
     const enqueueQueue = async (queue: Queue<string>, str: string): Promise<Queue<string>> => {
         setIsLoading(true);
         setIsEnqueue(true);
+        setIndex(edges[1]);
+        await makeDelay(500);
         queue.enqueue(str);
         setList(queue.print);
-        //setIndexes({start: circlesList.length});
-        await makeDelay(500);
-
-
-        //setIndexes({start: -Infinity});
+        setIndex(prevState => -Infinity);
         setIsEnqueue(false);
         setIsLoading(false);
         return queue;
@@ -56,14 +57,12 @@ export const QueuePage: React.FC = () => {
     const dequeueQueue = async (queue: Queue<string>): Promise<Queue<string>> => {
         setIsLoading(true);
         setIsDequeue(true);
+        setIndex(edges[0]);
         queue.dequeue();
-        if (queue.isEmpty()) {
-            queue.reset(7)
-        }
-        //setIndexes({start: circlesList.length - 1});
         await makeDelay(500);
         setList(queue.print);
-        //setIndexes({start: -Infinity});
+        //setEdges(queue.showEdges);
+        setIndex(prevState => -Infinity);
         setIsDequeue(false);
         setIsLoading(false);
         return queue;
@@ -75,6 +74,7 @@ export const QueuePage: React.FC = () => {
         queue.clear(7);
         await makeDelay(500);
         setList(queue.print);
+        setEdges(queue.showEdges);
         setIsClear(false);
         setIsLoading(false);
         return queue;
@@ -85,6 +85,7 @@ export const QueuePage: React.FC = () => {
         if (data && queue) {
             enqueueQueue(queue, data);
         }
+
         setValues({...values, data: ''});
     }
 
@@ -122,14 +123,14 @@ export const QueuePage: React.FC = () => {
                         type={'button'}
                         onClick={handleDequeue}
                         isLoader={isDequeue}
-                        disabled={isLoading || !circlesList?.some(el => el !== '')}
+                        disabled={isLoading || circlesList?.every(el => el === '')}
                 />
                 <div className={styles.clearBtnWrapper}>
                     <Button text={'Очистить'}
                             type={'button'}
                             onClick={handleClear}
                             isLoader={isClear}
-                            disabled={isLoading || !circlesList?.some(el => el !== '')}
+                            disabled={isLoading}
                     />
                 </div>
             </form>
@@ -139,7 +140,9 @@ export const QueuePage: React.FC = () => {
                         <li key={nanoid()} className={styles.listItem}>
                             <Circle letter={`${char}`}
                                     index={idx}
-                                    state={defineCircleState(indexes.start, idx)}
+                                    state={defineCircleState(index, idx)}
+                                    head={idx === 0 && idx === edges[0] ? 'head' : idx === edges[0] ? 'head' : ''}
+                                    tail={idx === 0 && idx === edges[1] ? 'tail' : idx === edges[1] - 1 ? 'tail' : ''}
                             />
                         </li>
                     )
