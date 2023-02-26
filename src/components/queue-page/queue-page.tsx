@@ -13,14 +13,14 @@ import {defineCircleState} from "./utils/defineCircleState";
 
 export const QueuePage: React.FC = () => {
     const {values, handleChange, setValues} = useForm({});
-    const [circlesList, setList] = useState<Array<string | null>>([]);
+    const [circlesList, setList] = useState<Array<string | null>>(Array(7).fill(''));
     const [queue, setQueue] = useState<Queue<string> | null>(null);
     const [isLoading, setIsLoading] = useState<boolean | undefined>(false);
     const [index, setIndex] = useState<number>(-Infinity);
     const [isEnqueue, setIsEnqueue] = useState<boolean | undefined>(false);
     const [isDequeue, setIsDequeue] = useState<boolean | undefined>(false);
     const [isClear, setIsClear] = useState<boolean | undefined>(false);
-    const [edges, setEdges] = useState<number[]>([0, 0]);
+    const [edges, setEdges] = useState<number[]>([-Infinity, -Infinity]);
 
     let data: string | '' = values?.data;
     let regex = /\D/g;
@@ -29,26 +29,16 @@ export const QueuePage: React.FC = () => {
         setQueue(new Queue(7));
     }, []);
 
-    useEffect(() => {
-        if (queue) {
-            setList(queue.print);
-        }
-    }, [queue]);
-
-    useEffect(() => {
-        if (queue) {
-            setEdges(queue.showEdges);
-        }
-    }, [circlesList]);
-
     const enqueueQueue = async (queue: Queue<string>, str: string): Promise<Queue<string>> => {
         setIsLoading(true);
         setIsEnqueue(true);
-        setIndex(edges[1]);
-        await makeDelay(500);
+        let [head, tail] = queue.showEdges();
+        setEdges([head, tail]);
         queue.enqueue(str);
+        setIndex(tail);
+        await makeDelay(500);
         setList(queue.print);
-        setIndex(prevState => -Infinity);
+        setIndex(-Infinity);
         setIsEnqueue(false);
         setIsLoading(false);
         return queue;
@@ -57,12 +47,16 @@ export const QueuePage: React.FC = () => {
     const dequeueQueue = async (queue: Queue<string>): Promise<Queue<string>> => {
         setIsLoading(true);
         setIsDequeue(true);
-        setIndex(edges[0]);
+        let [head, tail] = queue.showEdges();
+        setIndex(head);
         queue.dequeue();
+
         await makeDelay(500);
+        let [head1, tail1] = queue.showEdges();
+        setEdges([head1 <= tail - 1 ? head1 : tail - 1, tail - 1]);
         setList(queue.print);
-        //setEdges(queue.showEdges);
-        setIndex(prevState => -Infinity);
+
+        setIndex(-Infinity);
         setIsDequeue(false);
         setIsLoading(false);
         return queue;
@@ -141,8 +135,8 @@ export const QueuePage: React.FC = () => {
                             <Circle letter={`${char}`}
                                     index={idx}
                                     state={defineCircleState(index, idx)}
-                                    head={idx === 0 && idx === edges[0] ? 'head' : idx === edges[0] ? 'head' : ''}
-                                    tail={idx === 0 && idx === edges[1] ? 'tail' : idx === edges[1] - 1 ? 'tail' : ''}
+                                    head={idx === edges[0] ? 'head' : ''}
+                                    tail={idx === edges[1] ? 'tail' : ''}
                             />
                         </li>
                     )

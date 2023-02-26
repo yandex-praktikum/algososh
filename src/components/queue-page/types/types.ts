@@ -36,7 +36,7 @@ export class Queue<T> implements IQueue<T> {
         }
         this.container[this.head % this.size] = '';
         this.length--;
-        if (this.head < this.size - 1 && this.head < this.tail - 1) {
+        if (this.head < this.size - 1) {
             this.head++;
         }
     };
