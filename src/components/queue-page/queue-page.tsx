@@ -69,21 +69,16 @@ export const QueuePage: React.FC = () => {
         return queue;
     }
 
-    /*const clearStack = async (stack: Stack<string>): Promise<Stack<string>> => {
+    const clearQueue = async (queue: Queue<string>): Promise<Queue<string>> => {
         setIsLoading(true);
         setIsClear(true);
-        while (stack.peak()) {
-            stack.pop();
-        }
-        if (circlesList) {
-            await makeDelay(500);
-            setList(stack.print);
-        }
-
+        queue.clear(7);
+        await makeDelay(500);
+        setList(queue.print);
         setIsClear(false);
         setIsLoading(false);
-        return stack;
-    }*/
+        return queue;
+    }
 
     const handleEnqueue = (e: FormEvent<HTMLFormElement> | FormEvent<HTMLButtonElement>): void => {
         e.preventDefault();
@@ -99,11 +94,11 @@ export const QueuePage: React.FC = () => {
         }
     }
 
-    /* const handleClear = (e: FormEvent<HTMLFormElement> | FormEvent<HTMLButtonElement>): void => {
-         if (stack) {
-             clearStack(stack);
-         }
-     }*/
+    const handleClear = (): void => {
+        if (queue) {
+            clearQueue(queue);
+        }
+    }
 
     return (
         <SolutionLayout title="Очередь">
@@ -132,7 +127,7 @@ export const QueuePage: React.FC = () => {
                 <div className={styles.clearBtnWrapper}>
                     <Button text={'Очистить'}
                             type={'button'}
-
+                            onClick={handleClear}
                             isLoader={isClear}
                             disabled={isLoading || !circlesList?.some(el => el !== '')}
                     />
