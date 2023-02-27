@@ -1,0 +1,55 @@
+.formContainer {
+    width: 952px;
+    box-sizing: border-box;
+    margin: 0 auto;
+    padding: 0;
+    display: flex;
+    justify-content: start;
+    align-items: start;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.form {
+    width: 952px;
+    box-sizing: border-box;
+    margin: 0 auto;
+    padding: 0;
+    display: flex;
+    justify-content: start;
+    align-items: start;
+    flex-direction: row;
+}
+
+.btnWrapperSmall {
+    width: 175px;
+    box-sizing: border-box;
+    margin-right: 12px;
+}
+
+.btnWrapperSmall:last-of-type {
+    margin-right: 0;
+}
+
+.btnWrapperSmall > button {
+    width: 100%;
+}
+
+.btnWrapperBig {
+    width: 362px;
+    box-sizing: border-box;
+    margin-right: 12px;
+}
+
+.btnWrapperBig:last-of-type {
+    margin-right: 0;
+}
+
+.btnWrapperBig > button {
+    width: 100%;
+}
+
+.input {
+    margin-right: 12px;
+    width: 204px;
+}

@@ -68,7 +68,7 @@ export const QueuePage: React.FC = () => {
         queue.clear(7);
         await makeDelay(500);
         setList(queue.print);
-        setEdges(queue.showEdges);
+        setEdges([-Infinity, -Infinity]);
         setIsClear(false);
         setIsLoading(false);
         return queue;
