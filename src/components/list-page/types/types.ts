@@ -1,8 +1,8 @@
-class Node<T> {
+class LinkedListNode<T> {
     value: T;
-    next: Node<T> | null;
+    next: LinkedListNode<T> | null;
 
-    constructor(value: T, next?: Node<T> | null) {
+    constructor(value: T, next?: LinkedListNode<T> | null) {
         this.value = value;
         this.next = next === undefined ? null : next;
     }
@@ -19,8 +19,8 @@ interface ILinkedList<T> {
 }
 
 export class LinkedList<T> implements ILinkedList<T> {
-    private head: Node<T> | null;
-    private tail: Node<T> | null;
+    private head: LinkedListNode<T> | null;
+    private tail: LinkedListNode<T> | null;
     private size: number;
 
     constructor(array?: T[]) {
@@ -32,7 +32,7 @@ export class LinkedList<T> implements ILinkedList<T> {
 
 
     prepend(element: T) {
-        const node = new Node(element);
+        const node = new LinkedListNode(element);
         if (!this.head) {
             this.head = node;
             this.tail = node;
@@ -55,7 +55,7 @@ export class LinkedList<T> implements ILinkedList<T> {
     }
 
     append(element: T) {
-        const node = new Node(element);
+        const node = new LinkedListNode(element);
         if (!this.tail) {
             this.tail = node;
             this.head = node;
@@ -80,10 +80,10 @@ export class LinkedList<T> implements ILinkedList<T> {
             this.tail = null;
         } else {
             let n = this.head;
-            let prev = this.head;
+            let prev = null;
             while (this.size > 1 && n?.next) {
+                prev = n;
                 n = n.next;
-                prev = prev!.next;
             }
             prev!.next = null;
             this.tail = prev;
@@ -96,7 +96,7 @@ export class LinkedList<T> implements ILinkedList<T> {
             console.log("Enter a valid index");
             return;
         } else {
-            const node = new Node(element);
+            const node = new LinkedListNode(element);
             // добавить элемент в начало списка
             if (index === 0) {
                 node.next = this.head;
