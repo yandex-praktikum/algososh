@@ -14,7 +14,7 @@ interface ILinkedList<T> {
     deleteHead: () => void;
     deleteTail: () => void;
     addByIndex: (element: T, index: number) => void;
-    //deleteByIndex: () => number;
+    deleteByIndex: (index: number) => void;
     toArray: () => T[] | null;
 }
 
@@ -123,25 +123,32 @@ export class LinkedList<T> implements ILinkedList<T> {
         }
     }
 
-    /*  deleteByIndex(index: number, element: T) {
-          if (index < 0 || index > this.size) {
-              console.log("Enter a valid index");
-              return;
-          }
-          let dummyHead = new Node(element); // добавим в начало пустой узел
-          dummyHead.next = this.head;
-          let curr = dummyHead;
-          let prev = curr;
-          let n = 0;
-          while (n <= index) {
-              curr = curr.next as Node<T>;
-              prev = prev.next as Node<T>;
-              n++;
-          }
-          prev.next = curr.next;
-          curr.next = null;
-          this.size--;
-      }*/
+    deleteByIndex(index: number) {
+        if (index < 0 || index > this.size || !this.head) {
+            return;
+        }
+        if (this.size === 1) {
+            this.head = null;
+            this.size = 0;
+            this.tail = null;
+        }
+        let curr = this.head;
+        if (index === 0) {
+            this.head = curr!.next;
+            curr!.next = null;
+        } else {
+            let prev = null;
+            let n = 0;
+            while (n < index) {
+                prev = curr;
+                if (curr) curr = curr?.next;
+                n++;
+            }
+            if (prev && curr) prev.next = curr.next ? curr.next : null;
+            if (curr) curr.next = null;
+        }
+        this.size--;
+    }
 
     /*getSize() {
         return this.size;
