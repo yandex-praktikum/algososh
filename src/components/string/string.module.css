@@ -1,0 +1,15 @@
+.form {
+  display: flex;
+  align-items: flex-start;
+  max-width: 522px;
+  margin: 0 auto;
+  gap: 12px;
+}
+
+.results {
+  display: inline-flex;
+  margin: 120px auto 0;
+  padding: 0;
+  gap: 16px;
+  list-style: none;
+}
