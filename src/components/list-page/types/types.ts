@@ -16,6 +16,7 @@ interface ILinkedList<T> {
     addByIndex: (element: T, index: number) => void;
     deleteByIndex: (index: number) => void;
     toArray: () => T[] | null;
+    getSize: () => number;
 }
 
 export class LinkedList<T> implements ILinkedList<T> {
@@ -150,9 +151,9 @@ export class LinkedList<T> implements ILinkedList<T> {
         this.size--;
     }
 
-    /*getSize() {
+    getSize(): number {
         return this.size;
-    }*/
+    }
 
     toArray(): T[] | null {
         let curr = this.head;
@@ -163,6 +164,5 @@ export class LinkedList<T> implements ILinkedList<T> {
         }
         return res;
     }
-
 
 }
