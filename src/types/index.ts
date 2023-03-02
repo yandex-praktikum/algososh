@@ -29,7 +29,7 @@ export type TSortingSteps<T> = {
   modified: number[];
 }[];
 
-export interface ILogStep {
+export interface IRefStep {
   current?: number[],
   modified?: number
 }
