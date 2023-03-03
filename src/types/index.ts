@@ -1,4 +1,4 @@
-import { LinkedListFunctions } from './linkedList-functions';
+import { Functions } from './linkedList-functions';
 import { Direction } from './direction';
 import { ElementStates } from './element-states';
 import { ButtonPositions } from './button-positions';
@@ -8,7 +8,7 @@ import type {TSortingResult, TReverseStringResult} from './results';
 export type { TSortingResult, TReverseStringResult };
 
 export { 
-  LinkedListFunctions, 
+  Functions, 
   Direction, 
   ButtonPositions,
   ElementStates, 

@@ -1,4 +1,4 @@
-export enum LinkedListFunctions {
+export enum Functions {
     Waiting = '',
     AddToHead = 'AddToHead',
     AddToTail = 'AddToTail',

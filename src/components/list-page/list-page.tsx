@@ -1,8 +1,9 @@
 import React, { useEffect, useRef, useState } from "react";
-import { LinkedListFunctions as Functions } from "../../types/linkedList-functions";
+import { Functions  } from "../../types/linkedList-functions";
 import { ElementStates } from "../../types/element-states";
 import { ButtonPositions as Positions } from "../../types/button-positions";
 import { SolutionLayout } from "../ui/solution-layout/solution-layout";
+import { Scroll } from '../ui/scroll/scroll';
 import { Input } from "../ui/input/input";
 import { Button } from "../ui/button/button";
 import { Circle } from "../ui/circle/circle";
@@ -340,6 +341,7 @@ export const ListPage: React.FC = () => {
           />
         </fieldset>
       </form>
+      <Scroll>
       <div className={styles.container}>
         <ul className={styles.list__results}>
           {result.length > 0 &&
@@ -355,6 +357,7 @@ export const ListPage: React.FC = () => {
               const tail = tailListTitle(index);
 
               return (
+               
                 <li key={index} className={styles.list__item}>
                   <Circle
                     letter={`${item}`}
@@ -374,6 +377,7 @@ export const ListPage: React.FC = () => {
             })}
         </ul>
       </div>
+      </Scroll>
     </SolutionLayout>
   );
 };

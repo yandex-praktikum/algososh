@@ -18,7 +18,7 @@ export const generateInitialArray = ({
     .map(
       (item) => item + Math.floor(Math.random() * (maxVal - minVal)) + minVal
     );
-console.log('generator', initialArray)
+
   return initialArray;
 
 };
