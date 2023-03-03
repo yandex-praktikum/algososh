@@ -5,20 +5,22 @@ import {Input} from "../ui/input/input";
 import {Button} from "../ui/button/button";
 import {nanoid} from "nanoid";
 import {Circle} from "../ui/circle/circle";
-import {defineCircleState} from "../queue-page/utils/defineCircleState";
+import {defineCircleState} from "./utils/defineCircleState";
 import {useForm} from "../../services/hooks/useForm";
-import {Queue} from "../queue-page/types/types";
 import {ArrowIcon} from "../ui/icons/arrow-icon";
 import {LinkedList} from "./types/types";
 import {makeDelay} from "../../services/utils/makeDelay";
-import {swap} from "../../services/utils/swap";
 
 export const ListPage: React.FC = () => {
     const {values, handleChange, setValues} = useForm({});
     const [circlesList, setList] = useState<Array<string> | null>(null);
     const [linkedList, setLinkedList] = useState<LinkedList<string> | null>(null);
     const [isLoading, setIsLoading] = useState<boolean | undefined>(false);
-    // const [index, setIndex] = useState<number>(-Infinity);
+    const [circleState, setCircleState] = useState<{ changingIndex: number, isDone: boolean, value: number}>({
+        changingIndex: -Infinity,
+        isDone: false,
+        value: -Infinity
+    });
     const [isAddHead, setIsAddHead] = useState<boolean | undefined>(false);
     const [isRemoveHead, setIsRemoveHead] = useState<boolean | undefined>(false);
     const [isAddTail, setIsAddTail] = useState<boolean | undefined>(false);
@@ -52,17 +54,20 @@ export const ListPage: React.FC = () => {
     const addHead = async (linkedList: LinkedList<string>, str: string): Promise<LinkedList<string>> => {
         setIsLoading(true);
         setIsAddHead(true);
-
         linkedList.prepend(str);
         //setIndex(tail);
         setSmallCircle(str);
         setIsSmallCircleTop(true);
         setIsFromHead(true);
+        setCircleState({changingIndex: 0, isDone: false, value: -Infinity});
         await makeDelay(500);
         setIsSmallCircleTop(false);
         setIsFromHead(false);
         setList(linkedList.toArray());
         setEdges([0, linkedList.getSize() - 1]);
+        setCircleState({...circleState, isDone: true, value: 0});
+        await makeDelay(500);
+        setCircleState({changingIndex: -Infinity, isDone: false, value: -Infinity});
         //setIndex(-Infinity);
         setIsAddHead(false);
         setIsLoading(false);
@@ -318,22 +323,25 @@ export const ListPage: React.FC = () => {
                             <Circle
                                 letter={`${char}`}
                                 extraClass={`${styles.circle}`}
-                                //index={idx}
-                                //state={defineCircleState(index, idx)}
+                                state={defineCircleState(circleState.changingIndex, idx, circleState.isDone, circleState.value)}
                                 head={idx === edges[0] && isSmallCircleTop && isFromHead
                                     ? <Circle letter={`${smallCircle}`}
+                                              state={defineCircleState(circleState.changingIndex, idx, circleState.isDone, circleState.value)}
                                               isSmall={true}/>
                                     : idx === edges[1] && isSmallCircleTop && isFromTail
                                         ? <Circle letter={`${smallCircle}`}
+                                                  state={defineCircleState(circleState.changingIndex, idx, circleState.isDone, circleState.value)}
                                                   isSmall={true}/>
                                         : idx === edges[0] && !isSmallCircleTop && !isSmallCircleBottom
                                             ? 'head'
                                             : ''}
                                 tail={idx === edges[0] && isSmallCircleBottom && isFromHead
                                     ? <Circle letter={`${smallCircle}`}
+                                              state={defineCircleState(circleState.changingIndex, idx, circleState.isDone, circleState.value)}
                                               isSmall={true}/>
                                     : idx === edges[1] && isSmallCircleBottom && isFromTail
                                         ? <Circle letter={`${smallCircle}`}
+                                                  state={defineCircleState(circleState.changingIndex, idx, circleState.isDone, circleState.value)}
                                                   isSmall={true}/>
                                         : idx === edges[1] && !isSmallCircleBottom
                                             ? 'Tail'
