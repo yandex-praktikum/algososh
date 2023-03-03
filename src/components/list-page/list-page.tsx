@@ -68,18 +68,19 @@ export const ListPage: React.FC = () => {
         return linkedList;
     };
 
-    const removeHead = async (
-        linkedList: LinkedList<string>
-    ): Promise<LinkedList<string>> => {
+    const removeHead = async (linkedList: LinkedList<string>): Promise<LinkedList<string>> => {
         setIsLoading(true);
         setIsRemoveHead(true);
-        //let [head, tail] = queue.showEdges();
         //setIndex(head);
         linkedList.deleteHead();
+        setSmallCircle(circlesList![0]);
+        setIsSmallCircleBottom(true);
+        setIsFromHead(true);
         await makeDelay(500);
-        //let [head1, tail1] = queue.showEdges();
-        //setEdges([head1 <= tail - 1 ? head1 : tail - 1, tail - 1]);
+        setIsSmallCircleBottom(false);
+        setIsFromHead(false);
         setList(linkedList.toArray());
+        setEdges([0, linkedList.getSize() - 1]);
         //setIndex(-Infinity);
         setIsRemoveHead(false);
         setIsLoading(false);
@@ -105,18 +106,19 @@ export const ListPage: React.FC = () => {
         return linkedList;
     };
 
-    const removeTail = async (
-        linkedList: LinkedList<string>
-    ): Promise<LinkedList<string>> => {
+    const removeTail = async (linkedList: LinkedList<string>): Promise<LinkedList<string>> => {
         setIsLoading(true);
         setIsRemoveTail(true);
-        //let [head, tail] = queue.showEdges();
         //setIndex(head);
+        setSmallCircle(circlesList![circlesList!.length - 1]);
+        setIsSmallCircleBottom(true);
+        setIsFromTail(true);
         linkedList.deleteTail();
         await makeDelay(500);
-        //let [head1, tail1] = queue.showEdges();
-        //setEdges([head1 <= tail - 1 ? head1 : tail - 1, tail - 1]);
+        setIsSmallCircleBottom(false);
+        setIsFromTail(false);
         setList(linkedList.toArray());
+        setEdges([0, linkedList.getSize() - 1]);
         //setIndex(-Infinity);
         setIsRemoveTail(false);
         setIsLoading(false);
@@ -308,7 +310,15 @@ export const ListPage: React.FC = () => {
                                         : idx === edges[0] && !isSmallCircleTop
                                             ? 'head'
                                             : ''}
-                                tail={idx === edges[1] ? 'tail' : ''}
+                                tail={idx === edges[0] && isSmallCircleBottom && isFromHead
+                                    ? <Circle letter={`${smallCircle}`}
+                                              isSmall={true}/>
+                                    : idx === edges[1] && isSmallCircleBottom && isFromTail
+                                        ? <Circle letter={`${smallCircle}`}
+                                                  isSmall={true}/>
+                                        : idx === edges[1] && !isSmallCircleBottom
+                                            ? 'Tail'
+                                            : ''}
                             />
 
                             {idx < circlesList.length - 1 && <ArrowIcon/>}
