@@ -11,6 +11,7 @@ import {Queue} from "../queue-page/types/types";
 import {ArrowIcon} from "../ui/icons/arrow-icon";
 import {LinkedList} from "./types/types";
 import {makeDelay} from "../../services/utils/makeDelay";
+import {swap} from "../../services/utils/swap";
 
 export const ListPage: React.FC = () => {
     const {values, handleChange, setValues} = useForm({});
@@ -125,36 +126,54 @@ export const ListPage: React.FC = () => {
         return linkedList;
     };
 
-    const addByIndex = async (
-        linkedList: LinkedList<string>,
-        str: string,
-        index: number
-    ): Promise<LinkedList<string>> => {
+    const addByIndex = async (linkedList: LinkedList<string>, str: string, index: number): Promise<LinkedList<string>> => {
         setIsLoading(true);
         setIsAddByIndex(true);
-        //let [head, tail] = queue.showEdges();
-        //setEdges([head, tail]);
+        setSmallCircle(str);
+        setIsSmallCircleTop(true);
+        setIsFromHead(true);
         linkedList.addByIndex(str, index);
+        let i = 0;
+        while (i <= index) {
+
+            setEdges([i, linkedList.getSize() - 1]);
+            i++;
+            await makeDelay(500);
+        }
+        setEdges([0, linkedList.getSize() - 1]);
+        setSmallCircle('');
         //setIndex(tail);
-        await makeDelay(500);
+        // await makeDelay(500);
+        setIsSmallCircleTop(false);
+        setIsFromHead(false);
         setList(linkedList.toArray());
+
         //setIndex(-Infinity);
         setIsAddByIndex(false);
         setIsLoading(false);
         return linkedList;
     };
 
-    const deleteByIndex = async (
-        linkedList: LinkedList<string>,
-        index: number
-    ): Promise<LinkedList<string>> => {
+    const deleteByIndex = async (linkedList: LinkedList<string>, index: number): Promise<LinkedList<string>> => {
         setIsLoading(true);
         setIsDeleteByIndex(true);
-        //let [head, tail] = queue.showEdges();
-        //setEdges([head, tail]);
+
+        setIsSmallCircleBottom(true);
+        setIsFromHead(true);
         linkedList.deleteByIndex(index);
+        let i = 0;
+        while (i <= index) {
+
+            setEdges([i, linkedList.getSize() - 1]);
+            setSmallCircle(circlesList![i]);
+            i++;
+            await makeDelay(500);
+        }
+        setEdges([0, linkedList.getSize() - 1]);
+        setSmallCircle('');
         //setIndex(tail);
-        await makeDelay(500);
+        setIsSmallCircleBottom(false);
+        setIsFromHead(false);
         setList(linkedList.toArray());
         //setIndex(-Infinity);
         setIsDeleteByIndex(false);
@@ -307,7 +326,7 @@ export const ListPage: React.FC = () => {
                                     : idx === edges[1] && isSmallCircleTop && isFromTail
                                         ? <Circle letter={`${smallCircle}`}
                                                   isSmall={true}/>
-                                        : idx === edges[0] && !isSmallCircleTop
+                                        : idx === edges[0] && !isSmallCircleTop && !isSmallCircleBottom
                                             ? 'head'
                                             : ''}
                                 tail={idx === edges[0] && isSmallCircleBottom && isFromHead
