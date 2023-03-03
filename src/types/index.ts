@@ -1,19 +1,13 @@
-import { Functions } from './linkedList-functions';
-import { Direction } from './direction';
-import { ElementStates } from './element-states';
-import { ButtonPositions } from './button-positions';
-import { SortingMethods } from './sorting';
-import type {TSortingResult, TReverseStringResult} from './results';
+import { Functions } from "./linkedList-functions";
+import { Direction } from "./direction";
+import { ElementStates } from "./element-states";
+import { ButtonPositions } from "./button-positions";
+import { SortingMethods } from "./sorting";
+import type { TSortingResult, TReverseStringResult } from "./results";
 
 export type { TSortingResult, TReverseStringResult };
 
-export { 
-  Functions, 
-  Direction, 
-  ButtonPositions,
-  ElementStates, 
-  SortingMethods 
-};
+export { Functions, Direction, ButtonPositions, ElementStates, SortingMethods };
 
 export type TGetElementState = {
   itemIndex: number;
@@ -30,6 +24,6 @@ export type TSortingSteps<T> = {
 }[];
 
 export interface IRefStep {
-  current?: number[],
-  modified?: number
+  current?: number[];
+  modified?: number;
 }

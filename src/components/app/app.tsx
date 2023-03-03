@@ -15,26 +15,13 @@ function App() {
     <div className="app">
       <BrowserRouter>
         <Routes>
-          <Route path="/" element ={<MainPage />}>
-                      </Route>
-          <Route path="/recursion" element ={<StringComponent />}>
-            
-          </Route>
-          <Route path="/fibonacci" element ={<FibonacciPage />}>
-            
-          </Route>
-          <Route path="/sorting" element ={<SortingPage />}>
-            
-          </Route>
-          <Route path="/stack" element ={<StackPage />}>
-            
-          </Route>
-          <Route path="/queue" element ={<QueuePage />}>
-            
-          </Route>
-          <Route path="/list" element ={<ListPage />}>
-            
-          </Route>
+          <Route path="/" element={<MainPage />}></Route>
+          <Route path="/recursion" element={<StringComponent />}></Route>
+          <Route path="/fibonacci" element={<FibonacciPage />}></Route>
+          <Route path="/sorting" element={<SortingPage />}></Route>
+          <Route path="/stack" element={<StackPage />}></Route>
+          <Route path="/queue" element={<QueuePage />}></Route>
+          <Route path="/list" element={<ListPage />}></Route>
         </Routes>
       </BrowserRouter>
     </div>

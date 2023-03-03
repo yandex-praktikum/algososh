@@ -54,7 +54,6 @@ export class LinkedList<T> implements ILinkedList<T> {
   protected _listIsEmpty() {
     return this._length === 0;
   }
- 
 
   prepend(node: T) {
     const newNode = new LinkedListNode(node);
@@ -134,7 +133,6 @@ export class LinkedList<T> implements ILinkedList<T> {
         prevNode = currentNode;
         currentNode = currentNode.next;
       }
-
       i++;
     }
 
@@ -174,10 +172,8 @@ export class LinkedList<T> implements ILinkedList<T> {
           if (currentNode.next) {
             currentNode = currentNode.next;
           }
-
           i++;
         }
-
         this._tail = currentNode;
         this._tail.next = null;
         this._length--;

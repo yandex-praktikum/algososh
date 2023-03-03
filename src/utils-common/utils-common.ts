@@ -20,7 +20,6 @@ export const generateInitialArray = ({
     );
 
   return initialArray;
-
 };
 
 export const setDelay = (ms: number) => {

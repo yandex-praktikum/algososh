@@ -1,4 +1,4 @@
-import { useState, ChangeEvent } from 'react';
+import { useState, ChangeEvent } from "react";
 
 interface IInputValues {
   [key: string]: string | number;
@@ -13,8 +13,8 @@ export function useForm(inputValues: IInputValues) {
   };
 
   const clearValue = (name: string) => {
-    const isString = typeof inputValues[name] === 'string';
-    setValues((prevState) => ({ ...prevState, [name]: isString ? '' : -1 }));
+    const isString = typeof inputValues[name] === "string";
+    setValues((prevState) => ({ ...prevState, [name]: isString ? "" : -1 }));
   };
 
   return { values, handleChange, setValues, clearValue };
