@@ -8,8 +8,10 @@ export function useForm(inputValues: IInputValues) {
   const [values, setValues] = useState(inputValues);
 
   const handleChange = (evt: ChangeEvent<HTMLInputElement>) => {
-    const { value, name } = evt.target;
-    setValues((prevState) => ({ ...prevState, [name]: value }));
+   
+      const { value, name } = evt.target;
+      setValues((prevState) => ({ ...prevState, [name]: value }));
+   
   };
 
   const clearValue = (name: string) => {

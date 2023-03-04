@@ -65,7 +65,7 @@ export const FibonacciPage: FC = () => {
           type={"submit"}
           text={"Рассчитать"}
           onClick={handleClick}
-          disabled={value < 1 || value > 19}
+          disabled={value > 0 && value <= 19 ? false: true}
           isLoader={loader}
         />
       </form>
@@ -74,6 +74,7 @@ export const FibonacciPage: FC = () => {
           fibonacciNumbers.current.slice(0, step).map((item, index) => {
             return (
               <li key={index}>
+                
                 <Circle letter={item.toString()} index={index} />
               </li>
             );

@@ -7,21 +7,22 @@ import { QueuePage } from "../queue-page/queue-page";
 import { StringComponent } from "../string/string";
 import { SortingPage } from "../sorting-page/sorting-page";
 import { StackPage } from "../stack-page/stack-page";
+import {rootPath, recursionPath, fibonacciPath, sortingPath, stackPath, queuePath, listPath} from '../../constants/roots'
 
-import "./app.css";
+import styles from "./app.module.css";
 
 function App() {
   return (
-    <div className="app">
+    <div className={styles.app}>
       <BrowserRouter>
         <Routes>
-          <Route path="/" element={<MainPage />}></Route>
-          <Route path="/recursion" element={<StringComponent />}></Route>
-          <Route path="/fibonacci" element={<FibonacciPage />}></Route>
-          <Route path="/sorting" element={<SortingPage />}></Route>
-          <Route path="/stack" element={<StackPage />}></Route>
-          <Route path="/queue" element={<QueuePage />}></Route>
-          <Route path="/list" element={<ListPage />}></Route>
+          <Route path={rootPath} element={<MainPage />}></Route>
+          <Route path={recursionPath} element={<StringComponent />}></Route>
+          <Route path={fibonacciPath} element={<FibonacciPage />}></Route>
+          <Route path={sortingPath} element={<SortingPage />}></Route>
+          <Route path={stackPath} element={<StackPage />}></Route>
+          <Route path={queuePath} element={<QueuePage />}></Route>
+          <Route path={listPath} element={<ListPage />}></Route>
         </Routes>
       </BrowserRouter>
     </div>

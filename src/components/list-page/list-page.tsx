@@ -310,7 +310,7 @@ export const ListPage: React.FC = () => {
         </fieldset>
         <fieldset className={styles.list__group}>
           <Input
-            type={"text"}
+            type={"number"}
             placeholder={"Введите индекс"}
             value={index === -1 ? "" : index}
             name={"index"}
