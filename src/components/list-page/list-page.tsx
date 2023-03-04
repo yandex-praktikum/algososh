@@ -16,7 +16,7 @@ export const ListPage: React.FC = () => {
     const [circlesList, setList] = useState<Array<string> | null>(null);
     const [linkedList, setLinkedList] = useState<LinkedList<string> | null>(null);
     const [isLoading, setIsLoading] = useState<boolean | undefined>(false);
-    const [circleState, setCircleState] = useState<{ changingIndex: number, isDone: boolean, value: number}>({
+    const [circleState, setCircleState] = useState<{ changingIndex: number, isDone: boolean, value: number }>({
         changingIndex: -Infinity,
         isDone: false,
         value: -Infinity
@@ -55,7 +55,6 @@ export const ListPage: React.FC = () => {
         setIsLoading(true);
         setIsAddHead(true);
         linkedList.prepend(str);
-        //setIndex(tail);
         setSmallCircle(str);
         setIsSmallCircleTop(true);
         setIsFromHead(true);
@@ -68,7 +67,6 @@ export const ListPage: React.FC = () => {
         setCircleState({...circleState, isDone: true, value: 0});
         await makeDelay(500);
         setCircleState({changingIndex: -Infinity, isDone: false, value: -Infinity});
-        //setIndex(-Infinity);
         setIsAddHead(false);
         setIsLoading(false);
         return linkedList;
@@ -77,17 +75,17 @@ export const ListPage: React.FC = () => {
     const removeHead = async (linkedList: LinkedList<string>): Promise<LinkedList<string>> => {
         setIsLoading(true);
         setIsRemoveHead(true);
-        //setIndex(head);
         linkedList.deleteHead();
         setSmallCircle(circlesList![0]);
         setIsSmallCircleBottom(true);
         setIsFromHead(true);
+        setCircleState({changingIndex: 0, isDone: false, value: -Infinity});
         await makeDelay(500);
         setIsSmallCircleBottom(false);
         setIsFromHead(false);
         setList(linkedList.toArray());
         setEdges([0, linkedList.getSize() - 1]);
-        //setIndex(-Infinity);
+        setCircleState({changingIndex: -Infinity, isDone: false, value: -Infinity});
         setIsRemoveHead(false);
         setIsLoading(false);
         return linkedList;
@@ -97,16 +95,18 @@ export const ListPage: React.FC = () => {
         setIsLoading(true);
         setIsAddTail(true);
         linkedList.append(str);
-        //setIndex(tail);
         setSmallCircle(str);
         setIsSmallCircleTop(true);
         setIsFromTail(true);
+        setCircleState({changingIndex: circlesList!.length - 1, isDone: false, value: -Infinity});
         await makeDelay(500);
         setIsSmallCircleTop(false);
         setIsFromTail(false);
         setList(linkedList.toArray());
-        setEdges([0, linkedList.getSize() - 1])
-        //setIndex(-Infinity);
+        setEdges([0, linkedList.getSize() - 1]);
+        setCircleState({...circleState, isDone: true, value: linkedList.getSize() - 1});
+        await makeDelay(500);
+        setCircleState({changingIndex: -Infinity, isDone: false, value: -Infinity});
         setIsAddTail(false);
         setIsLoading(false);
         return linkedList;
@@ -115,17 +115,17 @@ export const ListPage: React.FC = () => {
     const removeTail = async (linkedList: LinkedList<string>): Promise<LinkedList<string>> => {
         setIsLoading(true);
         setIsRemoveTail(true);
-        //setIndex(head);
         setSmallCircle(circlesList![circlesList!.length - 1]);
         setIsSmallCircleBottom(true);
         setIsFromTail(true);
         linkedList.deleteTail();
+        setCircleState({changingIndex: circlesList!.length - 1, isDone: false, value: -Infinity});
         await makeDelay(500);
         setIsSmallCircleBottom(false);
         setIsFromTail(false);
         setList(linkedList.toArray());
         setEdges([0, linkedList.getSize() - 1]);
-        //setIndex(-Infinity);
+        setCircleState({changingIndex: -Infinity, isDone: false, value: -Infinity});
         setIsRemoveTail(false);
         setIsLoading(false);
         return linkedList;
@@ -140,20 +140,19 @@ export const ListPage: React.FC = () => {
         linkedList.addByIndex(str, index);
         let i = 0;
         while (i <= index) {
-
+            setCircleState({changingIndex: i, isDone: false, value: -Infinity});
             setEdges([i, linkedList.getSize() - 1]);
             i++;
             await makeDelay(500);
         }
         setEdges([0, linkedList.getSize() - 1]);
+        setCircleState({...circleState, isDone: true, value: index});
         setSmallCircle('');
-        //setIndex(tail);
-        // await makeDelay(500);
         setIsSmallCircleTop(false);
         setIsFromHead(false);
         setList(linkedList.toArray());
-
-        //setIndex(-Infinity);
+        await makeDelay(500);
+        setCircleState({changingIndex: -Infinity, isDone: false, value: -Infinity});
         setIsAddByIndex(false);
         setIsLoading(false);
         return linkedList;
@@ -162,13 +161,12 @@ export const ListPage: React.FC = () => {
     const deleteByIndex = async (linkedList: LinkedList<string>, index: number): Promise<LinkedList<string>> => {
         setIsLoading(true);
         setIsDeleteByIndex(true);
-
         setIsSmallCircleBottom(true);
         setIsFromHead(true);
         linkedList.deleteByIndex(index);
         let i = 0;
         while (i <= index) {
-
+            setCircleState({changingIndex: i, isDone: false, value: -Infinity});
             setEdges([i, linkedList.getSize() - 1]);
             setSmallCircle(circlesList![i]);
             i++;
@@ -176,11 +174,10 @@ export const ListPage: React.FC = () => {
         }
         setEdges([0, linkedList.getSize() - 1]);
         setSmallCircle('');
-        //setIndex(tail);
         setIsSmallCircleBottom(false);
         setIsFromHead(false);
         setList(linkedList.toArray());
-        //setIndex(-Infinity);
+        setCircleState({changingIndex: -Infinity, isDone: false, value: -Infinity});
         setIsDeleteByIndex(false);
         setIsLoading(false);
         return linkedList;
@@ -323,7 +320,7 @@ export const ListPage: React.FC = () => {
                             <Circle
                                 letter={`${char}`}
                                 extraClass={`${styles.circle}`}
-                                state={defineCircleState(circleState.changingIndex, idx, circleState.isDone, circleState.value)}
+                                state={defineCircleState(!isFromTail ? circleState.changingIndex - 1 : -Infinity, idx, circleState.isDone, circleState.value)}
                                 head={idx === edges[0] && isSmallCircleTop && isFromHead
                                     ? <Circle letter={`${smallCircle}`}
                                               state={defineCircleState(circleState.changingIndex, idx, circleState.isDone, circleState.value)}
