@@ -1,0 +1,19 @@
+.container {
+  width: 829px;
+  margin: 0 auto 48px auto;
+  display: flex;
+  justify-content: space-between;
+}
+
+.wrapper {
+  width: 630px;
+  display: flex;
+  gap: 12px;
+}
+
+.showstack {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 16px;
+}

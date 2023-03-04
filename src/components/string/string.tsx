@@ -15,7 +15,7 @@ export const StringComponent: React.FC = () => {
 
   const onChange = (e: ChangeEvent<HTMLInputElement>) => {
     setInputValue(e.target.value);
-    console.log(e.target.value);
+    
   }
   
   const onSubmitReverse = async (e:FormEvent<HTMLFormElement>): Promise<string[]> => {
