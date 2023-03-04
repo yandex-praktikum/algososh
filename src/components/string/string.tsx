@@ -15,7 +15,6 @@ export const StringComponent: React.FC = () => {
 
   const onChange = (e: ChangeEvent<HTMLInputElement>) => {
     setInputValue(e.target.value);
-    
   }
   
   const onSubmitReverse = async (e:FormEvent<HTMLFormElement>): Promise<string[]> => {
@@ -56,7 +55,7 @@ export const StringComponent: React.FC = () => {
            isLimitText={true}
            extraClass = 'mr-6'
       />
-      <Button type='submit' 
+      <Button type={'submit'} 
               text={'Развернуть'}
               isLoader={isloader}
               disabled={inputValue === ''}/>
@@ -67,7 +66,8 @@ export const StringComponent: React.FC = () => {
           <Circle key={index}
                   letter={item}
                   index={index + 1}
-                  state={stateCircle(currentIndex, index, array)}/>)}
+                  state={stateCircle(currentIndex, index, array)}
+          />)}
       </ul>
     </SolutionLayout>
   );

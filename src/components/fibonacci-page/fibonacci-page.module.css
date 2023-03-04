@@ -1,0 +1,16 @@
+.container {
+  margin: 0 auto 48px auto;
+  width: 567px;
+  display: flex;
+
+}
+
+.showfibonacci {
+  margin: 0 auto;
+  width: 944px;
+  display: flex;
+  flex-flow: row wrap;
+  align-content: flex-start;
+  column-gap: 16px;
+  row-gap: 78px;
+}

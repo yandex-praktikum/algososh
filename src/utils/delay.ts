@@ -4,3 +4,4 @@ export const delay = (time: number) => new Promise<void>(
 
 export const DELAY_MILLISECONDS = 1000;
 export const DELAY_MILLISECONDS_500 = 500;
+export const DELAY_MILLISECONDS_700 = 700;
