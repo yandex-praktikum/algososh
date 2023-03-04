@@ -1,0 +1,44 @@
+.list__wrap {
+  display: flex;
+  flex-direction: column;
+  margin: 0 auto;
+  width: 952px;
+  justify-content: center;
+  gap: 12px;
+}
+
+.list__group {
+  display: flex;
+  align-items: stretch;
+  margin: 0;
+  padding: 0;
+  border: none;
+  gap: 12px;
+}
+
+.list__group > div {
+  max-width: 204px;
+}
+
+.list__results {
+  display: inline-flex;
+  list-style: none;
+  margin: 0;
+  padding: 120px 0 100px;
+  gap: 25px;
+}
+
+.list__item {
+  display: flex;
+  align-items: center;
+  gap: 25px;
+}
+
+.container {
+    margin-left: auto;
+    margin-right: auto;
+    overflow-x: auto;
+    overflow-y: hidden;
+    scrollbar-color: #85cfff #0032ff;
+    scrollbar-width: thin;
+  }

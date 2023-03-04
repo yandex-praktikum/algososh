@@ -1,0 +1,18 @@
+.form {
+  display: flex;
+  align-items: flex-start;
+  max-width: 522px;
+  margin: 0 auto;
+  gap: 12px;
+}
+
+.results {
+  display: inline-flex;
+  flex-wrap: wrap;
+  margin: 48px auto 0;
+  padding: 0;
+  row-gap: 80px;
+  column-gap: 16px;
+  max-width: 944px;
+  list-style: none;
+}

@@ -1,0 +1,46 @@
+.panel {
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  max-width: 980px;
+  margin: 0 auto;
+  gap: 52px;
+}
+
+.panel > *:last-child {
+  margin-left: auto;
+}
+
+.wrap {
+  border: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+}
+
+.wrap > div {
+  margin-right: 44px;
+}
+
+.wrap > div:last-of-type {
+  margin-right: 0;
+}
+
+.wrap > button {
+  margin-right: 12px;
+}
+
+.wrap > button:last-of-type {
+  margin-right: 0;
+}
+
+.results {
+  display: flex;
+  justify-content: center;
+  align-items: flex-end;
+  list-style: none;
+  margin: 48px auto 0;
+  padding: 0;
+  gap: 10px;
+  height: 368px;
+}

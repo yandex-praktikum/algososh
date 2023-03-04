@@ -1,0 +1,24 @@
+.panel {
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
+  margin: 0 auto;
+  gap: 80px;
+}
+
+.panel__group {
+  display: flex;
+  min-width: 630px;
+  border: none;
+  margin: 0;
+  padding: 0;
+  gap: 12px;
+}
+
+.results {
+  display: inline-flex;
+  gap: 16px;
+  list-style: none;
+  margin: 48px auto 0;
+  padding: 0;
+}

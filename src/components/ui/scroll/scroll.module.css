@@ -1,0 +1,8 @@
+.container {
+  overflow-x: auto;
+  overflow-y: hidden;
+  margin-left: auto;
+  margin-right: auto;
+  scrollbar-width: thin;
+  scrollbar-color: #85cfff #0032ff;
+}
