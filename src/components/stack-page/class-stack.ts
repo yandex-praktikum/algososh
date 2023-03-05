@@ -3,7 +3,7 @@ interface IStack<T> {
   pop: () => void;
   peak: () => T | null;
   getSize: () => number;
-  prinStack: () => T[];
+  printStack: () => T[];
   clearStack: () => void;
   isFull: () => boolean;
 }
@@ -37,7 +37,7 @@ class Stack<T> implements IStack<T> {
 
   getSize = () => this.container.length;
 
-  prinStack = () => this.container; 
+  printStack = () => this.container; 
 
   isFull = () => {
     if(this.getSize() < this.maxSize){

@@ -29,7 +29,6 @@ export const StackPage: React.FC = () => {
 
   const onChange = (e:ChangeEvent<HTMLInputElement>) =>{
     setInputValue(e.target.value);
-    console.log(e.target.value); 
   }
 
   const handlePushValue = async (item: string) => {
@@ -39,7 +38,7 @@ export const StackPage: React.FC = () => {
       disabled: true
     });
     stack.push(item);
-    setStackArray(stack.prinStack());
+    setStackArray(stack.printStack());
     setInputValue('');
     await delay(DELAY_MILLISECONDS_500);
     setCurrentIndex(currentIndex + 1);
@@ -59,7 +58,7 @@ export const StackPage: React.FC = () => {
     setCurrentIndex(stack.getSize() - 1);
     await delay(DELAY_MILLISECONDS_500);
     stack.pop()
-    setStackArray(stack.prinStack());
+    setStackArray(stack.printStack());
     setIsLoader({
       ...isloader,
       isPopValue: false,
@@ -75,7 +74,7 @@ export const StackPage: React.FC = () => {
     });
     await delay(DELAY_MILLISECONDS_500);
     stack.clearStack();
-    setStackArray(stack.prinStack());
+    setStackArray(stack.printStack());
     setCurrentIndex(0);
     setInputValue('');
     setIsLoader({
