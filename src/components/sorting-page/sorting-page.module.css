@@ -1,0 +1,21 @@
+.form {
+  margin: 0 auto 48px auto;
+  width: 980px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.btn_wrapper {
+  display: flex;
+  column-gap: 16px;
+}
+
+.showarray {
+  margin: 0 auto;
+  min-height: 345px;
+  display: flex;
+  justify-content: center;
+  align-items: flex-end;
+  column-gap: 10px;
+}
