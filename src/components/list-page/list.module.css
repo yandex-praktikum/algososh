@@ -1,0 +1,69 @@
+.main {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.form {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 12px;
+}
+
+.formValue {
+  display: grid;
+  grid-template-columns: 204px repeat(4, 175px);
+  grid-template-rows: auto;
+  gap: 12px;
+}
+
+.formIndex {
+  display: grid;
+  grid-template-columns: 204px repeat(2, 362px);
+  grid-template-rows: auto;
+  gap: 12px;
+}
+
+.list {
+  list-style-type: none;
+  display: flex;
+  gap: 32px;
+  margin: 56px 0 0;
+  padding: 0;
+}
+
+.circle {
+  margin: 0;
+  padding: 0;
+  position: relative;
+}
+
+.arrow {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%) translateX(100%);
+  right: -3px;
+}
+
+.topCircle {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 8px;
+  visibility: hidden;
+}
+
+.bottomCircle {
+  margin-top: 38px;
+  display: flex;
+  justify-content: center;
+  visibility: hidden;
+}
+
+.topCircle__visible {
+  visibility: visible;
+}
+
+.bottomCircle__visible {
+  visibility: visible;
+}

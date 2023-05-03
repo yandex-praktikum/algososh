@@ -1,0 +1,16 @@
+.input {
+  margin: 0 auto;
+  padding: 0;
+  max-width: 522px;
+  min-height: 86px;
+  display: flex;
+  column-gap: 12px;
+}
+
+.letters {
+  margin: 0 auto;
+  padding-top: 120px;
+  width: fit-content;
+  display: flex;
+  gap: 16px;
+}

@@ -1,0 +1,40 @@
+.main {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.form {
+  width: calc(100% - 260px);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.radio {
+  display: flex;
+  gap: 40px;
+  margin-right: 52px;
+}
+
+.direction {
+  max-width: 422px;
+  display: flex;
+  gap: 12px;
+  margin-right: 80px;
+}
+
+.random {
+  display: flex;
+  max-width: 205px;
+}
+
+.columns {
+  display: flex;
+  align-items: flex-end;
+  height: 340px;
+  gap: 10px;
+  margin: 48px 0 0;
+  padding: 0;
+  list-style-type: none;
+}
