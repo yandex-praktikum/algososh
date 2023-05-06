@@ -1,0 +1,23 @@
+.form {
+  display: flex;
+  align-items: center;
+
+  max-width: 1240px;
+}
+
+.container {
+  display: flex;
+  gap: 10px;
+  align-items: flex-end;
+  justify-content: center;
+
+  margin-top: 48px;
+}
+
+.current {
+  --default-color: #D252E1;
+}
+
+.sorted {
+  --default-color: #7FE051;
+}
