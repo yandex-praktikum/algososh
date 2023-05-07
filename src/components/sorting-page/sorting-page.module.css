@@ -1,8 +1,14 @@
 .form {
-  display: flex;
+  display: grid;
+  gap: 12px;
+  grid-template-columns: 1fr repeat(3, 2fr) 3fr;
   align-items: center;
 
   max-width: 1240px;
+}
+
+.lastBtn {
+  justify-self: end;
 }
 
 .container {
