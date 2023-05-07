@@ -5,7 +5,7 @@ import { Button } from "../ui/button/button";
 import { Circle } from "../ui/circle/circle";
 import { SolutionLayout } from "../ui/solution-layout/solution-layout";
 
-const ANIMATION_TIMEOUT = 300;
+const ANIMATION_TIMEOUT = 500;
 
 interface IStack<T> {
   push: (item: T) => void;
