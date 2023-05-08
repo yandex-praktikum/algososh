@@ -1,0 +1,29 @@
+.form {
+  display: grid;
+  gap: 12px;
+  grid-template-columns: 1fr repeat(3, 2fr) 3fr;
+  align-items: center;
+
+  max-width: 1240px;
+}
+
+.lastBtn {
+  justify-self: end;
+}
+
+.container {
+  display: flex;
+  gap: 10px;
+  align-items: flex-end;
+  justify-content: center;
+
+  margin-top: 48px;
+}
+
+.current {
+  --default-color: #D252E1;
+}
+
+.sorted {
+  --default-color: #7FE051;
+}
