@@ -16,12 +16,8 @@
 .container {
   display: flex;
   gap: 10px;
-  align-items: flex-end;
+  align-items: center;
   justify-content: center;
 
-  margin-top: 48px;
-}
-
-.current {
-  --default-color: #D252E1;
+  margin-top: 90px;
 }

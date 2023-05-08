@@ -1,112 +1,14 @@
-import React, { FormEvent, useState, ChangeEvent } from "react";
+import React, { useState, ChangeEvent } from "react";
 import styles from './list-page.module.css';
 import { Input } from "../ui/input/input";
 import { Button } from "../ui/button/button";
 import { Circle } from "../ui/circle/circle";
+import { ArrowIcon } from "../ui/icons/arrow-icon";
 import { SolutionLayout } from "../ui/solution-layout/solution-layout";
 import { ElementStates } from "../../types/element-states";
+import { LinkedList } from "./LinkedList";
 
-
-const ANIMATION_TIMEOUT = 500;
-
-
-// interface ILinkedList<T> {
-//   prepend: (item: T) => void;
-//   append: (item: T) => void;
-//   addByIndex: (index: number, item: T) => void;
-//   deleteByIndex: (index: number) => void;
-//   deleteHead: () => void;
-//   deleteTail: () => void;
-//   clone: () => ILinkedList<T>;
-//   toArray: () => T[];
-// }
-
-class LinkedListNode<T> {
-  public readonly value: T;
-  public next: LinkedListNode<T> | null;
-  public state: 'default' | 'changing' | 'modified' = 'default';
-
-  constructor(value: T, next?: LinkedListNode<T> | null) {
-    this.value = value;
-    this.next = next ?? null;
-  }
-}
-
-export class LinkedList<T> {//implements ILinkedList<T> {
-  public head: LinkedListNode<T> | null = null;
-  public tail: LinkedListNode<T> | null = null;
-
-  constructor(values?: T[]) {
-    if (values)
-      for(const value of values) this.append(value);
-  }
-
-  getHead = () => this.head;
-
-  getTail = () => this.tail;
-
-  prepend = (item: T): void => {
-    const node = new LinkedListNode(item, this.head);
-    this.head = node;
-    this.tail ??= node;
-  };
-
-  append = (item: T): void => {
-    console.log('append', item);
-    const node = new LinkedListNode(item);
-    if (this.tail) this.tail.next = node;
-    this.tail = node;
-    if (!this.head) this.head = node;
-  };
-
-  addByIndex = (index: number, item: T) => {
-
-  }
-
-  deleteByIndex = () => {
-
-  }
-
-  deleteHead = () => {
-    if (this.head) this.head = this.head.next;
-    if (!this.head) this.tail = null;
-    console.log('delete head', this.head, this.tail)
-  }
-
-  deleteTail = () => {
-    if (this.head === this.tail) {
-      this.head = this.tail = null;
-    } else {
-      let node = this.head;
-      while (node && node.next && node.next.next) {
-        node = node.next;
-      }
-      this.tail = node;
-      if (node) node.next = null;
-    }
-    console.log('delete tail', this.head, this.tail)
-  }
-
-  clone = () => {
-    const clone = new LinkedList<T>();
-    clone.head = this.head;
-    clone.tail = this.tail;
-    return clone;
-  }
-
-  toArray = (): LinkedListNode<T>[] => {
-    const res: LinkedListNode<T>[] = [];
-
-    let node = this.head;
-    while (node) {
-      res.push(node);
-      node = node.next;
-    }
-
-    return res;
-  };
-}
-
+const ANIMATION_TIMEOUT = 1000;
 
 const randomNumber = (min: number, max: number) => {
   return min + Math.round(Math.random()*(max-min));
@@ -115,17 +17,14 @@ const randomNumber = (min: number, max: number) => {
 const generateList = () => {
   const r = Array.from({ length: randomNumber(1, 6) }, () => (String(randomNumber(0, 100))));
 
-  console.log('generateList', r);
   return new LinkedList(r);;
 }
 
 export const ListPage: React.FC = () => {
   const [elements, setElements] = useState<LinkedList<string>>(generateList);
   const [value, setValue] = useState('');
-  const [index, setIndex] = useState(0);
-
-
-  console.log('elements', elements)
+  const [index, setIndex] = useState(-1);
+  const [progress, setProgress] = useState<'addHead' | 'addTail' | 'deleteHead' | 'deleteTail' | 'addByIndex' | 'deleteByIndex' | undefined >(undefined);
 
   const onValueChange = (e: ChangeEvent<HTMLInputElement>) => {
     setValue(e.target.value);
@@ -135,70 +34,219 @@ export const ListPage: React.FC = () => {
     setIndex(Number(e.target.value));
   }
 
-  const onFormSubmit = (e: FormEvent) => {
-    e.preventDefault();
+  const animateAdd = (type: 'head' | 'tail', state: ElementStates): void => {
+    const node = type === 'head' ? elements.getHead() : elements.getTail();
+    if (node) {
+      node.state = state;
+      if (state === ElementStates.Changing) {
+        node.addingValue = value;
+        node.modify = 'head';
+        node.showLetter = false;
+      } else {
+        node.showLetter = true;
+        node.addingValue = null;
+      }
+    }
 
+    setElements(elements.clone());
     setValue('');
+  }
+
+  const addHead = () => {
+    setProgress('addHead');
+    elements.prepend(value)
+    animateAdd('head', ElementStates.Changing);
+
+    setTimeout(() =>  {
+      animateAdd('head', ElementStates.Modified)
+      setTimeout(() => {
+        animateAdd('head', ElementStates.Default);
+        setProgress(undefined);
+        setIndex(-1);
+      }, ANIMATION_TIMEOUT);
+    }, ANIMATION_TIMEOUT)
+
+  }
+
+  const addTail = () => {
+    setProgress('addTail');
+    elements.append(value)
+    animateAdd('tail', ElementStates.Changing);
+
+    setTimeout(() =>  {
+      animateAdd('tail', ElementStates.Modified)
+      setTimeout(() => {
+        animateAdd('tail', ElementStates.Default);
+        setProgress(undefined);
+      }, ANIMATION_TIMEOUT);
+    }, ANIMATION_TIMEOUT)
 
   }
 
   const deleteHead = () => {
+    setProgress('deleteHead');
     const head = elements.getHead();
-    if (head) head.state = ElementStates.Changing;
+    if (head) {
+      head.state = ElementStates.Changing;
+      head.modify = 'tail';
+    }
     else return;
 
     setElements(elements.clone())
 
     setTimeout(() =>  {
-
       elements.deleteHead();
-      setElements(elements.clone())
+      setElements(elements.clone());
+      setProgress(undefined);
     }, ANIMATION_TIMEOUT)
   }
 
   const deleteTail = () => {
+    setProgress('deleteTail');
     const tail = elements.getTail();
-    if (tail) tail.state = ElementStates.Changing;
+    if (tail) {
+      tail.state = ElementStates.Changing;
+      tail.modify = 'tail';
+    }
     else return;
 
     setElements(elements.clone())
 
     setTimeout(() =>  {
-
       elements.deleteTail();
-      setElements(elements.clone())
+      setElements(elements.clone());
+      setProgress(undefined);
     }, ANIMATION_TIMEOUT)
   }
-  const addByIndex = () => {}
-  const deleteByIndex = () => {}
+
+
+  const addByIndex = () => {
+    if (index < 0 || index >= elements.size) return;
+    if (index === 0) return addHead();
+    setProgress('addByIndex');
+    let i = 0;
+
+    setTimeout(function byIndex() {
+      let currentNode = elements.getNode(i);
+      let prevNode = elements.getNode(i - 1);
+      if (i <= index && currentNode) {
+        if (prevNode) {
+          prevNode.addingValue = null;
+          prevNode.modify = '';
+        }
+        currentNode.state = ElementStates.Changing;
+        currentNode.addingValue = value;
+        currentNode.modify = 'head';
+      }
+
+      setElements(elements.clone());
+
+      if (i > index) {
+        let addedIndex = index;
+        elements.addByIndex(index, value);
+
+        const arr = elements.toArray();
+        arr.map((el) => {
+          el.state = ElementStates.Default;
+          el.addingValue = null;
+        });
+        if (index === 0) addedIndex++;
+        let node = elements.getNode(addedIndex);
+        if (node) node.state = ElementStates.Modified;
+        setElements(elements.clone());
+        setTimeout(() => {
+          if (node) {
+            node.state = ElementStates.Default;
+            setElements(elements.clone());
+            setValue('');
+            setIndex(-1);
+            setProgress(undefined);
+          }
+        }, ANIMATION_TIMEOUT);
+      } else {
+        i++
+        setTimeout(byIndex, ANIMATION_TIMEOUT);
+      }
+
+    }, ANIMATION_TIMEOUT)
+  }
+
+  const deleteByIndex = () => {
+    if (index < 0 || index >= elements.size) return;
+
+    setProgress('deleteByIndex');
+    let i = 0;
+
+    setTimeout(function byIndex() {
+      let currentNode = elements.getNode(i);
+      if (i < index && currentNode) {
+        currentNode.state = ElementStates.Changing;
+      }
+
+      if (i === index && currentNode) {
+        currentNode.state = ElementStates.Changing;
+        currentNode.modify = 'tail';
+      }
+
+      setElements(elements.clone());
+
+      if (i > index) {
+        elements.deleteByIndex(index);
+
+        const arr = elements.toArray();
+        arr.map((el) => {
+          el.state = ElementStates.Default;
+        });
+
+        setElements(elements.clone());
+        setIndex(-1);
+        setProgress(undefined);
+      } else {
+        i++
+        setTimeout(byIndex, ANIMATION_TIMEOUT);
+      }
+
+    }, ANIMATION_TIMEOUT)
+  }
 
   return (
     <SolutionLayout title="Связный список">
-      <form className={styles.form} onSubmit={onFormSubmit}>
-        <Input maxLength={4} type="text" value={value} isLimitText onChange={onValueChange} />
-        <Button type="submit" text="Добавить в head" disabled={!value} />
-        <Button type="submit" text="Добавить в tail" disabled={!value} />
-        <Button type="button" text="Удалить из head" onClick={deleteHead} />
-        <Button type="button" text="Удалить из tail" onClick={deleteTail} />
-        <Input type="text" value={value} isLimitText onChange={onIndexChange} />
-        <Button type="button" text="Добавить по индексу" onClick={addByIndex} extraClass={styles.addByIndex}/>
-        <Button type="button" text="Удалить по индексу" onClick={deleteByIndex} extraClass={styles.deleteByIndex}/>
+      <form className={styles.form}>
+        <Input maxLength={4} type="text" placeholder="Введите значение" value={value} isLimitText onChange={onValueChange} />
+        <Button type="button" text="Добавить в head" disabled={!value || !!progress} onClick={addHead} isLoader={progress === 'addHead'}/>
+        <Button type="button" text="Добавить в tail" disabled={!value || !!progress} onClick={addTail} isLoader={progress === 'addTail'}/>
+        <Button type="button" text="Удалить из head" onClick={deleteHead} disabled={!!progress} isLoader={progress === 'deleteHead'} />
+        <Button type="button" text="Удалить из tail" onClick={deleteTail} disabled={!!progress} isLoader={progress === 'deleteTail'} />
+        <Input type="number" placeholder="Введите индекс" value={index >=0 ? index : ''} onChange={onIndexChange} />
+        <Button type="button" text="Добавить по индексу" disabled={!value || index < 0 || !!progress} onClick={addByIndex} isLoader={progress === 'addByIndex'} extraClass={styles.addByIndex}/>
+        <Button type="button" text="Удалить по индексу" disabled={index < 0 || !!progress} onClick={deleteByIndex} isLoader={progress === 'deleteByIndex'} extraClass={styles.deleteByIndex}/>
       </form>
       <div className={styles.container}>
         {elements.toArray().map((el, i, arr) => {
-          console.log('arr', arr);
 
-          const props: Record<string, any> = { key: i, index: i, letter: el.value, state: el.state };
+          const props: Record<string, any> = { index: i, letter: el.value, state: el.state };
           if (i === 0) props.head = 'head';
           if (i === arr.length - 1) props.tail = 'tail';
 
           if (el.state === ElementStates.Changing) {
-            props.head = <Circle letter={el.value} state={ElementStates.Changing} isSmall/>;
-            delete props.letter;
-            props.state = ElementStates.Default;
+            if (el.modify === 'head') {
+              props.head = <Circle letter={el.addingValue || ''} state={ElementStates.Changing} isSmall/>;
+              if (!el.showLetter) delete props.letter;
+            }
+            if (el.modify === 'tail') {
+              props.tail = <Circle letter={el.value} state={ElementStates.Changing} isSmall/>;
+              delete props.letter;
+            }
+            if (el.modify === '') {
+              props.state = ElementStates.Changing;
+            } else {
+              props.state = ElementStates.Default;
+            }
           }
-          console.log('circle', el, i)
-          return <Circle {...props}/>
+          return (<React.Fragment key={i}>
+            {i > 0 && <ArrowIcon />}
+            <Circle {...props}/>
+          </React.Fragment>)
         })}
 
       </div>
