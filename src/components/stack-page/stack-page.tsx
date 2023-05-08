@@ -49,9 +49,10 @@ export const StackPage: React.FC = () => {
   const [elements, setElements] = useState<IStack<string>>(new Stack<string>());
   const [text, setText] = useState('');
   const [headHilighted, setHeadHilight] = useState(false);
+  const [progress, setProgress] = useState<'add' | 'delete' | ''>('');
 
   const deleteElement = () => {
-
+    setProgress('delete');
     setHeadHilight(true);
 
     setTimeout(() => {
@@ -59,6 +60,7 @@ export const StackPage: React.FC = () => {
 
       elements.pop();
       setElements(elements.clone());
+      setProgress('');
     }, ANIMATION_TIMEOUT)
   }
 
@@ -74,7 +76,7 @@ export const StackPage: React.FC = () => {
 
   const onFormSubmit = (e: FormEvent) => {
     e.preventDefault();
-
+    setProgress('add');
     elements.push(text);
 
     setElements(elements.clone());
@@ -84,6 +86,7 @@ export const StackPage: React.FC = () => {
       setHeadHilight(false);
 
       setElements(elements.clone());
+      setProgress('');
     }, ANIMATION_TIMEOUT)
 
   }
@@ -92,9 +95,9 @@ export const StackPage: React.FC = () => {
     <SolutionLayout title="Стек">
       <form className={styles.form} onSubmit={onFormSubmit}>
         <Input maxLength={4} type="text" value={text} isLimitText onChange={onInputChange} />
-        <Button type="submit" text="Добавить" disabled={!text} />
-        <Button type="button" text="Удалить" onClick={deleteElement} disabled={!elements.getSize()}/>
-        <Button type="button" text="Очистить" onClick={clearStack} disabled={!elements.getSize()}/>
+        <Button type="submit" text="Добавить" disabled={!text || !!progress} isLoader={progress === 'add'}/>
+        <Button type="button" text="Удалить" onClick={deleteElement} disabled={!elements.getSize() || !!progress} isLoader={progress === 'delete'}/>
+        <Button type="button" text="Очистить" onClick={clearStack} disabled={!elements.getSize() || !!progress}/>
       </form>
       <div className={styles.container}>
         {elements.getElements().map((el, i) => {

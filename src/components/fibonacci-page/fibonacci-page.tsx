@@ -13,7 +13,7 @@ export const FibonacciPage: React.FC = () => {
   const [inProgress, setProgress] = useState(false);
 
   const onInputChange = (e: ChangeEvent<HTMLInputElement>) => {
-    setN(Number(e.target.value));    
+    setN(Number(e.target.value));
   }
   const onFormSubmit = (e: FormEvent) => {
     e.preventDefault();
@@ -43,7 +43,7 @@ export const FibonacciPage: React.FC = () => {
     <SolutionLayout title="Последовательность Фибоначчи">
       <form className={styles.form} onSubmit={onFormSubmit}>
         <Input max={19} min={1} type="number" isLimitText onChange={onInputChange} disabled={inProgress}/>
-        <Button type="submit" text="Рассчитать" disabled={!n} isLoader={inProgress}/>
+        <Button type="submit" text="Рассчитать" disabled={!n || n > 19} isLoader={inProgress}/>
       </form>
       <div className={styles.container}>
         {(numbers.length > 0) && numbers.map((n, i) => {

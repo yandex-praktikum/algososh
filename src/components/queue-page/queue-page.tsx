@@ -77,8 +77,10 @@ export const QueuePage: React.FC = () => {
   const [text, setText] = useState('');
   const [headHilighted, setHeadHilight] = useState(false);
   const [tailHilighted, setTailHilight] = useState(false);
+  const [progress, setProgress] = useState<'add' | 'delete' | ''>('');
 
   const deleteElement = () => {
+    setProgress('delete');
     setHeadHilight(true);
 
     setTimeout(() => {
@@ -86,6 +88,7 @@ export const QueuePage: React.FC = () => {
 
       elements.dequeue();
       setElements(elements.clone());
+      setProgress('');
     }, ANIMATION_TIMEOUT)
   }
 
@@ -102,6 +105,7 @@ export const QueuePage: React.FC = () => {
   const onFormSubmit = (e: FormEvent) => {
     e.preventDefault();
 
+    setProgress('add');
     elements.enqueue(text);
     setText('');
 
@@ -112,6 +116,7 @@ export const QueuePage: React.FC = () => {
       setTailHilight(false);
 
       setElements(elements.clone());
+      setProgress('');
     }, ANIMATION_TIMEOUT)
 
   }
@@ -120,8 +125,8 @@ export const QueuePage: React.FC = () => {
     <SolutionLayout title="Очередь">
       <form className={styles.form} onSubmit={onFormSubmit}>
         <Input maxLength={4} type="text" value={text} isLimitText onChange={onInputChange} />
-        <Button type="submit" text="Добавить" disabled={!text} />
-        <Button type="button" text="Удалить" onClick={deleteElement} disabled={!elements.getLength()}/>
+        <Button type="submit" text="Добавить" disabled={!text || !!progress} isLoader={progress === 'add'}/>
+        <Button type="button" text="Удалить" onClick={deleteElement} disabled={!elements.getLength() || !!progress} isLoader={progress === 'delete'}/>
         <Button type="button" text="Очистить" onClick={clearStack}/>
       </form>
       <div className={styles.container}>
@@ -145,4 +150,3 @@ export const QueuePage: React.FC = () => {
     </SolutionLayout>
   );
 };
-

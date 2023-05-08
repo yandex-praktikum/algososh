@@ -217,9 +217,9 @@ export const ListPage: React.FC = () => {
         <Button type="button" text="Добавить в tail" disabled={!value || !!progress} onClick={addTail} isLoader={progress === 'addTail'}/>
         <Button type="button" text="Удалить из head" onClick={deleteHead} disabled={!!progress} isLoader={progress === 'deleteHead'} />
         <Button type="button" text="Удалить из tail" onClick={deleteTail} disabled={!!progress} isLoader={progress === 'deleteTail'} />
-        <Input type="number" placeholder="Введите индекс" value={index >=0 ? index : ''} onChange={onIndexChange} />
-        <Button type="button" text="Добавить по индексу" disabled={!value || index < 0 || !!progress} onClick={addByIndex} isLoader={progress === 'addByIndex'} extraClass={styles.addByIndex}/>
-        <Button type="button" text="Удалить по индексу" disabled={index < 0 || !!progress} onClick={deleteByIndex} isLoader={progress === 'deleteByIndex'} extraClass={styles.deleteByIndex}/>
+        <Input type="number" max={elements.size - 1} placeholder="Введите индекс" value={index >=0 ? index : ''} onChange={onIndexChange} />
+        <Button type="button" text="Добавить по индексу" disabled={!value || index < 0 || index > elements.size - 1 || !!progress} onClick={addByIndex} isLoader={progress === 'addByIndex'} extraClass={styles.addByIndex}/>
+        <Button type="button" text="Удалить по индексу" disabled={index < 0 || index > elements.size - 1 || !!progress} onClick={deleteByIndex} isLoader={progress === 'deleteByIndex'} extraClass={styles.deleteByIndex}/>
       </form>
       <div className={styles.container}>
         {elements.toArray().map((el, i, arr) => {
