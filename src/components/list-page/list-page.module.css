@@ -1,0 +1,27 @@
+.form {
+  display: grid;
+  gap: 12px;
+  grid-template-columns: repeat(5, 1fr);
+
+}
+
+.addByIndex {
+  grid-column: 2/4;
+}
+
+.deleteByIndex {
+  grid-column: 4/6;
+}
+
+.container {
+  display: flex;
+  gap: 10px;
+  align-items: flex-end;
+  justify-content: center;
+
+  margin-top: 48px;
+}
+
+.current {
+  --default-color: #D252E1;
+}
