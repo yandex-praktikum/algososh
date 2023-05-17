@@ -1,42 +1,42 @@
-import styles from "./fibonacci.module.css";
-import React, { ChangeEvent, FormEvent, useState } from 'react';
-import { Button } from "../ui/button/button";
-import { Input } from "../ui/input/input";
-import { Circle } from "../ui/circle/circle";
-import { SolutionLayout } from "../ui/solution-layout/solution-layout";
+import styles from './fibonacci.module.css'
+import React, { type ChangeEvent, type FormEvent, useState } from 'react'
+import { Button } from '../ui/button/button'
+import { Input } from '../ui/input/input'
+import { Circle } from '../ui/circle/circle'
+import { SolutionLayout } from '../ui/solution-layout/solution-layout'
 
-const TICK_TIMEOUT = 500;
+const TICK_TIMEOUT = 500
 
 export const FibonacciPage: React.FC = () => {
-  const [n, setN] = useState(0);
-  const [numbers, setNumbers] = useState<number[]>([]);
-  const [inProgress, setProgress] = useState(false);
+  const [n, setN] = useState(0)
+  const [numbers, setNumbers] = useState<number[]>([])
+  const [inProgress, setProgress] = useState(false)
 
-  const onInputChange = (e: ChangeEvent<HTMLInputElement>) => {
-    setN(Number(e.target.value));
+  const onInputChange = (e: ChangeEvent<HTMLInputElement>): void => {
+    setN(Number(e.target.value))
   }
-  const onFormSubmit = (e: FormEvent) => {
-    e.preventDefault();
+  const onFormSubmit = (e: FormEvent): void => {
+    e.preventDefault()
 
-    numbers.length = 0;
-    setNumbers([]);
-    setProgress(true);
+    numbers.length = 0
+    setNumbers([])
+    setProgress(true)
 
-    let i = numbers.length;
-    setTimeout(function tick() {
+    let i = numbers.length
+    setTimeout(function tick () {
       if (i <= n) {
-        numbers.push(i <= 1 ? 1 : numbers[i - 1] + numbers[i - 2]);
+        numbers.push(i <= 1 ? 1 : numbers[i - 1] + numbers[i - 2])
 
-        setNumbers([...numbers]);
+        setNumbers([...numbers])
 
         if (i === n) {
-          setProgress(false);
+          setProgress(false)
         } else {
-          i++;
-          setTimeout(tick, TICK_TIMEOUT);
+          i++
+          setTimeout(tick, TICK_TIMEOUT)
         }
       }
-    }, TICK_TIMEOUT);
+    }, TICK_TIMEOUT)
   }
 
   return (
@@ -51,5 +51,5 @@ export const FibonacciPage: React.FC = () => {
         })}
       </div>
     </SolutionLayout>
-  );
-};
+  )
+}

@@ -1,152 +1,151 @@
-import React, { FormEvent, useState, ChangeEvent } from "react";
-import styles from './queue-page.module.css';
-import { Input } from "../ui/input/input";
-import { Button } from "../ui/button/button";
-import { Circle } from "../ui/circle/circle";
-import { SolutionLayout } from "../ui/solution-layout/solution-layout";
+import React, { type FormEvent, useState, type ChangeEvent } from 'react'
+import styles from './queue-page.module.css'
+import { Input } from '../ui/input/input'
+import { Button } from '../ui/button/button'
+import { Circle } from '../ui/circle/circle'
+import { SolutionLayout } from '../ui/solution-layout/solution-layout'
 
-const ANIMATION_TIMEOUT = 500;
+const ANIMATION_TIMEOUT = 500
 
 interface IQueue<T> {
-  enqueue: (item: T) => void;
-  dequeue: () => void;
-  clear: () => void;
-  clone: () => IQueue<T>;
-  getHead: () => number;
-  getTail: () => number;
-  getElements: () => T[];
-  getLength: () => number;
-  getSize: () => number;
+  enqueue: (item: T) => void
+  dequeue: () => void
+  clear: () => void
+  clone: () => IQueue<T>
+  getHead: () => number
+  getTail: () => number
+  getElements: () => T[]
+  getLength: () => number
+  getSize: () => number
 }
 
 export class Queue<T> implements IQueue<T> {
-  private readonly size: number = 0;
-  private container: (T)[] = [];
-  private length: number = 0;
-  private head = -1;
-  private tail = -1;
+  private readonly size: number = 0
+  private container: (T)[] = []
+  private length: number = 0
+  private head = -1
+  private tail = -1
 
-  constructor(size: number, container?: (T)[], head?: number, tail?: number, length?: number) {
-    this.size = size;
-    this.container = container || Array(size);
-    this.head = head ?? -1;
-    this.tail = tail ?? -1;
-    this.length = length ?? 0;
+  constructor (size: number, container?: (T)[], head?: number, tail?: number, length?: number) {
+    this.size = size
+    this.container = (container != null) ? container : Array(size)
+    this.head = head ?? -1
+    this.tail = tail ?? -1
+    this.length = length ?? 0
   }
 
   enqueue = (item: T): void => {
     if (this.tail < this.size - 1) {
-      this.container[this.tail + 1] = item;
+      this.container[this.tail + 1] = item
 
-      if (this.head === -1) this.head = 0;
-      this.tail++;
-      this.length++;
+      if (this.head === -1) this.head = 0
+      this.tail++
+      this.length++
     }
-  };
+  }
 
   dequeue = (): void => {
     if (this.getLength()) {
-      this.head++;
-      this.length--;
-      if (!this.length) this.tail = this.head - 1;
+      this.head++
+      this.length--
+      if (!this.length) this.tail = this.head - 1
     }
-  };
-
-  clear = (): void => {
-    this.container = Array(this.size);
-    this.head = -1;
-    this.tail = -1;
-    this.length = 0;
   }
 
-  clone = () => new Queue(this.getSize(), this.getElements(), this.getHead(), this.getTail(), this.getLength());
+  clear = (): void => {
+    this.container = Array(this.size)
+    this.head = -1
+    this.tail = -1
+    this.length = 0
+  }
 
-  getHead = () => this.head;
+  clone = (): Queue<T> => new Queue(this.getSize(), this.getElements(), this.getHead(), this.getTail(), this.getLength())
 
-  getTail = () => this.tail;
+  getHead = (): number => this.head
 
-  getElements = () => this.container;
+  getTail = (): number => this.tail
 
-  getLength = () => this.length;
+  getElements = (): T[] => this.container
 
-  getSize = () => this.size;
+  getLength = (): number => this.length
+
+  getSize = (): number => this.size
 }
 
 export const QueuePage: React.FC = () => {
-  const [elements, setElements] = useState<IQueue<string>>(new Queue<string>(7));
-  const [text, setText] = useState('');
-  const [headHilighted, setHeadHilight] = useState(false);
-  const [tailHilighted, setTailHilight] = useState(false);
-  const [progress, setProgress] = useState<'add' | 'delete' | ''>('');
+  const [elements, setElements] = useState<IQueue<string>>(new Queue<string>(7))
+  const [text, setText] = useState('')
+  const [headHilighted, setHeadHilight] = useState(false)
+  const [tailHilighted, setTailHilight] = useState(false)
+  const [progress, setProgress] = useState<'add' | 'delete' | ''>('')
 
-  const deleteElement = () => {
-    setProgress('delete');
-    setHeadHilight(true);
+  const deleteElement = (): void => {
+    setProgress('delete')
+    setHeadHilight(true)
 
     setTimeout(() => {
-      setHeadHilight(false);
+      setHeadHilight(false)
 
-      elements.dequeue();
-      setElements(elements.clone());
-      setProgress('');
+      elements.dequeue()
+      setElements(elements.clone())
+      setProgress('')
     }, ANIMATION_TIMEOUT)
   }
 
-  const clearStack = () => {
-    elements.clear();
+  const clearStack = (): void => {
+    elements.clear()
 
-    setElements(elements.clone());
+    setElements(elements.clone())
   }
 
-  const onInputChange = (e: ChangeEvent<HTMLInputElement>) => {
-    setText(e.target.value);
+  const onInputChange = (e: ChangeEvent<HTMLInputElement>): void => {
+    setText(e.target.value)
   }
 
-  const onFormSubmit = (e: FormEvent) => {
-    e.preventDefault();
+  const onFormSubmit = (e: FormEvent): void => {
+    e.preventDefault()
 
-    setProgress('add');
-    elements.enqueue(text);
-    setText('');
+    setProgress('add')
+    elements.enqueue(text)
+    setText('')
 
-    setElements(elements.clone());
+    setElements(elements.clone())
 
-    setTailHilight(true);
+    setTailHilight(true)
     setTimeout(() => {
-      setTailHilight(false);
+      setTailHilight(false)
 
-      setElements(elements.clone());
-      setProgress('');
+      setElements(elements.clone())
+      setProgress('')
     }, ANIMATION_TIMEOUT)
-
   }
 
   return (
-    <SolutionLayout title="Очередь">
+    <SolutionLayout title='Очередь'>
       <form className={styles.form} onSubmit={onFormSubmit}>
-        <Input maxLength={4} type="text" value={text} isLimitText onChange={onInputChange} />
-        <Button type="submit" text="Добавить" disabled={!text || !!progress} isLoader={progress === 'add'}/>
-        <Button type="button" text="Удалить" onClick={deleteElement} disabled={!elements.getLength() || !!progress} isLoader={progress === 'delete'}/>
-        <Button type="button" text="Очистить" onClick={clearStack}/>
+        <Input maxLength={4} type='text' value={text} isLimitText onChange={onInputChange} />
+        <Button type='submit' text='Добавить' disabled={!text || !!progress} isLoader={progress === 'add'}/>
+        <Button type='button' text='Удалить' onClick={deleteElement} disabled={!elements.getLength() || !!progress} isLoader={progress === 'delete'}/>
+        <Button type='button' text='Очистить' onClick={clearStack}/>
       </form>
       <div className={styles.container}>
         {Array.from({ length: elements.getSize() }, (_, i) => {
-          const el = elements.getElements()[i];
-          const props: Record<string, any> = { key: i, index: i };
+          const el = elements.getElements()[i]
+          const props: Record<string, any> = { index: i }
 
-          if (i >= elements.getHead() && i <= elements.getTail()) props.letter = el;
+          if (i >= elements.getHead() && i <= elements.getTail()) props.letter = el
           if (i === elements.getHead()) {
-            props.head = 'head';
-            if (headHilighted) props.extraClass = styles.current;
+            props.head = 'head'
+            if (headHilighted) props.extraClass = styles.current
           }
           if (i === elements.getTail() && elements.getLength()) {
-            props.tail = 'tail';
+            props.tail = 'tail'
             if (tailHilighted) props.extraClass = styles.current
           };
 
-          return <Circle {...props}/>
+          return <Circle key={i} {...props}/>
         })}
       </div>
     </SolutionLayout>
-  );
-};
+  )
+}
