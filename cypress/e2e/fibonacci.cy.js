@@ -1,10 +1,9 @@
 import { fibonacci } from '../../src/utils/fibonacci'
 
 const DELAY = 500
-const checkClass = (classes, value) => {expect(classes).to.contain(value)}
 const N = 10
 
-describe('reverse string function works correctly', () => {
+describe('fibonacci function works correctly', () => {
   beforeEach(() => {
     cy.visit('http://localhost:3000/fibonacci')
   })
@@ -13,7 +12,7 @@ describe('reverse string function works correctly', () => {
     cy.contains('Рассчитать').should('have.attr', 'disabled')
   })
 
-  it('should be animate couning correct fibonscci number', () => {
+  it('should animate couning correct fibonscci number', () => {
     cy.get('form input[type="number"]').type(N)
     cy.get('form button[type="submit"]').click()
 

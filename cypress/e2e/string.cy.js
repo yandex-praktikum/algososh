@@ -12,7 +12,7 @@ describe('reverse string function works correctly', () => {
     cy.contains('Развернуть').should('have.attr', 'disabled')
   })
 
-  it('should be animate reversing string correctly', () => {
+  it('should animate reversing string correctly', () => {
     cy.get('form input[type="text"]').type(SAMPLE_TEXT)
     cy.get('form button[type="submit"]').click()
 
