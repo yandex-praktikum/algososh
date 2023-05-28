@@ -1,5 +1,3 @@
-import { fibonacci } from '../../src/utils/fibonacci'
-
 const DELAY = 500
 const TEXT = 't'
 const addedElements = 3
