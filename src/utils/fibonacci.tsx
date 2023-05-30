@@ -7,7 +7,6 @@ export const fibonacci = (n: number): number => {
     } else {
       hash[i] = hash[i - 1] + hash[i - 2]
     }
-
   }
 
   return hash[n]

@@ -81,7 +81,6 @@ describe('queue page works correctly', () => {
     cy.wait(1000)
     cy.contains('Очистить').click()
     cy.get('@queue').each(($el) => {
-      console.log('t', $el)
       expect($el.find('p[class*="letter"]').text()).to.eq('')
       expect($el.find('div[class*="head"]').text()).to.eq('')
       expect($el.find('div[class*="tail"]').text()).to.eq('')
