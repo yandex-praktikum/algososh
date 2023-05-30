@@ -72,19 +72,21 @@ describe('queue page works correctly', () => {
   it('should clear queue correctly', () => {
     cy.get('form').next().children('div').as('queue')
     const length = cy.get('@queue').length
-    console.log('l', length);
 
     for (let i = 0; i < addedElements; i++) {
       cy.get('form input[type="text"]').type(TEXT)
       cy.get('form button[type="submit"]').click()
     }
 
+    cy.wait(1000)
     cy.contains('Очистить').click()
-    for (let i = 0; i < length; i++) {
-      cy.get('@queue').eq(i).find('p[class*="letter"]').should('have.text', '')
-      cy.get('@queue').eq(i).find('div[class*="head"]').should('have.text', '')
-      cy.get('@queue').eq(i).find('div[class*="tail"]').should('have.text', '')
-    }
+    cy.get('@queue').each(($el) => {
+      console.log('t', $el)
+      expect($el.find('p[class*="letter"]').text()).to.eq('')
+      expect($el.find('div[class*="head"]').text()).to.eq('')
+      expect($el.find('div[class*="tail"]').text()).to.eq('')
+    })
+
   })
 
 })
