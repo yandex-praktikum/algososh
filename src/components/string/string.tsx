@@ -4,6 +4,7 @@ import { Button } from '../ui/button/button'
 import { Input } from '../ui/input/input'
 import { SolutionLayout } from '../ui/solution-layout/solution-layout'
 import { Circle } from '../ui/circle/circle'
+import { reverseStringAlgorythmSteps } from '../../utils/reverse-string'
 
 interface ILetter {
   value: string
@@ -14,11 +15,13 @@ const TICK_TIMEOUT = 1000
 
 export const StringComponent: React.FC = () => {
   const [letters, setLetters] = useState<ILetter[]>([])
+  const [steps, setSteps] = useState<string[][]>([[]])
   const [inProgress, setProgress] = useState(false)
   const [isSorted, setSorted] = useState(false)
 
   const onInputChange = (e: ChangeEvent<HTMLInputElement>): void => {
     setLetters(e.target.value.split('').map((value) => ({ value })))
+    setSteps(reverseStringAlgorythmSteps(e.target.value))
   }
 
   const onFormSubmit = (e: FormEvent): void => {
@@ -27,23 +30,22 @@ export const StringComponent: React.FC = () => {
     setProgress(true)
 
     let i = 0
-    const l = letters.length
-    const middle = Math.floor(l / 2)
+    const textL = letters.length
+    const l = steps.length
 
     setTimeout(function tick () {
-      if (i <= middle) {
-        letters[i].state = letters[l - i - 1].state = (i < middle && l > 1) ? 'current' : 'sorted'
+      letters[i].state = letters[textL - i - 1].state = 'current'
 
-        if (i >= 1) {
-          const tmp = letters[i - 1].value
-          letters[i - 1].value = letters[l - i].value
-          letters[l - i].value = tmp
-          letters[i - 1].state = letters[l - i].state = 'sorted'
+      setLetters([...letters])
+
+      setTimeout(() => {}, TICK_TIMEOUT)
+      if (i <= l - 1) {
+        for (let j = 0; j < steps[i].length; j++) {
+          letters[j].value = steps[i][j]
         }
+        letters[i].state = letters[textL - i - 1].state = 'sorted'
 
-        setLetters([...letters])
-
-        if (i === middle) {
+        if (i === l - 1) {
           setProgress(false)
           setSorted(true)
         } else {
@@ -57,12 +59,12 @@ export const StringComponent: React.FC = () => {
   return (
     <SolutionLayout title='Строка'>
       <form className={styles.form} onSubmit={onFormSubmit}>
-        <Input maxLength={11} extraClass='' isLimitText onChange={onInputChange} disabled={inProgress}/>
-        <Button type='submit' text='Развернуть' extraClass='' disabled={letters.length === 0} isLoader={inProgress}/>
+        <Input data-testid="input" maxLength={11} extraClass='' isLimitText onChange={onInputChange} disabled={inProgress}/>
+        <Button data-testid="button" type='submit' text='Развернуть' extraClass='' disabled={letters.length === 0} isLoader={inProgress}/>
       </form>
-      <div className={styles.container}>
+      <div data-testid='container' className={styles.container}>
         {(inProgress || isSorted) && letters.map((letter, i) => {
-          return <Circle key={i} letter={letter.value} extraClass={letter.state && styles[letter.state]}/>
+          return <Circle data-testid="circle" key={i} letter={letter.value} extraClass={letter.state && styles[letter.state]}/>
         })}
       </div>
     </SolutionLayout>
