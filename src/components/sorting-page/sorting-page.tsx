@@ -6,6 +6,8 @@ import { Direction } from '../../types/direction'
 import styles from './sorting-page.module.css'
 import { Column } from '../ui/column/column'
 
+import { bubbleSortSteps } from '../../utils/sorts'
+
 interface INumber {
   value: number
   state?: 'current' | 'sorted'
@@ -25,27 +27,19 @@ const createNumbers = (): Array<{ value: number }> => {
 
 const bubbleSort: TSortFunc = (numbers, setNumbers, sort, stopProgress) => {
   const l = numbers.length
+  const steps = bubbleSortSteps(numbers.map(el => el.value), sort)
   let j = 1
   let i = l
+  let k = 0
+
   setTimeout(function tick () {
-    numbers[j].state = numbers[j - 1].state = 'current'
-    if (j >= 2) numbers[j - 2].state = undefined
+    const step: INumber[] = steps[k].map(el => ({ value: el }))
+    step[j].state = step[j - 1].state = 'current'
+    if (j >= 2) step[j - 2].state = undefined
     if (i < l) {
-      if (j !== i - 1) numbers[i - 1].state = undefined
-      numbers[i].state = 'sorted'
-    }
-
-    let a = j - 1
-    let b = j
-    if (sort === 'desc') {
-      a = j
-      b = j - 1
-    }
-
-    if (numbers[a].value > numbers[b].value) {
-      const tmp = numbers[a].value
-      numbers[a].value = numbers[b].value
-      numbers[b].value = tmp
+      for (let m = i; m < l; m++) {
+        step[m].state = 'sorted'
+      }
     }
 
     if (j < i - 1) {
@@ -55,13 +49,17 @@ const bubbleSort: TSortFunc = (numbers, setNumbers, sort, stopProgress) => {
       j = 1
     }
 
-    if (i > 0) {
+    if (i > 0 && k < steps.length - 1) {
+      k++
+      setTimeout(tick, TICK_TIMEOUT)
+    } else if (i >= 1) {
+      step[i].state = 'current'
       setTimeout(tick, TICK_TIMEOUT)
     } else {
-      numbers[i].state = 'sorted'
+      step[i].state = 'sorted'
       stopProgress()
     }
-    setNumbers([...numbers])
+    setNumbers([...step])
   }, TICK_TIMEOUT)
 }
 
