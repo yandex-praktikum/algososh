@@ -6,7 +6,7 @@ import { Direction } from '../../types/direction'
 import styles from './sorting-page.module.css'
 import { Column } from '../ui/column/column'
 
-import { bubbleSortSteps } from '../../utils/sorts'
+import { bubbleSortSteps, selectionSortSteps } from '../../utils/sorts'
 
 interface INumber {
   value: number
@@ -64,61 +64,40 @@ const bubbleSort: TSortFunc = (numbers, setNumbers, sort, stopProgress) => {
 }
 
 const selectionSort: TSortFunc = (numbers, setNumbers, sort, stopProgress) => {
+  const steps = selectionSortSteps(numbers.map(el => el.value), sort)
   let i = 0
   let j = 1
-  let searchedIndex = i
+  let k = 0
   const l = numbers.length
 
   setTimeout(function tick () {
+    const step: INumber[] = steps[k].map(el => ({ value: el }))
+
     if (i < l - 1) {
-      numbers[i].state = numbers[j].state = 'current'
+      step[i].state = step[j].state = 'current'
     }
 
-    if (i !== j - 1 && j < l) {
-      numbers[j - 1].state = undefined
+    for (let m = 0; m < i; m++) {
+      step[m].state = 'sorted'
     }
 
-    if (j - 1 === i && i > 0) {
-      numbers[i - 1].state = 'sorted'
-      if (i === l - 1) {
-        numbers[i].state = 'sorted'
-      }
-
-      let a = i - 1
-      let b = searchedIndex
-      if (sort === 'desc') {
-        a = searchedIndex
-        b = i - 1
-      }
-      if (numbers[a].value > numbers[b].value) {
-        const tmp = numbers[a].value
-        numbers[a].value = numbers[b].value
-        numbers[b].value = tmp
-      }
-      searchedIndex = i
-    }
-
-    let c = j
-    let d = searchedIndex
-    if (sort === 'desc') {
-      c = searchedIndex
-      d = j
-    }
-    if (j < l && numbers[d].value > numbers[c].value) {
-      searchedIndex = j
+    if (i === l - 1) {
+      step[i].state = 'sorted'
     }
 
     if (j >= l - 1) {
       i++
       j = i + 1
     } else {
-      numbers[l - 1].state = undefined
       j++
     }
 
-    setNumbers([...numbers])
+    setNumbers([...step])
 
-    if (i < l) {
+    if (k < steps.length - 1) {
+      k++
+      setTimeout(tick, TICK_TIMEOUT)
+    } else if (i === l - 2) {
       setTimeout(tick, TICK_TIMEOUT)
     } else {
       stopProgress()

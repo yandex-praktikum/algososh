@@ -23,6 +23,40 @@ export const bubbleSortSteps = (arr: number[], type?: string): number[][] => {
   return res
 }
 
-export const selectionSort = (arr: number[], type: string): number[] => {
-  return arr
+export const selectionSortSteps = (arr: number[], type?: string): number[][] => {
+  const res: number[][] = []
+
+  if (arr.length <= 1) return [arr]
+
+  for (let i = 0; i < arr.length; i++) {
+    let searchedIndex = i
+    for (let j = i + 1; j < arr.length; j++) {
+      let a = j
+      let b = searchedIndex
+      if (type === 'desc') {
+        a = searchedIndex
+        b = j
+      }
+      if (arr[a] < arr[b]) {
+        searchedIndex = j
+      }
+      res.push([...arr])
+    }
+    let c = i
+    let d = searchedIndex
+    if (type === 'desc') {
+      c = searchedIndex
+      d = i
+    }
+    if (arr[c] > arr[d]) {
+      const tmp = arr[i]
+      arr[i] = arr[searchedIndex]
+      arr[searchedIndex] = tmp
+    }
+    if (i === arr.length - 1) {
+      res.push([...arr])
+    }
+  }
+
+  return res
 }
