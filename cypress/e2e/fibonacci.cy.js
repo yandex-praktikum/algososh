@@ -22,17 +22,14 @@ describe('fibonacci function works correctly', () => {
       cy.get('@container').children('div').eq(i).find('p[class*="letter"]').then(($p) => {
         const n = $p.text()
 
-        if (i == 0 || i == 1) {
+        if (i === 0 || i === 1) {
           expect(n, 'text').to.equal('1')
         } else {
           expect(n, 'text').to.equal(String(fibonacci(i)))
         }
       })
-
     }
+    // eslint-disable-next-line
     cy.wait(DELAY)
-
-
   })
-
 })

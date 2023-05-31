@@ -1,7 +1,7 @@
 const DELAY = 500
 const TEXT = 't'
 const addedElements = 3
-const checkClass = (classes, value) => {expect(classes).to.contain(value)}
+const checkClass = (classes, value) => { expect(classes).to.contain(value) }
 
 describe('stack page works correctly', () => {
   beforeEach(() => {
@@ -25,6 +25,7 @@ describe('stack page works correctly', () => {
         checkClass($class, 'current')
       })
 
+    // eslint-disable-next-line
     cy.wait(DELAY)
 
     cy.get('@top').find('div[class*="circle_circle"]').should('have.attr', 'class')
@@ -54,5 +55,4 @@ describe('stack page works correctly', () => {
     cy.contains('Очистить').click()
     cy.get('form').next().children('div').should('have.length', 0)
   })
-
 })

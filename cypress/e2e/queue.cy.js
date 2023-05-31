@@ -1,7 +1,7 @@
 const DELAY = 500
 const TEXT = 't'
 const addedElements = 3
-const checkClass = (classes, value) => {expect(classes).to.contain(value)}
+const checkClass = (classes, value) => { expect(classes).to.contain(value) }
 
 describe('queue page works correctly', () => {
   beforeEach(() => {
@@ -33,6 +33,7 @@ describe('queue page works correctly', () => {
           checkClass($class, 'current')
         })
 
+      // eslint-disable-next-line
       cy.wait(DELAY)
 
       cy.get('@queue').eq(i).find('div[class*="circle_circle"]').should('have.attr', 'class')
@@ -40,7 +41,6 @@ describe('queue page works correctly', () => {
           checkClass($class, 'default')
         })
     }
-
   })
 
   it('should delete element correctly', () => {
@@ -57,6 +57,7 @@ describe('queue page works correctly', () => {
         checkClass($class, 'current')
       })
 
+    // eslint-disable-next-line
     cy.wait(DELAY)
 
     cy.get('@queue').eq(0).find('div[class*="circle_circle"]').should('have.attr', 'class')
@@ -71,21 +72,19 @@ describe('queue page works correctly', () => {
 
   it('should clear queue correctly', () => {
     cy.get('form').next().children('div').as('queue')
-    const length = cy.get('@queue').length
 
     for (let i = 0; i < addedElements; i++) {
       cy.get('form input[type="text"]').type(TEXT)
       cy.get('form button[type="submit"]').click()
     }
 
-    cy.wait(1000)
+    // eslint-disable-next-line
+    cy.wait(DELAY)
     cy.contains('Очистить').click()
     cy.get('@queue').each(($el) => {
       expect($el.find('p[class*="letter"]').text()).to.eq('')
       expect($el.find('div[class*="head"]').text()).to.eq('')
       expect($el.find('div[class*="tail"]').text()).to.eq('')
     })
-
   })
-
 })
