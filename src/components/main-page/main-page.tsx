@@ -1,14 +1,14 @@
-import React from "react";
-import Marquee from "react-fast-marquee";
-import { Link } from "react-router-dom";
+import React from 'react'
+import Marquee from 'react-fast-marquee'
+import { Link } from 'react-router-dom'
 
-import styles from "./main-page.module.css";
+import styles from './main-page.module.css'
 
 interface MainPageProps {
-  extraClass?: string;
+  extraClass?: string
 }
 
-export const MainPage: React.FC<MainPageProps> = ({ extraClass = "" }) => {
+export const MainPage: React.FC<MainPageProps> = ({ extraClass = '' }) => {
   return (
     <main className={`${styles.content} ${extraClass}`}>
       <div className={styles.title_box}>
@@ -57,5 +57,5 @@ export const MainPage: React.FC<MainPageProps> = ({ extraClass = "" }) => {
         © Сделано в Практикуме.
       </p>
     </main>
-  );
-};
+  )
+}

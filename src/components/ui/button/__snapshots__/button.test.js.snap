@@ -1,0 +1,67 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Заблокированная кнопка рендерится без ошибок 1`] = `
+<button
+  className="text text_type_button text_color_primary button undefined false "
+  disabled={true}
+  type="button"
+>
+  <p
+    className="text undefined"
+  >
+    Кнопка
+  </p>
+</button>
+`;
+
+exports[`Кнопка без текста рендерится без ошибок 1`] = `
+<button
+  className="text text_type_button text_color_primary button undefined false "
+  type="button"
+>
+  <p
+    className="text undefined"
+  />
+</button>
+`;
+
+exports[`Кнопка с лоадером рендерится без ошибок 1`] = `
+<button
+  className="text text_type_button text_color_primary button undefined loader "
+  disabled={true}
+  type="button"
+>
+  <img
+    alt="Загрузка."
+    className="loader_icon"
+    src="loader.svg"
+  />
+</button>
+`;
+
+exports[`Кнопка с текстом рендерится без ошибок 1`] = `
+<button
+  className="text text_type_button text_color_primary button undefined false "
+  type="button"
+>
+  <p
+    className="text undefined"
+  >
+    Кнопка
+  </p>
+</button>
+`;
+
+exports[`Обработчик клика по кнопке рендерится без ошибок 1`] = `
+<button
+  className="text text_type_button text_color_primary button undefined false "
+  onClick={[Function]}
+  type="button"
+>
+  <p
+    className="text undefined"
+  >
+    Нажми
+  </p>
+</button>
+`;
