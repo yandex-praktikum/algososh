@@ -77,6 +77,12 @@ export class LinkedList<T> {
 
   deleteByIndex = (index: number): void => {
     if (index < 0 || index >= this.size) return
+    if (index === 0 && this.size === 1) {
+      this.head = null
+      this.tail = null
+      this.size = 0
+      return
+    }
 
     let node = this.head
     let i = 0

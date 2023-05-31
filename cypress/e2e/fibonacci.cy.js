@@ -1,11 +1,11 @@
 import { fibonacci } from '../../src/utils/fibonacci'
+import { submitFormSelector, inputNumberSelector, letterSelector, SMALL_DELAY, formSelector } from './consts'
 
-const DELAY = 500
 const N = 10
 
 describe('fibonacci function works correctly', () => {
   beforeEach(() => {
-    cy.visit('http://localhost:3000/fibonacci')
+    cy.visit('fibonacci')
   })
 
   it('should be disabled button when there is no number to count', () => {
@@ -13,13 +13,13 @@ describe('fibonacci function works correctly', () => {
   })
 
   it('should animate couning correct fibonscci number', () => {
-    cy.get('form input[type="number"]').type(N)
-    cy.get('form button[type="submit"]').click()
+    cy.get(inputNumberSelector).type(N)
+    cy.get(submitFormSelector).click()
 
-    cy.get('form').next().as('container')
+    cy.get(formSelector).next().as('container')
 
     for (let i = 0; i < N + 1; i++) {
-      cy.get('@container').children('div').eq(i).find('p[class*="letter"]').then(($p) => {
+      cy.get('@container').children('div').eq(i).find(letterSelector).then(($p) => {
         const n = $p.text()
 
         if (i === 0 || i === 1) {
@@ -30,6 +30,6 @@ describe('fibonacci function works correctly', () => {
       })
     }
     // eslint-disable-next-line
-    cy.wait(DELAY)
+    cy.wait(SMALL_DELAY)
   })
 })
