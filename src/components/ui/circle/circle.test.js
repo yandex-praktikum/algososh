@@ -1,4 +1,4 @@
-import React from 'react';
+import React from 'react'
 import renderer from 'react-test-renderer'
 
 import { Circle } from './circle'
@@ -8,7 +8,7 @@ it('Компонент Circle без буквы рендерится без ош
     .create(<Circle letter='' />)
     .toJSON()
 
-    expect(tree).toMatchSnapshot()
+  expect(tree).toMatchSnapshot()
 })
 
 it('Компонент Circle с буквами рендерится без ошибок', () => {
@@ -16,7 +16,7 @@ it('Компонент Circle с буквами рендерится без ош
     .create(<Circle letter='R' />)
     .toJSON()
 
-    expect(tree).toMatchSnapshot()
+  expect(tree).toMatchSnapshot()
 })
 
 it('Компонент Circle с head рендерится без ошибок', () => {
@@ -24,7 +24,7 @@ it('Компонент Circle с head рендерится без ошибок',
     .create(<Circle letter='B' head='head'/>)
     .toJSON()
 
-    expect(tree).toMatchSnapshot()
+  expect(tree).toMatchSnapshot()
 })
 
 it('Компонент Circle с реакт-компонентом в head рендерится без ошибок', () => {
@@ -32,7 +32,7 @@ it('Компонент Circle с реакт-компонентом в head ре�
     .create(<Circle letter='D' head={<Circle letter='d' />} />)
     .toJSON()
 
-    expect(tree).toMatchSnapshot()
+  expect(tree).toMatchSnapshot()
 })
 
 it('Компонент Circle с tail рендерится без ошибок', () => {
@@ -40,7 +40,7 @@ it('Компонент Circle с tail рендерится без ошибок',
     .create(<Circle letter='T' tail='tail'/>)
     .toJSON()
 
-    expect(tree).toMatchSnapshot()
+  expect(tree).toMatchSnapshot()
 })
 
 it('Компонент Circle с реакт-компонентом в tail рендерится без ошибок', () => {
@@ -48,7 +48,7 @@ it('Компонент Circle с реакт-компонентом в tail ре�
     .create(<Circle letter='A' tail={<Circle letter='a'/>}/>)
     .toJSON()
 
-    expect(tree).toMatchSnapshot()
+  expect(tree).toMatchSnapshot()
 })
 
 it('Компонент Circle с индексом рендерится без ошибок', () => {
@@ -56,7 +56,7 @@ it('Компонент Circle с индексом рендерится без о
     .create(<Circle index={1} letter='t'/>)
     .toJSON()
 
-    expect(tree).toMatchSnapshot()
+  expect(tree).toMatchSnapshot()
 })
 
 it('Компонент Circle с опцией isSmall рендерится без ошибок', () => {
@@ -64,7 +64,7 @@ it('Компонент Circle с опцией isSmall рендерится бе�
     .create(<Circle isSmall={true} letter='S'/>)
     .toJSON()
 
-    expect(tree).toMatchSnapshot()
+  expect(tree).toMatchSnapshot()
 })
 
 it('Компонент Circle в состоянии default рендерится без ошибок', () => {
@@ -72,7 +72,7 @@ it('Компонент Circle в состоянии default рендерится
     .create(<Circle letter='D' state='default'/>)
     .toJSON()
 
-    expect(tree).toMatchSnapshot()
+  expect(tree).toMatchSnapshot()
 })
 
 it('Компонент Circle в состоянии changing рендерится без ошибок', () => {
@@ -80,7 +80,7 @@ it('Компонент Circle в состоянии changing рендеритс�
     .create(<Circle letter='C' state='changing'/>)
     .toJSON()
 
-    expect(tree).toMatchSnapshot()
+  expect(tree).toMatchSnapshot()
 })
 
 it('Компонент Circle в состоянии modified рендерится без ошибок', () => {
@@ -88,12 +88,5 @@ it('Компонент Circle в состоянии modified рендеритс�
     .create(<Circle letter='M' state='modified'/>)
     .toJSON()
 
-    expect(tree).toMatchSnapshot()
+  expect(tree).toMatchSnapshot()
 })
-
-
-
-
-
-
-

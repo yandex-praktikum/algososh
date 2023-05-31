@@ -1,4 +1,4 @@
-import React from 'react';
+import React from 'react'
 import renderer from 'react-test-renderer'
 import { render, screen, fireEvent } from '@testing-library/react'
 
@@ -9,7 +9,7 @@ it('Кнопка с текстом рендерится без ошибок', ()
     .create(<Button text='Кнопка' />)
     .toJSON()
 
-    expect(tree).toMatchSnapshot()
+  expect(tree).toMatchSnapshot()
 })
 
 it('Кнопка без текста рендерится без ошибок', () => {
@@ -17,7 +17,7 @@ it('Кнопка без текста рендерится без ошибок', 
     .create(<Button />)
     .toJSON()
 
-    expect(tree).toMatchSnapshot()
+  expect(tree).toMatchSnapshot()
 })
 
 it('Заблокированная кнопка рендерится без ошибок', () => {
@@ -25,7 +25,7 @@ it('Заблокированная кнопка рендерится без ош
     .create(<Button disabled={true} text='Кнопка'/>)
     .toJSON()
 
-    expect(tree).toMatchSnapshot()
+  expect(tree).toMatchSnapshot()
 })
 
 it('Кнопка с лоадером рендерится без ошибок', () => {
@@ -33,7 +33,7 @@ it('Кнопка с лоадером рендерится без ошибок', 
     .create(<Button isLoader={true}/>)
     .toJSON()
 
-    expect(tree).toMatchSnapshot()
+  expect(tree).toMatchSnapshot()
 })
 
 it('Обработчик клика по кнопке рендерится без ошибок', () => {
@@ -41,10 +41,11 @@ it('Обработчик клика по кнопке рендерится бе�
     .create(<Button text='Нажми' onClick={() => alert('Click!')}/>)
     .toJSON()
 
-    expect(tree).toMatchSnapshot()
+  expect(tree).toMatchSnapshot()
 })
 
 it('Обработчик клика по кнопке вызывает корректный alert', () => {
+  // eslint-disable-next-line
   window.alert = jest.fn()
 
   render(<Button text='Нажми' onClick={() => alert('Click!')}/>)
