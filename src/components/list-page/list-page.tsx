@@ -33,7 +33,16 @@ export const ListPage: React.FC = () => {
   const [operationDeleteElementValue, setOperationDeleteElementValue] =
     useState<string>("");
 
-  const list = useMemo(() => new LinkedList<string>([]), []);
+  const randomArr = () => {
+    const arr: string[] = [];
+    const length = Math.floor(Math.random() * 5) + 2;
+    for (let i = 0; i < length; i++) {
+      arr.push(String(Math.round(Math.random() * 100)));
+    }
+    return arr;
+  };
+
+  const list = useMemo(() => new LinkedList<string>(randomArr()), []);
 
   const maxCount = 4;
 
@@ -222,6 +231,7 @@ export const ListPage: React.FC = () => {
   };
 
   useEffect(() => {
+    setData(list.getArrWithColor());
     return () => setData([]);
   }, [])
 
