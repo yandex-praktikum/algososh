@@ -1,0 +1,37 @@
+.container {
+    display: grid;
+    grid-template-columns: 204px 175px 175px 175px 175px;
+    margin: 0 auto;
+    column-gap: 12px;
+    justify-content: center;
+    margin-bottom: 12px;
+}
+
+.indexContainer {
+    display: grid;
+    grid-template-columns: 204px 362px 362px;
+    margin: 0 auto;
+    column-gap: 12px;
+    justify-content: center;
+}
+
+.circles {
+    display: grid;
+    column-gap: 16px;
+    margin: 0 auto;
+    grid-auto-flow: column;
+    justify-content: center;
+    margin-top: 120px;
+    row-gap: 48px;
+}
+
+.circleWithArrow {
+    display: grid;
+    align-items: center;
+    grid-template-columns: 80px 24px;
+    column-gap: 16px;
+}
+
+.cleanButton {
+    margin-left: 80px;
+}
