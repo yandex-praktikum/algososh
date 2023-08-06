@@ -1,0 +1,17 @@
+.container {
+    max-width: 600px;
+    display: grid;
+    grid-template-columns: 377px 178px;
+    margin: 0 auto;
+    column-gap: 12px;
+}
+
+.circles {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, 80px);
+    column-gap: 16px;
+    margin: 0 auto;
+    justify-content: center;
+    margin-top: 48px;
+    row-gap: 48px;
+}
