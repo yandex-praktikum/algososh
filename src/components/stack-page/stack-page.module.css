@@ -1,0 +1,8 @@
+.input {
+  max-width: 345px;
+}
+
+.circlesContainer {
+  display: flex;
+  justify-content: center;
+}

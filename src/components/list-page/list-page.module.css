@@ -1,0 +1,37 @@
+.fieldset {
+  display: flex;
+  justify-content: center;
+  border: 0;
+  margin: 0;
+  margin-bottom: 12px;
+  padding: 0;
+}
+
+.input {
+  max-width: 205px;
+}
+
+.btn {
+  min-width: 168px;
+}
+
+.wideBtn {
+  flex-basis: 350px;
+}
+
+.circlesContainer {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.listElm {
+  list-style: none;
+  display: flex;
+  align-items: center;
+}
+
+.tailCapture {
+  margin: 0;
+  padding: 0;
+}

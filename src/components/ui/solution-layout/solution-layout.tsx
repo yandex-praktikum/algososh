@@ -26,7 +26,7 @@ export const SolutionLayout: React.FC<SolutionLayoutProps> = ({
         </span>
       </div>
       <div className={styles.contentCard}>
-        <Link className={styles.link} to="/">
+        <Link className={styles.link} to="/algovisual">
           <ReturnButton extraClass={styles.returnButton} />
         </Link>
         <h3 className={`text text_type_h3 text_color_h3 ${styles.cardTitle}`}>
