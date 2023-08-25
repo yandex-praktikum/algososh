@@ -62,14 +62,13 @@ export const QueuePage: React.FC = () => {
   return (
     <SolutionLayout title="Очередь">
       <FlexForm onSubmit={onSubmit} onReset={eraseQueue} extraClass={`mb-40`}>
-        <Input maxLength={4} isLimitText={true} onChange={onChange} value={inputString} extraClass={`${styles.input} mr-6`} />
+        <Input maxLength={4} isLimitText={true} onChange={onChange} value={inputString} placeholder='Введите значение' extraClass={`${styles.input} mr-6`} />
         <Button text='Добавить' isLoader={false} disabled={inputString.length === 0 || queue.current.head - queue.current.tail === 1 || (queue.current.head === 0 && queue.current.tail === queue.current.containerSize - 1)} type='submit' extraClass="mr-6" />
         <Button text='Удалить' isLoader={false} disabled={queue.current.head < 0} onClick={dequeue} type='button' extraClass="mr-40" />
         <Button text='Очистить' isLoader={false} disabled={false} type='reset' />
       </FlexForm>
       <div className={styles.circlesContainer} >
         {!!queueToRender.length && queueToRender.map((str, index) => {
-          // return (<Circle key={index.toString() + str} letter={str?.toString()} head={(index === queue.current.head && index !== highlightedElm?.index) ? 'head' : null} index={index} tail={(index === queue.current.tail && index !== highlightedElm?.index) ? 'tail' : null} state={index === highlightedElm ? ElementStates.Changing : ElementStates.Default} extraClass="mr-8" />)
           return (<Circle key={index.toString() + str} letter={str?.toString()} head={getCircleFeatures(index)?.head} index={index} tail={getCircleFeatures(index)?.tail} state={getCircleFeatures(index)?.state} extraClass="mr-8" />)
         })}
       </div>

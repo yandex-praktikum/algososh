@@ -15,7 +15,7 @@ export const FibonacciPage: React.FC = () => {
   const [isLoading, setIsLoading] = React.useState<boolean>(false);
 
   const onChange = React.useCallback((evt) => {
-    setInputFibNum(evt.target.value);
+    setInputFibNum(parseInt(evt.target.value));
   }, [])
 
   const onSubmit = React.useCallback(async (evt) => {
@@ -51,8 +51,8 @@ export const FibonacciPage: React.FC = () => {
   return (
     <SolutionLayout title="Последовательность Фибоначчи">
       <FlexForm onSubmit={onSubmit}>
-        <Input type='number' max={19} min={0} isLimitText={true} onChange={onChange} extraClass={`${styles.input} mr-6`} />
-        <Button text='Рассчитать' isLoader={isLoading} type='submit' />
+        <Input type='number' max={19} min={0} isLimitText={true} onChange={onChange} value={inputFibNum} placeholder='Введите значение' extraClass={`${styles.input} mr-6`} />
+        <Button text='Рассчитать' isLoader={isLoading} disabled={inputFibNum < 0 || inputFibNum > 19} type='submit' />
       </FlexForm>
       <div className={styles.circlesContainer} >
         {!!fibonacciArr?.length && fibonacciArr.map((fibVal, index) => {
