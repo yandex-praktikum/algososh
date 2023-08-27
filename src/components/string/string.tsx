@@ -28,6 +28,11 @@ export const StringComponent: React.FC = () => {
     const symbols = [...inputValue.split('').map((el) => { return { value: el, color: ElementStates.Default } })];
     let startIndex = 0;
     let lastIndex = symbols.length;
+    setData([...symbols]);
+    await new Promise((resolve) =>
+      setTimeout(resolve, SHORT_DELAY_IN_MS)
+    );
+
     while (startIndex < lastIndex) {
       if (startIndex === lastIndex - 1) {
         symbols[startIndex].color = ElementStates.Modified;
