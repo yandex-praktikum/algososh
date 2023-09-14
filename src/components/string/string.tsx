@@ -75,7 +75,7 @@ export const StringComponent: React.FC = () => {
   return (
     <SolutionLayout title="Строка">
       <FlexForm onSubmit={onSubmit} extraClass="mb-40">
-        <Input maxLength={11} isLimitText={true} onChange={onChange} extraClass={`${styles.input} mr-6`} />
+        <Input maxLength={11} isLimitText={true} onChange={onChange} value={inputString} extraClass={`${styles.input} mr-6`} />
         <Button text='Развернуть' isLoader={reverse.left < reverse.right ? true : false} type='submit' />
       </FlexForm>
       <div className={styles.circlesContainer} >
