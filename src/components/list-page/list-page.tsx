@@ -1,4 +1,4 @@
-import React from "react";
+import React, { ChangeEvent } from "react";
 import { SolutionLayout } from "../ui/solution-layout/solution-layout";
 import { Input } from "../ui/input/input";
 import { Button } from "../ui/button/button";
@@ -10,6 +10,8 @@ import { LinkedList } from "../../utils/linked-list";
 import { wait } from "../../utils/utils";
 import styles from './list-page.module.css'
 import { ArrowIcon } from "../ui/icons/arrow-icon";
+
+import { useForm } from "../../hooks/useForm";
 
 interface ICirclesState {
   head: number,
@@ -36,7 +38,7 @@ interface TCircleVisualState {
 type TAnimation = 'addHead' | 'addTail' | 'removeHead' | 'removeTail' | 'addByIndex' | 'removeByIndex';
 
 export const ListPage: React.FC = () => {
-  const [formValues, setFormValues] = React.useState<{ nodeValue: string, nodeIndex: string }>({ nodeValue: '', nodeIndex: '' });
+  const {formValues, setFormValues, onChangeHandler: onChange} = useForm({ nodeValue: '', nodeIndex: '' })
   const list = React.useRef((new LinkedList<string>()).push('0').push('34').push('8').push('1'));
   const [listToRender, setListToRender] = React.useState<Array<string | null>>(['0', '34', '8', '1']);
 
@@ -55,10 +57,6 @@ export const ListPage: React.FC = () => {
   const resetFormValues = React.useCallback(() => {
     setFormValues({ nodeValue: '', nodeIndex: '' });
   }, [])
-
-  const onChange = React.useCallback((evt) => {
-    setFormValues({ ...formValues, [evt.target.name]: evt.target.value });
-  }, [formValues]);
 
   const addTail = React.useCallback(async () => {
     setAnimationInProgress('addTail');

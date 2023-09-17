@@ -17,6 +17,7 @@ export const StackPage: React.FC = () => {
   const stack = React.useRef(new Stack<string>());
   const [stackToRender, setStackToRender] = React.useState<string[]>([]);
   const [stackElmHighlight, setStackElmHighlight] = React.useState<number>(-1);
+  const [animationInProgress, setAnimationInProgress] =  React.useState<'push' | 'pop' | null>(null)
 
 
   const onChange = React.useCallback((evt) => {
@@ -31,16 +32,20 @@ export const StackPage: React.FC = () => {
 
   const onSubmit = React.useCallback(async (evt: React.FormEvent<HTMLFormElement>) => {
     evt.preventDefault();
+    setAnimationInProgress('push');
     stack.current.push(inputString);
     setStackToRender([...stack.current.container]);
     await highlightElm(stack.current.getSize() - 1);
+    setAnimationInProgress(null);
     setInputString('');
   }, [inputString])
 
   const popStack = React.useCallback(async () => {
+    setAnimationInProgress('pop');
     await highlightElm(stack.current.getSize() - 1);
     stack.current.pop();
     setStackToRender([...stack.current.container]);
+    setAnimationInProgress(null);
   }, [])
 
   const resetStack = React.useCallback(async () => {
@@ -54,9 +59,9 @@ export const StackPage: React.FC = () => {
     <SolutionLayout title="Стек">
       <FlexForm onSubmit={onSubmit} onReset={resetStack} extraClass={`mb-40`}>
         <Input maxLength={4} isLimitText={true} onChange={onChange} value={inputString} placeholder='Введите значение'  extraClass={`${styles.input} mr-6`} />
-        <Button text='Добавить' isLoader={false} disabled={inputString.length === 0} type='submit' extraClass="mr-6" />
-        <Button text='Удалить' isLoader={false} disabled={stackToRender.length === 0} onClick={popStack} type='button' extraClass="mr-40" />
-        <Button text='Очистить' isLoader={false} disabled={stackToRender.length === 0} type='reset' />
+        <Button text='Добавить' isLoader={animationInProgress === 'push'} disabled={inputString.length === 0} type='submit' extraClass="mr-6" />
+        <Button text='Удалить' isLoader={animationInProgress === 'pop'} disabled={stackToRender.length === 0 || !!animationInProgress} onClick={popStack} type='button' extraClass="mr-40" />
+        <Button text='Очистить' isLoader={false} disabled={stackToRender.length === 0 || !!animationInProgress} type='reset' />
       </FlexForm>
       <div className={styles.circlesContainer} >
         {!!stackToRender.length && stackToRender.map((str, index) => {

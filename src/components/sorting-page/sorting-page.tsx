@@ -1,4 +1,4 @@
-import React from "react";
+import React, { ChangeEvent, SyntheticEvent } from "react";
 import { SolutionLayout } from "../ui/solution-layout/solution-layout";
 import { RadioInput } from "../ui/radio-input/radio-input";
 import { Button } from "../ui/button/button";
@@ -21,8 +21,8 @@ export const SortingPage: React.FC = () => {
   const [animationInProgress, setAnimationInProgress] = React.useState<TSortDirection | false>(false);
 
 
-  const selectSortMethod = React.useCallback((evt) => {
-    setSortMethod(evt.target.value);
+  const selectSortMethod = React.useCallback((evt: ChangeEvent<HTMLInputElement>) => {
+    if (evt.target.value ===  'select' || evt.target.value ===  'bubble') setSortMethod(evt.target.value);
   },[])
 
 
@@ -106,13 +106,17 @@ export const SortingPage: React.FC = () => {
     }
   }, []);
 
-  const getElementState = React.useCallback((index) => {
+  const getElementState = React.useCallback((index: number) => {
     if (arr.length === 1) return ElementStates.Modified;
     if (animatingArrElements && sortMethod === 'select' && (index < animatingArrElements.left || animatingArrElements.left === arr.length - 1)) return ElementStates.Modified;
     if (animatingArrElements && animatingArrElements.sorted && sortMethod === 'bubble' && (index >=  animatingArrElements.sorted || (animatingArrElements.sorted === 2 && (index === 0 || index === 1)))) return ElementStates.Modified;
     if (animatingArrElements && (index === animatingArrElements.left || index === animatingArrElements.right)) return ElementStates.Changing;
     return ElementStates.Default
-  }, [arr, animatingArrElements])
+  }, [arr, animatingArrElements]);
+
+  React.useEffect(() => {
+    randomArr();
+  },[])
 
 
 

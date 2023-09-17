@@ -1,4 +1,4 @@
-import React from "react";
+import React, { ChangeEvent } from "react";
 import { SolutionLayout } from "../ui/solution-layout/solution-layout";
 import { Input } from "../ui/input/input";
 import { Button } from "../ui/button/button";
@@ -24,7 +24,7 @@ export const StringComponent: React.FC = () => {
     right: 0,
   })
 
-  const onChange = React.useCallback((evt) => {
+  const onChange = React.useCallback((evt: ChangeEvent<HTMLInputElement>) => {
     setInputString(evt.target.value);
   }, [])
 
@@ -76,7 +76,7 @@ export const StringComponent: React.FC = () => {
     <SolutionLayout title="Строка">
       <FlexForm onSubmit={onSubmit} extraClass="mb-40">
         <Input maxLength={11} isLimitText={true} onChange={onChange} value={inputString} extraClass={`${styles.input} mr-6`} />
-        <Button text='Развернуть' isLoader={reverse.left < reverse.right ? true : false} type='submit' />
+        <Button text='Развернуть' isLoader={reverse.left < reverse.right ? true : false} disabled={inputString.length === 0} type='submit' />
       </FlexForm>
       <div className={styles.circlesContainer} >
         {!!reverse?.str?.length && reverse.str.map((char, index) => {
