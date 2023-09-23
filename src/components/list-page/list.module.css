@@ -1,0 +1,87 @@
+.context {
+  display: flex;
+  flex-direction: column;
+  margin: 0 auto;
+  gap: 12px;
+  width: 952px;
+}
+
+.form {
+  display: flex;
+  align-items: flex-start;
+  width: 952px;
+  margin: 0 auto;
+}
+
+.conditions {
+  width: 100%;
+  display: flex;
+  column-gap: 12px;
+}
+
+.limit {
+  display: flex;
+  width: 204px;
+  padding: 0 16px;
+  font-size: 14px;
+  line-height: 22px;
+  text-align: left;
+  margin: 4px 0 12px;
+}
+
+.input {
+    max-width: 204px;
+    width: 100%;
+}
+
+.circle_small {
+    position: absolute;
+}
+
+.list {
+    max-width: 400px;
+    gap: 16px;
+    width: 100%;
+    padding: 0;
+    margin: 120px auto 0;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    list-style: none;
+}
+
+.item {
+    position: relative;
+    display: flex;
+    align-items: center;
+}
+
+.buttons {
+  display: flex;
+  flex-direction: row;
+  width: 100%;
+  justify-content: space-between;
+  gap: 10px;
+}
+
+.button_small {
+    width: 100%;
+    max-width: 180px;
+}
+
+.button_big {
+    max-width: 362px;
+    width: 100%;
+}
+
+.add {
+  top: -65px;
+  left: 12px;
+    
+}
+
+.remove {
+    bottom: -170px;
+    left: 12px;
+}

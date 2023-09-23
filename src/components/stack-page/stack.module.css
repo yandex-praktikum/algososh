@@ -1,0 +1,39 @@
+.context {
+  display: flex;
+  flex-direction: column;
+  margin: 0 auto;
+  gap: 4px;
+  width: 829px;
+}
+
+.form {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  width: 829px;
+  margin: 0 auto;
+}
+
+.conditions {
+  display: flex;
+  gap: 12px;
+}
+
+.limit {
+  display: flex;
+  width: 204px;
+  padding: 0 16px;
+  font-size: 14px;
+  line-height: 22px;
+  text-align: left;
+}
+
+.stack {
+ display: flex;
+ gap: 16px;
+ margin: 48px auto 0;
+ justify-content: center;
+ align-items: center;
+ max-width: 368px;
+ padding: 0;
+}
