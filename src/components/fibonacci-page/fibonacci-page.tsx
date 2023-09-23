@@ -1,4 +1,4 @@
-import React, { FormEvent, ReactElement, useState } from "react";
+import React, { ChangeEvent, FormEvent, ReactElement, useState } from "react";
 import { SolutionLayout } from "../ui/solution-layout/solution-layout";
 import styles from "./fibonacci.module.css"
 import { Input } from "../ui/input/input";
@@ -8,7 +8,7 @@ import { fibArray } from "./fibonacci";
 
 export const FibonacciPage: React.FC = () => {
 
-  type propsType = {
+  type PropsType = {
     val: number[],
   }
 
@@ -17,7 +17,7 @@ export const FibonacciPage: React.FC = () => {
   const [btnDisable, setBtnDisable] = useState(false)
   const [btnLoader, setBtnLoader] = useState(false)
 
-  function onInputChange(e: FormEvent<HTMLInputElement>) {
+  function onInputChange(e: ChangeEvent<HTMLInputElement>) {
     e.preventDefault();
     let valToCount = (e.target as HTMLInputElement).value
 
@@ -43,7 +43,7 @@ export const FibonacciPage: React.FC = () => {
     setValue({ valToCount: '' });
   }
 
-  function FibBeads({ val }: propsType): any  {
+  function FibBeads({ val }: PropsType): any  {
     return val.map((fibNum: number, idx: number) => {
       return <Circle key={idx} letter={`${fibNum}`} index={idx} />
     })

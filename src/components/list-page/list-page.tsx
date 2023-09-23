@@ -1,4 +1,4 @@
-import React, { FormEvent, useState } from "react";
+import React, { ChangeEvent, FormEvent, useState } from "react";
 import { SolutionLayout } from "../ui/solution-layout/solution-layout";
 import styles from './list.module.css'
 import { Button } from "../ui/button/button";
@@ -21,7 +21,7 @@ export const listArr: IListArr[] = baseArr.map((item) => ({
 }))
 
 
-type propsType = {
+type PropsType = {
   listArray: IListArr[]
 }
 
@@ -61,12 +61,12 @@ export const ListPage: React.FC = () => {
     clearBtn: false,
   });
 
-  const onInputChange = (e: FormEvent<HTMLInputElement>): void => {
+  const onInputChange = (e: ChangeEvent<HTMLInputElement>): void => {
     const value = e.currentTarget.value;
     setValue(value.trim());
   }
 
-  const onIndexChange = (e: FormEvent<HTMLInputElement>): void => {
+  const onIndexChange = (e: ChangeEvent<HTMLInputElement>): void => {
     const value = e.currentTarget.value;
     setIndex(+value.trim());
   }
@@ -260,7 +260,7 @@ export const ListPage: React.FC = () => {
     setIndex(1);
   }
 
-  function List({ listArray }: propsType): any {
+  function List({ listArray }: PropsType): any {
     return listArray.map((item, index) => {
       return (
         <li className={styles.item} key={index}>
@@ -348,7 +348,7 @@ export const ListPage: React.FC = () => {
                 isLoader={disable.addByIndexBtn}
                 disabled={!input || !index || disable.index || disable.input
                   || index > listArray.length - 1
-                  || listArray.length >= maxIndex} />
+                  || listArray.length - 1 >= maxIndex || index < 0} />
 
               <Button text="Удалить по индексу" linkedList="big"
                 extraClass={`${styles.button_big}`}
@@ -357,7 +357,7 @@ export const ListPage: React.FC = () => {
                 disabled={listArray.length === 0
                   || disable.input || disable.index
                   || index > listArray.length - 1
-                  || index < 1} />
+                  || index < 1 || !input} />
             </div>
           </div>
         </form>

@@ -8,20 +8,20 @@ import { Direction } from "../../types/direction";
 import { bubbleSort, randomArr, selectionSort } from "./sorting";
 import { ElementStates } from "../../types/element-states";
 
-export type randomArrayType = {
+export type RandomArrayType = {
   number: number,
   state: ElementStates
 }
 
-type propsType = {
-  arr: randomArrayType[]
+type PropsType = {
+  arr: RandomArrayType[]
 }
 
 export const SortingPage: React.FC = () => {
 
   useEffect(() => { getNewArray() }, []);
 
-  const [array, setArray] = useState([] as randomArrayType[])
+  const [array, setArray] = useState([] as RandomArrayType[])
   const [isLoader, setIsLoader] = useState<Direction | null>()
   const [radio, setRadio] = useState<string>("selection");
 
@@ -33,10 +33,10 @@ export const SortingPage: React.FC = () => {
   const getNewArray = () => setArray(randomArr(0, 100, 3, 17))
 
 
-  function Array(props: propsType): any {
+  function Array(props: PropsType): any {
     const arr = props.arr
 
-    return arr.map((item: randomArrayType, idx) => {
+    return arr.map((item: RandomArrayType, idx) => {
       return (
         <Column key={idx} index={item.number} state={item.state} />
       )

@@ -1,4 +1,4 @@
-import React, { FormEvent, useState } from "react";
+import React, { ChangeEvent, FormEvent, useState } from "react";
 import { SolutionLayout } from "../ui/solution-layout/solution-layout";
 import styles from './stack.module.css'
 import { Input } from "../ui/input/input";
@@ -9,7 +9,7 @@ import { ElementStates } from "../../types/element-states";
 
 const stack = new Stack<string>();
 
-type propsType = {
+type PropsType = {
   stack: string[]
 }
 
@@ -33,7 +33,7 @@ export const StackPage: React.FC = () => {
     clearBtn: false,
   });
 
-  const onInputChange = (e: FormEvent<HTMLInputElement>): void => {
+  const onInputChange = (e: ChangeEvent<HTMLInputElement>): void => {
     const value = e.currentTarget.value;
     setValue(value.trim());
   }
@@ -86,7 +86,7 @@ export const StackPage: React.FC = () => {
   }
 
   
-  function NewStack({ stack }: propsType): any{
+  function NewStack({ stack }: PropsType): any{
     return stack.map((item, index: number) => {
           return (
             <Circle

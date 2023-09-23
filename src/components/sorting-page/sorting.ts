@@ -1,6 +1,6 @@
 import { Direction } from "../../types/direction";
 import { ElementStates } from "../../types/element-states";
-import { randomArrayType } from "./sorting-page";
+import { RandomArrayType } from "./sorting-page";
 
 // функция для генерации случайного числа в диапазоне
 const min = 0
@@ -11,26 +11,26 @@ export const randomNum = (min: number, max: number): number => {
   return Math.floor(Math.random() * (max - min + 1)) + min
 }
 
-export function randomArr(min: number, max: number, minLen: number, maxlen: number): randomArrayType[] {
+export function randomArr(min: number, max: number, minLen: number, maxlen: number): RandomArrayType[] {
   const arrLength = randomNum(minLen, maxlen)
-  const arr: randomArrayType[] = []
+  const arr: RandomArrayType[] = []
   for (let i = 0; i < arrLength; i++) {
     arr.push({ number: randomNum(min, max), state: ElementStates.Default })
   }
   return arr
 }
 
-export const swap = (arr: randomArrayType[], firstIndex: number, secondIndex: number): string => {
+export const swap = (arr: RandomArrayType[], firstIndex: number, secondIndex: number): string => {
   const temp = arr[firstIndex].number;
   arr[firstIndex].number = arr[secondIndex].number;
   arr[secondIndex].number = temp;
   return [...arr].join('')
 }
 
-type arrType = randomArrayType[]
+type arrType = RandomArrayType[]
 
 export const selectionSort =
-  async (arr: randomArrayType[],
+  async (arr: RandomArrayType[],
     setArray: (arr: arrType) => void,
     setIsLoader: (dir: Direction | null) => void,
     direction: Direction) => {
@@ -82,7 +82,7 @@ const timeOut = () => new Promise<void>(
 );
 
 export const bubbleSort =
-  async (arr: randomArrayType[],
+  async (arr: RandomArrayType[],
     setArray: (arr: arrType) => void,
     setIsLoader: (dir: Direction | null) => void,
     direction: Direction) => {

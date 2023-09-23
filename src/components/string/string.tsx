@@ -1,4 +1,4 @@
-import React from "react";
+import React, { ChangeEvent } from "react";
 import { SolutionLayout } from "../ui/solution-layout/solution-layout";
 import styles from './string.module.css'
 import { Input } from "../ui/input/input";
@@ -12,7 +12,7 @@ import { ElementStates } from "../../types/element-states";
 
 export const StringComponent: React.FC = () => {
 
-  type propsType = {
+  type PropsType = {
     string: string,
     changing: number[]
   }
@@ -23,7 +23,7 @@ export const StringComponent: React.FC = () => {
   const [stringData, setStringData] =
     useState({ string: '', changing: [] as number[] })
 
-  function onInputChange(e: FormEvent<HTMLInputElement>) {
+  function onInputChange(e: ChangeEvent<HTMLInputElement>) {
     e.preventDefault();
     setValue({ ...form, string: (e.target as HTMLInputElement).value });
   }
@@ -52,7 +52,7 @@ export const StringComponent: React.FC = () => {
 
 
 
-  function String({ string, changing }: propsType): any {
+  function String({ string, changing }: PropsType): any {
     const stringArr = string.split('')
 
     const colorState = {
@@ -82,7 +82,7 @@ export const StringComponent: React.FC = () => {
         <form className={styles.form} onSubmit={reverse}>
           <Input name={'string'} type="text" maxLength={11} onChange={onInputChange}
             value={form.string} extraClass="mr-6" />
-          <Button text="Развернуть" type="submit" isLoader={btnLoader}></Button>
+          <Button text="Развернуть" type="submit" isLoader={btnLoader} disabled={!form.string}></Button>
         </form>
         <p className={styles.limit}> Максимум - 11 символов</p>
       </div>
