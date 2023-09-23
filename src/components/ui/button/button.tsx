@@ -9,7 +9,7 @@ interface ButtonProps extends React.HTMLProps<HTMLButtonElement> {
   text?: string;
   type?: "button" | "submit" | "reset";
   sorting?: Direction;
-  linkedList?: "small" | "big";
+  linkedList?: "small" | "big" | "medium";
   isLoader?: boolean;
   extraClass?: string;
 }
