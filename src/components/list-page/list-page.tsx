@@ -357,7 +357,7 @@ export const ListPage: React.FC = () => {
                 disabled={listArray.length === 0
                   || disable.input || disable.index
                   || index > listArray.length - 1
-                  || index < 1 || !input} />
+                  || index < 1 } />
             </div>
           </div>
         </form>

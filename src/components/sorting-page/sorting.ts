@@ -34,6 +34,10 @@ export const selectionSort =
     setArray: (arr: arrType) => void,
     setIsLoader: (dir: Direction | null) => void,
     direction: Direction) => {
+
+    if (arr.length === 0) {
+      return arr;
+    }
     const { length } = arr;
 
     for (let i = 0; i < length; i++) {
@@ -87,6 +91,9 @@ export const bubbleSort =
     setIsLoader: (dir: Direction | null) => void,
     direction: Direction) => {
 
+    if (arr.length === 0) {
+      return arr;
+    }
     const { length } = arr;
     for (let i = 0; i < length; i++) {
       arr[i].state = ElementStates.Changing

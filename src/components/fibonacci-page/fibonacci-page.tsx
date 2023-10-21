@@ -14,7 +14,7 @@ export const FibonacciPage: React.FC = () => {
 
   const [form, setValue] = useState({ valToCount: '' })
   const [data, setData] = useState([])
-  const [btnDisable, setBtnDisable] = useState(false)
+  const [btnDisable, setBtnDisable] = useState(true)
   const [btnLoader, setBtnLoader] = useState(false)
 
   function onInputChange(e: ChangeEvent<HTMLInputElement>) {

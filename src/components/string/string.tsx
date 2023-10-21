@@ -72,8 +72,10 @@ export const StringComponent: React.FC = () => {
 
 
     return string && stringArr.map((s, idx) => {
-      return <Circle key={idx} letter={s}
+      return <li key={idx}>
+        <Circle key={idx} letter={s}
         state={getColor(idx) || ElementStates.Modified} />
+        </li>
     })
   }
   return (
@@ -87,7 +89,7 @@ export const StringComponent: React.FC = () => {
         <p className={styles.limit}> Максимум - 11 символов</p>
       </div>
       <ul className={styles.circles}>
-        <String string={stringData.string}
+          <String string={stringData.string}
           changing={stringData.changing} />
       </ul>
     </SolutionLayout>
