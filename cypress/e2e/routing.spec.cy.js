@@ -2,7 +2,7 @@
 
 describe('Приложение корректно работает с переходами по страницам', function () {
   beforeEach(() => {
-		cy.visit('http://localhost:3000');
+		cy.visit('');
 	})
 
   it('Открывается главная страница', function () {

@@ -1,3 +1,5 @@
+const { uiCircle, circleDefault } = require("./constants");
+
 describe('Тестирование страницы компонента "Очередь"', () => {
   beforeEach(() => {
     cy.visit('/queue')
@@ -15,9 +17,9 @@ describe('Тестирование страницы компонента "Оче
     cy.get('input').type('cat')
     cy.contains('Добавить').click()
     cy.tick(500)
-    cy.get('div[class*="circle_circle"]').contains('cat').parent()
+    cy.get(uiCircle).contains('cat').parent()
       .invoke('attr', 'class')
-      .then(classList => expect(classList).contains('circle_circle__xMxdD   circle_default__cxxRQ'))
+      .then(classList => expect(classList).contains(circleDefault))
   })
 
   // //Проверка правильности удаления элемента из очереди
@@ -26,13 +28,13 @@ describe('Тестирование страницы компонента "Оче
     cy.get('input').type('cat')
     cy.contains('Добавить').click()
     cy.tick(500)
-    cy.get('div[class*="circle_circle"]').contains('cat').parent()
+    cy.get(uiCircle).contains('cat').parent()
       .invoke('attr', 'class')
-      .then(classList => expect(classList).contains('circle_circle__xMxdD   circle_default__cxxRQ'))
+      .then(classList => expect(classList).contains(circleDefault))
     cy.tick(500)
     cy.contains('Удалить').click()
     cy.get('input').should('have.value', '')
-    cy.get('div[class*="circle_circle"]').should('have.value', '')
+    cy.get(uiCircle).should('have.value', '')
   })
 
   //Проверка поведения кнопки "Очистить"
@@ -41,27 +43,27 @@ describe('Тестирование страницы компонента "Оче
     cy.get('input').type('cat')
     cy.contains('Добавить').click()
     cy.tick(500)
-    cy.get('div[class*="circle_circle"]').contains('cat').parent()
+    cy.get(uiCircle).contains('cat').parent()
       .invoke('attr', 'class')
-      .then(classList => expect(classList).contains('circle_circle__xMxdD   circle_default__cxxRQ'))
+      .then(classList => expect(classList).contains(circleDefault))
     cy.tick(500)  
     cy.get('input').type('dog')
     cy.contains('Добавить').click()
     cy.tick(500)
-    cy.get('div[class*="circle_circle"]').contains('dog').parent()
+    cy.get(uiCircle).contains('dog').parent()
       .invoke('attr', 'class')
-      .then(classList => expect(classList).contains('circle_circle__xMxdD   circle_default__cxxRQ'))
+      .then(classList => expect(classList).contains(circleDefault))
     cy.tick(500)
     
     cy.get('input').type('frog')
     cy.contains('Добавить').click()
     cy.tick(500)
-     cy.get('div[class*="circle_circle"]').contains('frog').parent()
+     cy.get(uiCircle).contains('frog').parent()
       .invoke('attr', 'class')
-      .then(classList => expect(classList).contains('circle_circle__xMxdD   circle_default__cxxRQ'))
+      .then(classList => expect(classList).contains(circleDefault))
     cy.tick(500)
     cy.contains('Очистить').click()
-    cy.get('div[class*="circle_circle"]').should('have.value', '');
+    cy.get(uiCircle).should('have.value', '');
   })
 
 })

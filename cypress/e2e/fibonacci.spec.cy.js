@@ -1,3 +1,5 @@
+const { uiCircle } = require("./constants");
+
 describe('Тестирование страницы компонента "Фибоначчи"', () => {
   beforeEach(() => {
     cy.visit('/fibonacci')
@@ -16,23 +18,23 @@ describe('Тестирование страницы компонента "Фиб
     cy.contains('Рассчитать').click();
 
     cy.tick(500)
-    cy.get('div[class*="circle_circle"]').should('have.length', '1').should('have.text', '1')
+    cy.get(uiCircle).should('have.length', '1').should('have.text', '1')
 
     cy.tick(500)
     cy.wait(500)
-    cy.get('div[class*="circle_circle"]').should('have.length', '2').should('have.text', '11')
+    cy.get(uiCircle).should('have.length', '2').should('have.text', '11')
 
     cy.tick(500)
     cy.wait(500)
-    cy.get('div[class*="circle_circle"]').should('have.length', '3').should('have.text', '112')
+    cy.get(uiCircle).should('have.length', '3').should('have.text', '112')
 
     cy.tick(500)
     cy.wait(500)
-    cy.get('div[class*="circle_circle"]').should('have.length', '4').should('have.text', '1123')
+    cy.get(uiCircle).should('have.length', '4').should('have.text', '1123')
 
     cy.tick(500)
     cy.wait(500)
-    cy.get('div[class*="circle_circle"]').should('have.length', '5').should('have.text', '11235')
+    cy.get(uiCircle).should('have.length', '5').should('have.text', '11235')
 
   })
 })

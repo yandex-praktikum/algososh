@@ -1,3 +1,5 @@
+const { uiCircle } = require("./constants");
+
 const testString = ['x', 'e', 'd', 'n', 'a', 'y']
 
 describe('Тестирование страницы компонента "Строка"', () => {
@@ -24,7 +26,7 @@ describe('Тестирование страницы компонента "Стр
     cy.get('@array')
       .should('have.length', 6)
       .each(($li) => {
-        cy.get($li).find('[class^=circle_circle__]').as('circle');
+        cy.get($li).find(uiCircle).as('circle');
         cy.get('@circle').should('have.css', 'border-color', 'rgb(0, 50, 255)');
       });
     //изменение состояния элементов
@@ -32,7 +34,7 @@ describe('Тестирование страницы компонента "Стр
     cy.get('@array')
       .should('have.length', 6)
       .each(($li, index, list) => {
-        cy.get($li).find('[class^=circle_circle__]').as('circle');
+        cy.get($li).find(uiCircle).as('circle');
         if (index === 0 ) {
           cy.get('@circle').should('have.css', 'border-color', 'rgb(127, 224, 81)');
           cy.get('@circle').should('contain.text', testString[index]);
@@ -51,7 +53,7 @@ describe('Тестирование страницы компонента "Стр
     cy.get('@array')
       .should('have.length', 6)
       .each(($li, index, list) => {
-        cy.get($li).find('[class^=circle_circle__]').as('circle');
+        cy.get($li).find(uiCircle).as('circle');
         if (index === 1 ) {
           cy.get('@circle').should('have.css', 'border-color', 'rgb(127, 224, 81)');
           cy.get('@circle').should('contain.text', testString[index]);
@@ -70,7 +72,7 @@ describe('Тестирование страницы компонента "Стр
     cy.get('@array')
       .should('have.length', 6)
       .each(($li, index, list) => {
-        cy.get($li).find('[class^=circle_circle__]').as('circle');
+        cy.get($li).find(uiCircle).as('circle');
         if (index === 1 || index === (list.length - 2)) {
           cy.get('@circle').should('have.css', 'border-color', 'rgb(127, 224, 81)');
           cy.get('@circle').should('contain.text', testString[index]);
