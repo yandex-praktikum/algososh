@@ -1,0 +1,39 @@
+.context {
+  display: flex;
+  flex-direction: column;
+  margin: 0 auto;
+  gap: 4px;
+  width: 567px;
+}
+
+.form {
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  width: 567px;
+  gap: 12px;
+  margin: 0 auto;
+}
+
+.limit {
+  display: flex;
+  width: 204px;
+  padding: 0 16px;
+  gap: 10px;
+  font-size: 14px;
+  line-height: 22px;
+  text-align: left;
+}
+
+.circles {
+ display: flex;
+ gap: 16px;
+ margin: 0 auto;
+ margin-top: 120px;
+ justify-content: center;
+ max-width: 1040px;
+}
+
+li {
+  list-style-type: none;
+}
