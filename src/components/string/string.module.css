@@ -1,0 +1,24 @@
+.main {
+    display: flex;
+    flex-direction: column;
+    gap: 120px;
+    justify-content: center;
+    align-items: center;
+
+}
+
+.form {
+    display: flex;
+    max-width: 534px;    
+    gap: 12px
+}
+
+.circleList {
+    display: flex;
+    list-style-type: none;
+    gap: 16px;
+}
+
+.button {
+    min-width: 178px;
+}
