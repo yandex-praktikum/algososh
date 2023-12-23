@@ -3,43 +3,23 @@ import { SolutionLayout } from "../ui/solution-layout/solution-layout";
 import { Input } from "../ui/input/input";
 import { Button } from "../ui/button/button";
 import { Circle } from "../ui/circle/circle";
-import { ElementStates } from "../../types/element-states";
-import { DELAY_IN_MS } from "../../constants/delays";
 import styles from "./string.module.css"
 import { useForm } from "../hooks/useForm"
-
+import { ElementStates } from "../../types/element-states";
+import { DELAY_IN_MS } from "../../constants/delays";
+import { TFormData, TElement } from "./utils";
+import { getSourceString, swapElements } from "./utils";
 
 export const StringComponent: React.FC = () => {
-
-  type TFormData = {
-    [key: string]: string;
-  }
-
-  type TElement = {
-    value: string;
-    color: ElementStates
-  }
 
   const { values, handleChange } = useForm<TFormData>({ sourceString: '' });
   const [loader, setLoader] = useState<boolean>(false);
   const [strArray, setStrArray] = useState<TElement[]>([]);
-
-  const swapElements = (arr: TElement[], firstIndex: number, secondIndex: number) => {
-
-    const tmp = arr[firstIndex];    
-       
-    arr[firstIndex] = arr[secondIndex];
-    arr[secondIndex] = tmp;
-
-    return arr;
-  }
-
+   
   function handleSubmit(e: React.FormEvent) {
-    e.preventDefault();
-    
-    const newArr = values.sourceString.split('').map((value => ({ value, color: ElementStates.Default })));
-    reverse(newArr);
-  }
+    e.preventDefault();        
+    reverse(getSourceString(values.sourceString));
+  };
 
   const reverse = async (arr: TElement[]) => {
     setLoader(true);
@@ -49,23 +29,22 @@ export const StringComponent: React.FC = () => {
       let j = arr.length - 1 - i;
 
       if (i !== j) {
-        arr[i].color = ElementStates.Changing;
-        arr[j].color = ElementStates.Changing;
+        arr[i].state = ElementStates.Changing;
+        arr[j].state = ElementStates.Changing;
         setStrArray([...arr]);
         await new Promise(resolve => setTimeout(resolve, DELAY_IN_MS));
       };
 
       swapElements(arr, i, j); 
 
-      arr[i].color = ElementStates.Modified;
-      arr[j].color = ElementStates.Modified;
+      arr[i].state = ElementStates.Modified;
+      arr[j].state = ElementStates.Modified;
 
       setStrArray([...arr]);
     }
 
     setLoader(false);
   };
-  
   
 
   return (
@@ -92,7 +71,7 @@ export const StringComponent: React.FC = () => {
             <li key={index}>
               <Circle
                 letter={item.value}
-                state={item.color}
+                state={item.state}
               />
             </li>
           ))
