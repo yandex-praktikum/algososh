@@ -7,8 +7,10 @@ import styles from "./string.module.css"
 import { useForm } from "../hooks/useForm"
 import { ElementStates } from "../../types/element-states";
 import { DELAY_IN_MS } from "../../constants/delays";
-import { TFormData, TElement } from "./utils";
+import { TElement } from "./utils";
+import { TFormData } from "../../types/form"
 import { getSourceString, swapElements } from "./utils";
+import { STRING_MAX_LENGTH } from "../../constants/restrictions"
 
 export const StringComponent: React.FC = () => {
 
@@ -32,7 +34,7 @@ export const StringComponent: React.FC = () => {
         arr[i].state = ElementStates.Changing;
         arr[j].state = ElementStates.Changing;
         setStrArray([...arr]);
-        await new Promise(resolve => setTimeout(resolve, DELAY_IN_MS));
+        
       };
 
       swapElements(arr, i, j); 
@@ -53,7 +55,7 @@ export const StringComponent: React.FC = () => {
         <form className={styles.form} onSubmit={handleSubmit}>
           <Input
             isLimitText={true}
-            maxLength={11}
+            maxLength={STRING_MAX_LENGTH}
             value={values.sourceString}
             onChange={handleChange}
             name={"sourceString"}
