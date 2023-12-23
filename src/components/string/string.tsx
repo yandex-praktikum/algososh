@@ -34,7 +34,7 @@ export const StringComponent: React.FC = () => {
         arr[i].state = ElementStates.Changing;
         arr[j].state = ElementStates.Changing;
         setStrArray([...arr]);
-        
+        await new Promise(resolve => setTimeout(resolve, DELAY_IN_MS));
       };
 
       swapElements(arr, i, j); 
