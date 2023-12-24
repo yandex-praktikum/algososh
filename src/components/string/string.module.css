@@ -16,6 +16,7 @@
 .circleList {
     display: flex;
     list-style-type: none;
+    padding: 0;
     gap: 16px;
 }
 

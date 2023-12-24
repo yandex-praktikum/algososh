@@ -1,0 +1,36 @@
+.main {
+    display: flex;
+    flex-direction: column;
+    gap: 48px;
+    justify-content: center;
+    align-items: center;
+}
+
+.form {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-width: 980px;    
+    gap: 12px;
+}
+
+.columnList {
+    display: flex;
+    list-style-type: none;
+    padding: 0;
+    gap: 10px;
+    justify-content: center;
+    align-items: baseline;
+}
+
+.button {
+    min-width: 205px;
+}
+
+.ml_50 {
+    margin-left: 50px;
+}
+
+.ml_80 {
+    margin-left: 80px;
+}
