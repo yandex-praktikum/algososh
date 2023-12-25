@@ -27,20 +27,19 @@ export const StackPage: React.FC = () => {
     if (values.sourceString && stack.size <= STACK_MAX_LENGTH) {
       stack.push(values.sourceString);
       setArr([...stack.getItems]);
-      switchState();
       await new Promise(resolve => setTimeout(resolve, SHORT_DELAY_IN_MS));
-      setCurrentIndex(stack.size);
+      switchState();
       values.sourceString = '';
+      setCurrentIndex(stack.size);
     }
-
+   
   }
 
   const remove = async () => {
-
     if (stack.size > 0) {
+      switchState();
       await new Promise(resolve => setTimeout(resolve, SHORT_DELAY_IN_MS));
       stack.pop();
-      switchState();
       setArr([...stack.getItems]);
       setCurrentIndex(stack.size);
     }
@@ -100,7 +99,7 @@ export const StackPage: React.FC = () => {
             <li key={index}>
               <Circle
                 index={index}
-                state={currentIndex === index ? ElementStates.Changing : ElementStates.Default}
+                state={index === currentIndex - 1 ? state : ElementStates.Default}
                 head={index === currentIndex - 1 ? 'top' : ''}
                 letter={item}
               />
