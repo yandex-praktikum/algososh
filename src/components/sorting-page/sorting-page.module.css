@@ -18,9 +18,11 @@
     display: flex;
     list-style-type: none;
     padding: 0;
+    margin: 0;
     gap: 10px;
     justify-content: center;
-    align-items: baseline;
+    align-items: flex-end;
+    min-height: 340px;
 }
 
 .button {
