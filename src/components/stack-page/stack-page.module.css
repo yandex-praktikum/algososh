@@ -1,0 +1,38 @@
+.main {
+    display: flex;
+    flex-direction: column;
+    gap: 48px;
+    justify-content: center;
+    align-items: center;
+}
+
+.form {
+    display: flex;
+    justify-content: center;
+    min-width: 980px;    
+    gap: 12px;
+}
+
+.inputWidth {
+    min-width: 377px;
+}
+
+.columnList {
+    display: flex;
+    list-style-type: none;
+    padding: 0;
+    margin: 0;
+    gap: 16px;
+    max-width: 980px;    
+    flex-wrap: wrap;
+    column-gap: 16px;
+    row-gap: 80px; 
+}
+
+.button {
+    min-width: 108px;
+}
+
+.ml_80 {
+    margin-left: 80px;
+}
