@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import { SolutionLayout } from "../ui/solution-layout/solution-layout";
 import { Button } from "../ui/button/button";
 import { Input } from "../ui/input/input";
@@ -19,8 +19,7 @@ export const StackPage: React.FC = () => {
   const [loader, setLoader] = useState<boolean>(false);
   const [arr, setArr] = useState<string[]>([]);
   const [currentIndex, setCurrentIndex] = useState<number>(-1);
-  const [state, setState] = useState(ElementStates.Default)
-
+  
   const add = async () => {
     if (values.sourceString && stack.size <= STACK_MAX_LENGTH) {
       setLoader(true)
@@ -54,12 +53,6 @@ export const StackPage: React.FC = () => {
       setCurrentIndex(-1);
       setLoader(false)
     }
-  }
-
-  const switchState = async () => {
-    setState(ElementStates.Changing)
-    await new Promise(resolve => setTimeout(resolve, SHORT_DELAY_IN_MS));
-    setState(ElementStates.Default)
   }
 
   return (
