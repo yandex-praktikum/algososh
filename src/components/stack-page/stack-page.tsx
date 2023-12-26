@@ -22,35 +22,37 @@ export const StackPage: React.FC = () => {
   const [state, setState] = useState(ElementStates.Default)
 
   const add = async () => {
-    console.log("add action: values.sourceString: ", values.sourceString);
-
     if (values.sourceString && stack.size <= STACK_MAX_LENGTH) {
+      setLoader(true)
       stack.push(values.sourceString);
-      setArr([...stack.getItems]);
-      await new Promise(resolve => setTimeout(resolve, SHORT_DELAY_IN_MS));
-      switchState();
       values.sourceString = '';
       setCurrentIndex(stack.size);
+      setArr([...stack.getItems]);
+      await new Promise(resolve => setTimeout(resolve, SHORT_DELAY_IN_MS));
+      setCurrentIndex(-1);
+      setLoader(false)
     }
-   
   }
 
   const remove = async () => {
     if (stack.size > 0) {
-      switchState();
-      await new Promise(resolve => setTimeout(resolve, SHORT_DELAY_IN_MS));
+      setLoader(true)
       stack.pop();
+      setCurrentIndex(stack.size);
+      await new Promise(resolve => setTimeout(resolve, SHORT_DELAY_IN_MS));
       setArr([...stack.getItems]);
       setCurrentIndex(stack.size);
+      setLoader(false)
     }
   }
 
   const clear = () => {
-    console.log("clear action: stack.size: ", stack.size);
     if (stack.size > 0) {
+      setLoader(true)
       stack.clear();
       setArr([...stack.getItems]);
       setCurrentIndex(-1);
+      setLoader(false)
     }
   }
 
@@ -99,8 +101,8 @@ export const StackPage: React.FC = () => {
             <li key={index}>
               <Circle
                 index={index}
-                state={index === currentIndex - 1 ? state : ElementStates.Default}
-                head={index === currentIndex - 1 ? 'top' : ''}
+                state={currentIndex - 1 === index ? ElementStates.Changing : ElementStates.Default }
+                head={index === stack.size - 1 ? 'top' : ''}
                 letter={item}
               />
             </li>
