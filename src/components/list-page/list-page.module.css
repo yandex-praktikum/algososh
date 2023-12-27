@@ -1,0 +1,56 @@
+.main {
+    display: flex;
+    flex-direction: column;
+    gap: 70px;
+    justify-content: center;
+    align-items: center;
+}
+
+.controlContainer {
+    display: flex;
+    flex-direction: row;
+    gap: 12px;
+}
+
+.form {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.inputWidth {
+    min-width: 204px;
+}
+
+.columnList {
+    display: flex;
+    list-style-type: none;
+    padding: 0;
+    margin: 0;
+    flex-wrap: wrap;
+    column-gap: 16px;
+    row-gap: 40px;
+}
+
+.buttonWidth_175 {
+    min-width: 175px;
+}
+
+.buttonWidth_362 {
+    min-width: 362px;
+}
+
+.circleChevron {
+    display: flex;
+    align-items: center;
+}
+
+.circleChevron:not(:last-child)::after {
+    content: "";
+    background-image: url(../../images/chevron-right.jpg);
+    background-repeat: no-repeat;
+    height: 16px;
+    width: 16px;
+    display: block;
+    margin-left: 25px;
+  }

@@ -72,6 +72,7 @@ export const QueuePage: React.FC = () => {
             value={values.sourceString}
             onChange={handleChange}
             name={"sourceString"}
+            disabled={loader}
           />
           <Button
             extraClass={`${styles.button} ${styles.ml_50}`}
