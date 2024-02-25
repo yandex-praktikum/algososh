@@ -1,13 +1,14 @@
+import { TElement } from "../components/stack-page/stack-page";
 import { ElementStates } from "../types/element-states";
 
 
 export default class Stack<T> {
     items: T[];
     constructor() {
-        this.items = []                
+        this.items = []
     }
 
-    push(value: T) {       
+    push(value: T) {
         this.items.push(value)
     }
 
@@ -27,3 +28,4 @@ export default class Stack<T> {
         return this.items
     }
 }
+

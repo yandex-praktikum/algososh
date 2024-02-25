@@ -6,7 +6,7 @@ import Stack from "../../class/stack";
 import { Circle } from "../ui/circle/circle";
 import { ElementStates } from "../../types/element-states";
 
-type TElement = {
+export type TElement = {
   value: string,
   color: ElementStates
 }
@@ -90,7 +90,6 @@ export const StackPage: React.FC = () => {
             <Circle  letter={elem.value} state={elem.color} index={i} head={(i === arr.length-1)?'top': ''} />            
           </div> )}
         </div>
-
       </div>
     </SolutionLayout>
   );
