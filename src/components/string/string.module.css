@@ -1,0 +1,22 @@
+.content{
+    display: flex;
+    flex-direction: column;
+    max-width: 500px;
+    margin: 0 auto;
+    gap:50px
+    
+}
+
+.inputContainer {
+  display: flex;
+  flex-direction: row;
+  gap: 15px;
+}
+
+.contentContainer{
+  display: flex;
+  flex-direction: row;
+  gap:15px;
+  justify-content: center;
+  
+}
