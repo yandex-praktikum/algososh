@@ -17,9 +17,11 @@ export type TNode = {
 
 export const QueuePage: React.FC = () => {
   const [item, setItem] = useState<string>('');
+  const [isDisabled, setIsDisabled] = useState<boolean>(false)
   /* const { value, setElement} = useState<TElement>() */
-  const [arrNode, setArrNode] = useState<{ value: string; color: ElementStates; }[]>()
   const queueRef = useRef(new Queue<string>(7))
+  const [arrNode, setArrNode] = useState<{ value: string, color: ElementStates, isHead: boolean, isTail: boolean }[]>([...queueRef.current.createArr()])
+
 
   const arr = [{}, {}, {}, {}, {}, {}, {}];
 
@@ -27,6 +29,7 @@ export const QueuePage: React.FC = () => {
   let list = {};
   const onChange = (e: React.FormEvent<HTMLInputElement>) => {
     setItem((e.target as HTMLInputElement).value);
+    setIsDisabled(false)
   }
 
   const handleClickButtonAdd = async (element: string) => {
@@ -34,9 +37,14 @@ export const QueuePage: React.FC = () => {
     setItem('');
     let arr = queueRef.current.createArr()
     setArrNode([...arr])
+
+    setIsDisabled(true)
+    const tail = queueRef.current.getTail()
+    if (tail) tail.color = ElementStates.Changing;
+    setArrNode([...queueRef.current.createArr()])
     await new Promise(resolve => setTimeout(resolve, 500));
-    //queueRef.current.head.- создать tail и ему менять color
-    console.log(queueRef);
+    if (tail) tail.color = ElementStates.Default;
+    setArrNode([...queueRef.current.createArr()])    
   }
 
   const handleClickButtonDel = () => {
@@ -45,11 +53,16 @@ export const QueuePage: React.FC = () => {
     setArrNode([...queueRef.current.createArr()])
   }
 
+  const handleClickButtonClear = () => {
+    queueRef.current.clear()
+    setArrNode([...queueRef.current.createArr()])
+  }
+
   useEffect(() => {
 
   }, [arrNode])
   const a = queueRef.current.createArr()
-  console.log(a);
+  console.log('arrNode', queueRef);
 
   return (
     <SolutionLayout title="Очередь">
@@ -70,13 +83,13 @@ export const QueuePage: React.FC = () => {
             flexDirection: 'row',
             gap: '12px'
           }}>
-            <Button text="Добавить" onClick={() => handleClickButtonAdd(item)} />
+            <Button text="Добавить" onClick={() => handleClickButtonAdd(item)} disabled={isDisabled} />
             <Button text="Удалить" onClick={() => handleClickButtonDel()} />
           </div>
           <div style={{
             paddingLeft: '40px',
           }}>
-            <Button text="Очистить" />
+            <Button text="Очистить" onClick={()=> handleClickButtonClear()}/>
           </div>
         </div>
         <div style={{
@@ -86,7 +99,7 @@ export const QueuePage: React.FC = () => {
           gap: '12px'
         }}>
           {arrNode?.map((elem, i) =>
-            <Circle key={i} letter={elem.value} state={elem.color} index={i} head={(i === arr.length - 1) ? 'top' : ''} />
+            <Circle key={i} letter={elem.value} state={elem.color} index={i} head={(elem.isHead) ? 'head' : ''} tail={(elem.isTail) ? 'tail' : ''} />
           )}
         </div>
       </div>
