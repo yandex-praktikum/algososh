@@ -29,7 +29,7 @@ export class Queue<T> implements TQueue<T> {
     head: Node<T> | null;
     private tail: Node<T> | null;
     private size: number;
-    length: number
+    length?: number | null
 
     constructor(length: number) {
         this.list = null
@@ -40,6 +40,7 @@ export class Queue<T> implements TQueue<T> {
         this.createList()
     }
     createList() {
+        if (this.length)  // О как!!!
         for (let i = 0; i < this.length; i++) {
             const node = new Node<T>();
             if (!this.head) {
@@ -59,7 +60,7 @@ export class Queue<T> implements TQueue<T> {
         }
     }
     push(element: T) {
-        // нужно двигать tail
+        
         if (!this.size && this.head && this.tail) {
             console.log('1');
             this.head.isHead = true;
