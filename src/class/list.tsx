@@ -98,7 +98,6 @@ export class List<T extends string>  {
 
     push(element: T) {
         if (this.tail && this.list) {
-            console.log('2');
             let current = this.tail;
             current.isTail = false
             current.next = new Node(element);
@@ -129,8 +128,6 @@ export class List<T extends string>  {
             this.head = current;
             this.list = current;
         }
-        console.log(this.list);
-
     }
 
     shift() {
@@ -165,8 +162,6 @@ export class List<T extends string>  {
 
                 this.unshift(element)
             } else if (current && !current.next) {
-                console.log('tail');
-
                 this.push(element)
             }
         }
@@ -180,14 +175,14 @@ export class List<T extends string>  {
                 current = current.next;
                 index++;
             }
-            if(current && current.prev && current.next) {
+            if (current && current.prev && current.next) {
                 current.prev.next = current.next;
                 current.next.prev = current.prev;
             }
-            if(current && !current.next) {
+            if (current && !current.next) {
                 this.pop()
             }
-            if(current && !current.prev) {
+            if (current && !current.prev) {
                 this.shift()
             }
         }

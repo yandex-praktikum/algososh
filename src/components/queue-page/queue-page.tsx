@@ -6,11 +6,11 @@ import { Circle } from "../ui/circle/circle";
 import { ElementStates } from "../../types/element-states";
 import { TElement } from "../stack-page/stack-page";
 import { Queue, TQueue } from "../../class/queue";
+import styles from './queue-page.module.css'
 
 export type TNode = {
   value: string,
-  color: ElementStates,
-  /*  id: number, */
+  color: ElementStates,  
   prev: TNode | null,
   next: TNode | null,
 }
@@ -21,12 +21,7 @@ export const QueuePage: React.FC = () => {
   /* const { value, setElement} = useState<TElement>() */
   const queueRef = useRef(new Queue<string>(7))
   const [arrNode, setArrNode] = useState<{ value: string, color: ElementStates, isHead: boolean, isTail: boolean }[]>([...queueRef.current.createArr()])
-
-
-  const arr = [{}, {}, {}, {}, {}, {}, {}];
-
-
-  let list = {};
+   
   const onChange = (e: React.FormEvent<HTMLInputElement>) => {
     setItem((e.target as HTMLInputElement).value);
     setIsDisabled(false)
@@ -37,7 +32,6 @@ export const QueuePage: React.FC = () => {
     setItem('');
     let arr = queueRef.current.createArr()
     setArrNode([...arr])
-
     setIsDisabled(true)
     const tail = queueRef.current.getTail()
     if (tail) tail.color = ElementStates.Changing;
@@ -47,8 +41,7 @@ export const QueuePage: React.FC = () => {
     setArrNode([...queueRef.current.createArr()])    
   }
 
-  const handleClickButtonDel = () => {
-    console.log('del');
+  const handleClickButtonDel = () => {    
     queueRef.current.pop()
     setArrNode([...queueRef.current.createArr()])
   }
@@ -59,30 +52,14 @@ export const QueuePage: React.FC = () => {
   }
 
   useEffect(() => {
-
-  }, [arrNode])
-  const a = queueRef.current.createArr()
-  console.log('arrNode', queueRef);
+  }, [arrNode])  
 
   return (
     <SolutionLayout title="Очередь">
-      <div style={{
-        display: 'grid',
-        justifyItems: 'center',
-        gap: '40px',
-      }}>
-        <div style={{
-          display: 'flex',
-          flexDirection: 'row',
-          justifyContent: 'center',
-          gap: 12
-        }}>
+      <div className={`${styles.container}`}>
+        <form className={`${styles.form}`}>
           <Input maxLength={4} id='input' value={item} onChange={onChange} />
-          <div style={{
-            display: 'flex',
-            flexDirection: 'row',
-            gap: '12px'
-          }}>
+          <div className={`${styles.blockButtons}`}>
             <Button text="Добавить" onClick={() => handleClickButtonAdd(item)} disabled={isDisabled} />
             <Button text="Удалить" onClick={() => handleClickButtonDel()} />
           </div>
@@ -91,15 +68,15 @@ export const QueuePage: React.FC = () => {
           }}>
             <Button text="Очистить" onClick={()=> handleClickButtonClear()}/>
           </div>
-        </div>
-        <div style={{
-          display: 'flex',
-          flexDirection: 'row',
-          flexWrap: 'wrap',
-          gap: '12px'
-        }}>
+        </form>
+        <div className={`${styles.containerCircle}`}>
           {arrNode?.map((elem, i) =>
-            <Circle key={i} letter={elem.value} state={elem.color} index={i} head={(elem.isHead) ? 'head' : ''} tail={(elem.isTail) ? 'tail' : ''} />
+            <Circle key={i}
+             letter={elem.value} 
+             state={elem.color} 
+             index={i} 
+             head={(elem.isHead) ? 'head' : ''} 
+             tail={(elem.isTail) ? 'tail' : ''} />
           )}
         </div>
       </div>

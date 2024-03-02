@@ -16,6 +16,7 @@ type TNode = {
 }
 
 export const ListPage: React.FC = () => {
+  // тут нужны хуки, но ...
   const [inputValue, setInputValue] = useState<string>('');
   const [inputIndex, setInputIndex] = useState<string>('');
   const [typeAdd, setTypeAdd] = useState<string>('');
@@ -27,18 +28,45 @@ export const ListPage: React.FC = () => {
   const [element, setElement] = useState<string>();
   const [toggle, setToggle] = useState<boolean>(false)
   const [indexElement, setIndexElement] = useState<number>(0)
+  const [isDisabled, setIsDisabled] = useState<boolean>(false)
+  const [isAddHeadButtonDisabled, setIsAddHeadButtonDisabled] = useState(false);
+  const [isAddTailButtonDisabled, setIsAddTailButtonDisabled] = useState(false);
+  const [isDelHeadButtonDisabled, setIsDelHeadButtonDisabled] = useState(false);
+  const [isDelTailButtonDisabled, setIsDelTailButtonDisabled] = useState(false);
+  const [isLoaderAddHead, setIsLoaderAddHead] = useState(false)
+  const [isLoaderAddTail, setIsLoaderAddTail] = useState(false)
+  const [isLoaderDelHead, setIsLoaderDelHead] = useState(false)
+  const [isLoaderDelTail, setIsLoaderDelTail] = useState(false)
+  const [isLoaderAddId, setIsLoaderAddId] = useState(false)
+  const [isLoaderDelId, setIsLoaderDelId] = useState(false)
+
 
   const listRef = useRef(new List<string>())
   const [arrNode, setArrNode] = useState<TNode[]>([...listRef.current.createArr()])
-  // нужно создать случайный массиа
+
+
+
   const onChange = (e: React.FormEvent<HTMLInputElement>) => {
     (e.currentTarget.name === 'value') ?
       setInputValue(e.currentTarget.value) :
       setInputIndex(e.currentTarget.value)
+    if (e.currentTarget.name === 'index') {
+      setIsAddHeadButtonDisabled(true)
+      setIsAddTailButtonDisabled(true)
+      setIsDelHeadButtonDisabled(true)
+      setIsDelTailButtonDisabled(true)
+    }
+    if (e.currentTarget.name === 'value') {
+      setIsAddHeadButtonDisabled(false)
+      setIsAddTailButtonDisabled(false)
+      setIsDelHeadButtonDisabled(false)
+      setIsDelTailButtonDisabled(false)
+    }
 
   }
 
-  const handleClickButtonAddTail = async (element: string) => {
+  const handleClickButtonAddTail = async (e: React.MouseEvent<HTMLButtonElement, MouseEvent>, element: string) => {
+    setIsLoaderAddTail(true)
     setIsAdd(true)
     setTypeAdd('tail');
     setElement(`${element}`)
@@ -49,9 +77,11 @@ export const ListPage: React.FC = () => {
     setIsAdd(false)
     setElement('')
     setArrNode([...listRef.current.createArr()])
+    setIsLoaderAddTail(false)
   }
 
   const handleClickButtonDelTail = async () => {
+    setIsLoaderAddTail(true)
     setIsDel(true);
     setIsDelTail(true);
     setElement(`${listRef.current.getTail()}`);
@@ -60,9 +90,11 @@ export const ListPage: React.FC = () => {
     setIsDel(false);
     setIsDelTail(false);
     setArrNode([...listRef.current.createArr()]);
+    setIsLoaderAddTail(false)
   }
 
   const handleClickButtonAddHead = async (element: string) => {
+    setIsLoaderAddHead(true)
     setTypeAdd('head');
     setIsAdd(true)
     setElement(`${element}`);
@@ -72,9 +104,11 @@ export const ListPage: React.FC = () => {
     setArrNode([...listRef.current.createArr()]);
     setTypeAdd('');
     setIsAdd(false);
+    setIsLoaderAddHead(false)
   }
 
   const handleClickButtonDelHead = async () => {
+    setIsLoaderDelHead(true)
     setTypeDel('head');
     setIsDel(true);
     setIsDelHead(true);
@@ -86,10 +120,12 @@ export const ListPage: React.FC = () => {
     setIsDel(false);
     setIsDelHead(false);
     setElement('')
+    setIsLoaderDelHead(false)
   }
 
   const handleClickButtonAddId = async (element: string, id: string) => {
     if (+id < arrNode.length) {
+      setIsLoaderAddId(true)
       setElement(element)
       setInputValue('')
       setInputIndex('')
@@ -104,18 +140,20 @@ export const ListPage: React.FC = () => {
       setArrNode([...listRef.current.createArr()]);
       setElement('');
       setTypeAdd('');
+      setIsLoaderAddId(false)
     }
   }
 
   const handleClickButtonDelId = async (id: string) => {
     if (+id < arrNode.length) {
+      setIsLoaderDelId(true)
       setInputIndex('');
       setTypeDel('id');
       let elem;
       for (let i = 0; i <= +id; i++) {
         elem = listRef.current.getElement(i);
         if (elem) { elem.color = ElementStates.Changing };
-        if(elem && elem.isTail) {setIsDelTail(true)};
+        if (elem && elem.isTail) { setIsDelTail(true) };
         setArrNode([...listRef.current.createArr()])
         await new Promise(resolve => setTimeout(resolve, 500));
       }
@@ -132,6 +170,7 @@ export const ListPage: React.FC = () => {
       setTypeDel('');
       setToggle(false);
       setElement('');
+      setIsLoaderDelId(false)
     }
   }
 
@@ -148,10 +187,32 @@ export const ListPage: React.FC = () => {
           <Input type="number" maxLength={4} id='input' placeholder="Введите значение" onChange={(e) => onChange(e)} name="value" value={inputValue} />
 
           <div className={`${styles.buttonsBlock}`}>
-            <Button text="Добавить в head" extraClass={`${styles.buttonSize}`} onClick={() => handleClickButtonAddHead(inputValue)} />
-            <Button text="Добавить в tail" extraClass={`${styles.buttonSize}`} onClick={() => handleClickButtonAddTail(inputValue)} />
-            <Button text="Удалить из head" extraClass={`${styles.buttonSize}`} onClick={() => handleClickButtonDelHead()} />
-            <Button text="Удалить из tail" extraClass={`${styles.buttonSize}`} onClick={() => handleClickButtonDelTail()} />
+            <Button
+              text="Добавить в head"
+              extraClass={`${styles.buttonSize}`}
+              onClick={(e) => handleClickButtonAddHead(inputValue)}
+              name="head"
+              disabled={isAddHeadButtonDisabled}
+              isLoader={isLoaderAddHead}
+            />
+            <Button
+              text="Добавить в tail"
+              extraClass={`${styles.buttonSize}`}
+              onClick={(e) => handleClickButtonAddTail(e, inputValue)}
+              disabled={isAddTailButtonDisabled}
+              isLoader={isLoaderAddTail} />
+            <Button
+              text="Удалить из head"
+              extraClass={`${styles.buttonSize}`}
+              onClick={() => handleClickButtonDelHead()}
+              disabled={isDelHeadButtonDisabled}
+              isLoader={isLoaderDelHead} />
+            <Button
+              text="Удалить из tail"
+              extraClass={`${styles.buttonSize}`}
+              onClick={() => handleClickButtonDelTail()}
+              disabled={isDelTailButtonDisabled}
+              isLoader={isLoaderAddTail} />
           </div>
 
         </form>

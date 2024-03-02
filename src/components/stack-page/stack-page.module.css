@@ -1,0 +1,25 @@
+.container {
+    display: grid;
+    justify-items: center;
+    gap: 40px;
+}
+
+.form {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    gap: 12px;
+}
+
+.blockButtons {
+    display: flex;
+    flex-direction: row;
+    gap: 12px;    
+}
+
+.containerCircle {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    gap: 12px;
+}

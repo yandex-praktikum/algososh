@@ -41,28 +41,26 @@ export class Queue<T> implements TQueue<T> {
     }
     createList() {
         if (this.length)  // О как!!!
-        for (let i = 0; i < this.length; i++) {
-            const node = new Node<T>();
-            if (!this.head) {
-                this.list = node;
-                this.head = node;
-                this.tail = node;
-            } else {
-                let current = this.head;
-                while (current.next) {
-                    current = current.next;
-                }
-                current.next = node;
-                current.next.prev = current;
-                this.tail = node;
+            for (let i = 0; i < this.length; i++) {
+                const node = new Node<T>();
+                if (!this.head) {
+                    this.list = node;
+                    this.head = node;
+                    this.tail = node;
+                } else {
+                    let current = this.head;
+                    while (current.next) {
+                        current = current.next;
+                    }
+                    current.next = node;
+                    current.next.prev = current;
+                    this.tail = node;
 
+                }
             }
-        }
     }
     push(element: T) {
-        
         if (!this.size && this.head && this.tail) {
-            console.log('1');
             this.head.isHead = true;
             this.head.isTail = true;
             this.head.value = element;
@@ -70,10 +68,8 @@ export class Queue<T> implements TQueue<T> {
             this.head.color = ElementStates.Default;
             this.size++;
         } else if (this.head && this.list) {
-            console.log('2');
             let current = this.head;
             while (this.length !== this.size) {
-                console.log('3');
                 if (current.value && current.next) {
                     current = current.next;
                 } else {
@@ -91,8 +87,8 @@ export class Queue<T> implements TQueue<T> {
 
     }
     pop() {
-        if (this.head && this.head.value && this.list ) {
-            if (this.head && this.head.value) {                
+        if (this.head && this.head.value && this.list) {
+            if (this.head && this.head.value) {
                 this.head.value = null;
                 this.head.isHead = false;
                 if (this.head.next && this.head !== this.tail) {
@@ -103,9 +99,9 @@ export class Queue<T> implements TQueue<T> {
                     this.head.isTail = false;
                     this.head = null;
                     this.tail = null;
-                    
+
                 }
-            }            
+            }
         }
     }
 
@@ -120,10 +116,7 @@ export class Queue<T> implements TQueue<T> {
                 isTail: current.isTail,
             }
             if (!current.next) {
-                console.log('color', current.color);
-
                 arr.push(elemetn)
-                console.log(arr);
                 return arr
             }
             arr.push(elemetn)
@@ -140,24 +133,21 @@ export class Queue<T> implements TQueue<T> {
         if (this.list) {
             let current = this.list;
             while (current.next) {
-                if(current.isTail) {
+                if (current.isTail) {
                     return current
                 }
                 current = current.next;
-            } 
+            }
         }
         return null;
     }
 
     clear() {
-        let current = this.list;
-        while(current) {
-            current.value = null;
-            current.isHead = false;
-            current.isTail = false;
-            
-            current = current.next;
-        }
+        this.list = null;
+        this.head = null;
+        this.tail = null;
+        this.size = 0;
+        this.createList()
     }
 
 
