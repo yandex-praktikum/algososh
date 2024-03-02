@@ -1,0 +1,18 @@
+.form {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    gap: 12px;
+}
+
+.container {
+    width: 100%;
+    max-width: 1150px;
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: center;
+    margin: auto;
+    gap: 35px;
+}
+
