@@ -4,13 +4,19 @@ import { Queue } from "./queue";
 export class Node<T> {
     value: T | null;
     color: ElementStates;
+    index: number;
     isHead: boolean;
     isTail: boolean;
     next: Node<T> | null;
     prev: Node<T> | null;
-    constructor(value: T | null = null, next?: Node<T>, prev?: Node<T> | null, color = ElementStates.Default,) {
+    constructor(value: T | null = null,
+        next?: Node<T>,
+        index = 0,
+        prev?: Node<T> | null,
+        color = ElementStates.Default,) {
         this.value = value;
         this.color = color;
+        this.index = index;
         this.isHead = false;
         this.isTail = false;
         this.next = (next === undefined) ? null : next;
@@ -24,19 +30,18 @@ export class List<T extends string>  {
     list: Node<string> | null;
     head: Node<string> | null;
     protected tail: Node<string> | null;
-    private size: number;
-
+    private index: number;
+    size: number;
     constructor() {
         this.list = null
         this.head = null;
         this.tail = null;
+        this.index = 0;
         this.size = 0;
         this.createList()
     }
 
     createList() {
-        console.log('create');
-
         const lengthArray = Math.floor(Math.random() * (4 - 3)) + 3;
         let arr: string[] = [];
         for (let i = 0; i <= lengthArray; i++) {
@@ -60,50 +65,15 @@ export class List<T extends string>  {
                 current.next.prev = current;
                 this.tail = node;
                 this.tail.isTail = true;
+                current.index = this.size;
+                this.size++;
+
             }
-            console.log(this.head);
-
         }
-
     }
-    /* createArr() {
-        let arr: { value: string, color: ElementStates, isHead: boolean, isTail: boolean }[] = [];
-        function recursion(node: Node<string> | null) {
-            console.log('rec1', node);
-            let current = node;
-            if (current?.prev) {
-                current = current.prev;
-            } else {
-                if (current?.next) {
-                    const elemetn = {
-                        value: current.value || '',
-                        color: current.color,
-                        isHead: current.isHead,
-                        isTail: current.isTail,
-                    }
-                    if (!current.next) {
-                        console.log('color', current.color);
 
-                        arr.push(elemetn)
-                        console.log(arr);
-                        return arr
-                    }
-                    arr.push(elemetn)
-                    current = current.next;
-                    recursion(current)
-                }
-            }
-
-
-        }       
-        if (this.list) {
-            recursion(this.list)
-        }
-        return arr
-    } */
     createArr() {
         let arr: { value: string, color: ElementStates, isHead: boolean, isTail: boolean }[] = [];
-
         function recursion(node: Node<string> | null) {
             if (node) {
                 const element = {
@@ -113,7 +83,6 @@ export class List<T extends string>  {
                     isTail: node.isTail,
                 };
                 arr.push(element);
-
                 if (node.next) {
                     recursion(node.next);
                 }
@@ -136,8 +105,7 @@ export class List<T extends string>  {
             this.tail = current.next;
             current.next.isTail = true;
             current.next.prev = current;
-            /* current.color = ElementStates.Default */
-            this.size++;
+            this.index++;
         }
     }
 
@@ -151,28 +119,80 @@ export class List<T extends string>  {
     }
 
     unshift(element: T) {
-        console.log('unshift');
-
         if (this.head) {
             let temp = this.head;
             let current = new Node<string>(element);
             current.next = temp;
+            current.next.prev = current;
             current.isHead = true;
             current.next.isHead = false;
             this.head = current;
             this.list = current;
-            this.size++;
         }
+        console.log(this.list);
+
     }
 
     shift() {
-        if(this.head?.next) {
+        if (this.head?.next) {
             let current = this.head.next;
             current.prev = null;
+            current.isHead = true;
             this.head = current;
             this.list = current;
         }
     }
+
+    insert(id: string, element: T) {
+        const newElement = new Node<string>(element);
+        let current = this.head;
+        let index = 0;
+        if (current) {
+            while (current && index !== +id) {
+                current = current.next;
+                index++;
+            }
+            if (current && current.prev) {
+                const temp = current.prev;
+                if (temp) {
+                    temp.next = newElement;
+                    newElement.prev = temp;
+                    newElement.next = current;
+                    current.prev = newElement;
+                    this.list = this.head;
+                }
+            } else if (current && !current.prev) {
+
+                this.unshift(element)
+            } else if (current && !current.next) {
+                console.log('tail');
+
+                this.push(element)
+            }
+        }
+    }
+
+    delElementId(id: number) {
+        let current = this.head;
+        let index = 0;
+        if (current) {
+            while (current && index !== +id) {
+                current = current.next;
+                index++;
+            }
+            if(current && current.prev && current.next) {
+                current.prev.next = current.next;
+                current.next.prev = current.prev;
+            }
+            if(current && !current.next) {
+                this.pop()
+            }
+            if(current && !current.prev) {
+                this.shift()
+            }
+        }
+    }
+
 
     getTail() {
         if (this.tail) {
@@ -182,11 +202,25 @@ export class List<T extends string>  {
     }
 
     getHead() {
-        if(this.head) {
+        if (this.head) {
             return this.head.value
         }
         return undefined
     }
+
+    getElement(id: number) {
+        let current = this.list;
+        let index = 0;
+        if (current) {
+            while (index !== id && current) {
+                current = current.next;
+                index++;
+            }
+            return current;
+        }
+    }
+
+
 
 
 
