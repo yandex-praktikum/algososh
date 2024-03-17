@@ -1,0 +1,27 @@
+.stackButtonContainer {
+  display: flex;
+  flex-direction: row;
+  gap: 13px;
+  justify-content: center;
+  box-sizing: border-box;
+  margin: 0 auto;
+}
+
+.stackInput {
+  width: 377px;
+}
+
+.stackContentContainer {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  gap: 8px;
+  margin-top: 50px;
+}
+.circleContainer {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 8px;
+}
