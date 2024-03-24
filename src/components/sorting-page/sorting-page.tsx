@@ -1,4 +1,4 @@
-import React, { useState, useRef } from "react";
+import React, { useState } from "react";
 import { SolutionLayout } from "../ui/solution-layout/solution-layout";
 import { RadioInput } from "../ui/radio-input/radio-input";
 import { Button } from "../ui/button/button";
@@ -10,7 +10,7 @@ import { DELAY_IN_MS } from "../../constants/delays";
 import { ElementStates } from "../../types/element-states";
 import { bubbleSort, selectionSort } from "../../utils/sorting";
 import { delay } from "../../utils/utils";
-import { getColumnState } from "../../utils/utils";
+
 export const SortingPage: React.FC = () => {
   const [radioInputValue, setRadioInputValue] = useState<string>("Выбор");
   const [arrValue, setArrValue] = useState<Array<number>>([]);
@@ -28,7 +28,6 @@ export const SortingPage: React.FC = () => {
     await delay(DELAY_IN_MS);
     let randomedArray = randomArr([]);
     setArrValue(randomedArray);
-
     setButtonsLoadingState({ ...buttonsLoadingState, newArrButton: false });
   }
 
@@ -42,42 +41,39 @@ export const SortingPage: React.FC = () => {
       });
     }
     if (radioInputValue === "Выбор") {
-      let { selectionSortedSteps, sortedIndices } = selectionSort(
-        [...arrValue],
-        direction
-      );
-
+      let { selectionSortedSteps } = selectionSort([...arrValue], direction);
       for (let i = 0; i < selectionSortedSteps.length; i++) {
         await delay(DELAY_IN_MS);
-        const [currentArr, minIndex, currentIndex] = selectionSortedSteps[i];
+        const [currentArr, minIndex, currentIndex, currentCounter] =
+          selectionSortedSteps[i];
         setArrValue(currentArr);
         setColumnState(() =>
           currentArr.map((item, index) =>
-            getColumnState(index, selectionSortedSteps.length - 1, i, {
-              currentArray: currentArr,
-              sortedIndexes: sortedIndices,
-              aIndex: minIndex,
-              bIndex: currentIndex,
-            })
+            index === minIndex || index === currentIndex
+              ? ElementStates.Changing
+              : index < currentCounter &&
+                index !== minIndex &&
+                index !== currentIndex
+              ? ElementStates.Modified
+              : ElementStates.Default
           )
         );
       }
     } else {
-      let bubbleSortSteps = bubbleSort([...arrValue], direction);
+      let { bubbleSortSteps } = bubbleSort([...arrValue], direction);
       for (let i = 0; i < bubbleSortSteps.length; i++) {
         await delay(DELAY_IN_MS);
-        const [currentArr, fisrt, second] = bubbleSortSteps[i];
+        const [currentArr, first, second, currentCounter] = bubbleSortSteps[i];
         setArrValue(currentArr);
-
-        if (fisrt !== -1 && second !== -1) {
-          setColumnState((prev) =>
-            currentArr.map((item, index) =>
-              index === fisrt || index === second
-                ? ElementStates.Changing
-                : ElementStates.Default
-            )
-          );
-        }
+        setColumnState(() =>
+          currentArr.map((item, index) =>
+            index === first || index === second
+              ? ElementStates.Changing
+              : index > currentCounter
+              ? ElementStates.Modified
+              : ElementStates.Default
+          )
+        );
       }
     }
 

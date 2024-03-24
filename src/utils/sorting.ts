@@ -2,37 +2,45 @@ import { swap } from "./utils";
 import { Direction } from "../types/direction";
 export function bubbleSort(arr: number[], direction: Direction) {
   const n = arr.length;
-  const steps: [number[], number, number][] = [];
+  const steps: [number[], number, number, number][] = [];
+  let counter = arr.length - 1;
 
-  for (let j = 0; j < n - 1; j++) {
-    let swapOccured = false;
+  for (let j = 0; j < n; j++) {
+    let swapped = false;
     for (let i = 0; i < n - j - 1; i++) {
-      if (
-        (direction === Direction.Ascending && arr[i] > arr[i + 1]) ||
-        (direction === Direction.Descending && arr[i] < arr[i + 1])
-      ) {
-        swap(arr, i, i + 1);
-        steps.push([[...arr], i, i + 1]); // Добавляем текущее состояние массива в шаги
-
-        swapOccured = true;
+      steps.push([[...arr], i, i + 1, counter]);
+      console.log("каунтер", counter);
+      if (direction === Direction.Ascending) {
+        if (arr[i] > arr[i + 1]) {
+          swap(arr, i, i + 1);
+          swapped = true;
+        }
+      } else {
+        if (arr[i] < arr[i + 1]) {
+          swap(arr, i, i + 1);
+          swapped = true;
+        }
       }
     }
-    if (!swapOccured) {
-      break; // Если не было замен на данном проходе, то массив уже отсортирован
+    counter--;
+    if (!swapped) {
+      break;
     }
   }
-  return steps;
+
+  steps.push([[...arr], -1, -1, -1]);
+  return { bubbleSortSteps: steps };
 }
 
 export function selectionSort(arr: number[], direction: Direction) {
   const n = arr.length;
-  let steps: [number[], number, number][] = [];
-  let sortedIndices: number[] = [];
+  let steps: [number[], number, number, number][] = [];
+  let counter: number = 0;
 
   for (let i = 0; i < n - 1; i++) {
     let minIndex = i;
     for (let j = i + 1; j < n; j++) {
-      steps.push([[...arr], minIndex, j]);
+      steps.push([[...arr], minIndex, j, counter]);
       if (direction === Direction.Descending) {
         if (arr[j] > arr[minIndex]) {
           minIndex = j;
@@ -45,11 +53,11 @@ export function selectionSort(arr: number[], direction: Direction) {
     }
     if (minIndex !== i) {
       swap(arr, i, minIndex);
-      sortedIndices.push(i); // Добавляем индекс в sortedIndices только если был произведен обмен
     }
+    counter++;
   }
 
-  steps.push([[...arr], -1, -1]);
+  steps.push([[...arr], -1, -1, counter + 1]);
 
-  return { selectionSortedSteps: steps, sortedIndices };
+  return { selectionSortedSteps: steps };
 }

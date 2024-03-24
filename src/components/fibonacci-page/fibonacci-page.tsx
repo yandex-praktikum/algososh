@@ -5,7 +5,7 @@ import { Button } from "../ui/button/button";
 import { ChangeEvent } from "react";
 import { FormEvent } from "react";
 import { Circle } from "../ui/circle/circle";
-import { DELAY_IN_MS, SHORT_DELAY_IN_MS } from "../../constants/delays";
+import { SHORT_DELAY_IN_MS } from "../../constants/delays";
 export const FibonacciPage: React.FC = () => {
   const [inputValue, setInputValue] = useState(0);
   const [fibonacciNumber, setFibonacciNumber] = useState<Array<number>>([]);

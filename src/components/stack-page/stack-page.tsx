@@ -8,36 +8,47 @@ import { Stack } from "./stack";
 import { Circle } from "../ui/circle/circle";
 import { ElementStates } from "../../types/element-states";
 import { delay } from "../../utils/utils";
-import { SHORT_DELAY_IN_MS } from "../../constants/delays";
-import ArrowIcon from "../../utils/arrowIcon";
+import { DELAY_IN_MS } from "../../constants/delays";
+
 export const StackPage: React.FC = () => {
   const [inputValue, setInputValue] = useState<string>("");
   const [stack, setStack] = useState(new Stack<string>());
   const [contentArray, setContentArray] = useState<Array<string>>([]);
   const [circleState, setCircleState] = useState<number | null>(null);
-
+  const [loader, setLoader] = useState({
+    addButton: false,
+    deleteButton: false,
+    clearButton: false,
+  });
   function handleInputChanger(e: ChangeEvent<HTMLInputElement>) {
     setInputValue(e.target.value);
   }
 
   async function stackPush() {
+    setLoader({ ...loader, addButton: true });
     stack.push(inputValue);
     setContentArray([...stack.getItems()]);
     setCircleState(contentArray.length);
-    await delay(SHORT_DELAY_IN_MS);
+    await delay(DELAY_IN_MS);
     setCircleState(null);
+    setLoader({ ...loader, addButton: false });
     setInputValue("");
   }
   async function stackPop() {
+    setLoader({ ...loader, deleteButton: true });
     setCircleState(contentArray.length - 1);
-    await delay(SHORT_DELAY_IN_MS);
+    await delay(DELAY_IN_MS);
     setCircleState(null);
     stack.pop();
     setContentArray([...stack.getItems()]);
+    setLoader({ ...loader, deleteButton: false });
   }
-  function stackClear() {
+  async function stackClear() {
+    setLoader({ ...loader, clearButton: true });
     stack.clear();
     setContentArray([...stack.getItems()]);
+    await delay(DELAY_IN_MS);
+    setLoader({ ...loader, clearButton: false });
   }
 
   return (
@@ -50,9 +61,29 @@ export const StackPage: React.FC = () => {
           maxLength={4}
           isLimitText={true}
         />
-        <Button onClick={stackPush} text="Добавить" />
-        <Button onClick={stackPop} text="Удалить" />
-        <Button onClick={stackClear} extraClass="ml-20" text="Очистить" />
+        <Button
+          isLoader={loader.addButton}
+          disabled={!inputValue || loader.clearButton || loader.deleteButton}
+          onClick={stackPush}
+          text="Добавить"
+        />
+        <Button
+          isLoader={loader.deleteButton}
+          disabled={
+            !contentArray.length || loader.addButton || loader.clearButton
+          }
+          onClick={stackPop}
+          text="Удалить"
+        />
+        <Button
+          isLoader={loader.clearButton}
+          disabled={
+            !contentArray.length || loader.addButton || loader.deleteButton
+          }
+          onClick={stackClear}
+          extraClass="ml-20"
+          text="Очистить"
+        />
       </div>
       <div className={styles.stackContentContainer}>
         {contentArray.map((item, index) => {
