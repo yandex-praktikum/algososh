@@ -6,6 +6,7 @@ import { ChangeEvent } from "react";
 import { FormEvent } from "react";
 import { Circle } from "../ui/circle/circle";
 import { SHORT_DELAY_IN_MS } from "../../constants/delays";
+import { fibonacci } from "../../utils/fibonacci";
 export const FibonacciPage: React.FC = () => {
   const [inputValue, setInputValue] = useState(0);
   const [fibonacciNumber, setFibonacciNumber] = useState<Array<number>>([]);
@@ -13,23 +14,6 @@ export const FibonacciPage: React.FC = () => {
   function handleInputChange(event: ChangeEvent<HTMLInputElement>) {
     let value = parseInt(event.target.value);
     setInputValue(value);
-  }
-
-  function fibonacci(n: number): number {
-    if (n <= 1) {
-      return 1;
-    }
-
-    let a = 1;
-    let b = 1;
-
-    for (let i = 0; i < n; i++) {
-      let temp = a;
-      a = b;
-      b = temp + b;
-    }
-
-    return a;
   }
 
   function handleButtonClick(event: FormEvent<HTMLFormElement>) {
@@ -68,7 +52,7 @@ export const FibonacciPage: React.FC = () => {
         </form>
         <div className="formContentContainer">
           {fibonacciNumber.map((n, index) => {
-            return <Circle letter={`${n}`} index={index}></Circle>;
+            return <Circle key={index} letter={`${n}`} index={index}></Circle>;
           })}
         </div>
       </div>

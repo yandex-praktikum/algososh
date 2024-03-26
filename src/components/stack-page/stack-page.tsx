@@ -7,7 +7,7 @@ import { ChangeEvent } from "react";
 import { Stack } from "./stack";
 import { Circle } from "../ui/circle/circle";
 import { ElementStates } from "../../types/element-states";
-import { delay } from "../../utils/utils";
+import { delay, disableButtonSetter } from "../../utils/utils";
 import { DELAY_IN_MS } from "../../constants/delays";
 
 export const StackPage: React.FC = () => {
@@ -63,14 +63,14 @@ export const StackPage: React.FC = () => {
         />
         <Button
           isLoader={loader.addButton}
-          disabled={!inputValue || loader.clearButton || loader.deleteButton}
+          disabled={!inputValue || disableButtonSetter("addButton", loader)}
           onClick={stackPush}
           text="Добавить"
         />
         <Button
           isLoader={loader.deleteButton}
           disabled={
-            !contentArray.length || loader.addButton || loader.clearButton
+            !contentArray.length || disableButtonSetter("deleteButton", loader)
           }
           onClick={stackPop}
           text="Удалить"
@@ -78,7 +78,7 @@ export const StackPage: React.FC = () => {
         <Button
           isLoader={loader.clearButton}
           disabled={
-            !contentArray.length || loader.addButton || loader.deleteButton
+            !contentArray.length || disableButtonSetter("clearButton", loader)
           }
           onClick={stackClear}
           extraClass="ml-20"

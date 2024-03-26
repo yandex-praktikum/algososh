@@ -105,7 +105,7 @@ export default class LinkedList<T> implements ILinkedList<T> {
   }
   insertAtIndex(index: number, value: T) {
     if (index < 0 || index > this.size) {
-      throw new Error("Индекс за пределами допустимого");
+      return;
     }
     if (index === 0) {
       return this.prepend(value);

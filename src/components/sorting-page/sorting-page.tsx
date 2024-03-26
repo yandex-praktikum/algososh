@@ -5,7 +5,7 @@ import { Button } from "../ui/button/button";
 import { Direction } from "../../types/direction";
 import styles from "./sorting-page.module.css";
 import { Column } from "../ui/column/column";
-import { randomArr } from "../../utils/utils";
+import { disableButtonSetter, randomArr } from "../../utils/utils";
 import { DELAY_IN_MS } from "../../constants/delays";
 import { ElementStates } from "../../types/element-states";
 import { bubbleSort, selectionSort } from "../../utils/sorting";
@@ -105,8 +105,7 @@ export const SortingPage: React.FC = () => {
           sorting={Direction.Ascending}
           isLoader={buttonsLoadingState.ascendingButton}
           disabled={
-            buttonsLoadingState.newArrButton ||
-            buttonsLoadingState.descendingButton ||
+            disableButtonSetter("ascendingButton", buttonsLoadingState) ||
             arrValue.length === 0
           }
         ></Button>
@@ -116,8 +115,7 @@ export const SortingPage: React.FC = () => {
           sorting={Direction.Descending}
           isLoader={buttonsLoadingState.descendingButton}
           disabled={
-            buttonsLoadingState.newArrButton ||
-            buttonsLoadingState.ascendingButton ||
+            disableButtonSetter("descendingButton", buttonsLoadingState) ||
             arrValue.length === 0
           }
         ></Button>
@@ -126,10 +124,7 @@ export const SortingPage: React.FC = () => {
           extraClass="ml-20"
           text="Новый массив"
           isLoader={buttonsLoadingState.newArrButton}
-          disabled={
-            buttonsLoadingState.descendingButton ||
-            buttonsLoadingState.ascendingButton
-          }
+          disabled={disableButtonSetter("newArrButton", buttonsLoadingState)}
         ></Button>
       </div>
       <div className={styles.sortingContent}>

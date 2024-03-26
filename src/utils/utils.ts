@@ -1,5 +1,3 @@
-import { ElementStates } from "../types/element-states";
-
 export function swap(
   arr: string[] | number[],
   firstIndex: number,
@@ -8,20 +6,6 @@ export function swap(
   let temp = arr[firstIndex];
   arr[firstIndex] = arr[secondIndex];
   arr[secondIndex] = temp;
-}
-
-export function updateCircleState(
-  prevCircleStates: ElementStates[],
-  currentIndex: number,
-  elementStates: ElementStates,
-  stringArray?: string[] | number[] | undefined
-) {
-  let newCircleStates = [...prevCircleStates];
-  newCircleStates[currentIndex] = elementStates;
-  if (stringArray) {
-    newCircleStates[stringArray.length - 1 - currentIndex] = elementStates;
-  }
-  return newCircleStates;
 }
 
 export function randomArr(arr: number[]) {
@@ -44,4 +28,14 @@ export function randomLinkedList(arr: string[] = []) {
 }
 export function delay(ms: number) {
   return new Promise((resolve) => setTimeout(resolve, ms));
+}
+
+export function disableButtonSetter<T extends Record<string, boolean>>(
+  button: string,
+  object: T
+) {
+  return (
+    Object.keys(object).some((key) => key !== button) &&
+    Object.values(object).some((value) => value === true)
+  );
 }

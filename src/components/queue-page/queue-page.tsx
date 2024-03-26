@@ -7,7 +7,7 @@ import { Circle } from "../ui/circle/circle";
 import { Queue } from "./queue";
 import { ChangeEvent } from "react";
 import { ElementStates } from "../../types/element-states";
-import { delay } from "../../utils/utils";
+import { delay, disableButtonSetter } from "../../utils/utils";
 import { DELAY_IN_MS } from "../../constants/delays";
 export const QueuePage: React.FC = () => {
   const [arr, setArr] = useState(new Queue<string>(7));
@@ -67,8 +67,7 @@ export const QueuePage: React.FC = () => {
           disabled={
             !inputValue ||
             arr.tail === 7 ||
-            loader.deleteButton ||
-            loader.clearButton
+            disableButtonSetter("addButton", loader)
           }
           onClick={enqueue}
           text="Добавить"
@@ -76,13 +75,13 @@ export const QueuePage: React.FC = () => {
         />
         <Button
           isLoader={loader.deleteButton}
-          disabled={!arr.lenght || loader.addButton || loader.clearButton}
+          disabled={!arr.lenght || disableButtonSetter("deleteButton", loader)}
           onClick={dequeue}
           text="Удалить"
         />
         <Button
           isLoader={loader.clearButton}
-          disabled={!arr.lenght || loader.addButton || loader.deleteButton}
+          disabled={!arr.lenght || disableButtonSetter("clearButton", loader)}
           onClick={queueClear}
           extraClass="ml-20"
           text="Очистить"

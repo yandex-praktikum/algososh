@@ -3,79 +3,45 @@ import { SolutionLayout } from "../ui/solution-layout/solution-layout";
 import { Input } from "../ui/input/input";
 import { Button } from "../ui/button/button";
 import { Circle } from "../ui/circle/circle";
-import styles from "./string.module.css";
-import { ElementStates } from "../../types/element-states";
-import { DELAY_IN_MS } from "../../constants/delays";
-import { swap, updateCircleState } from "../../utils/utils";
+import {
+  getStringColumnState,
+  reverseStringBySteps,
+} from "../../utils/reverse-string";
 export const StringComponent: React.FC = () => {
-  const [circleStates, setCircleStates] = useState<Array<ElementStates>>([]);
   const [isLoading, setIsLoading] = useState(false);
   const [inputValue, setInputValue] = useState("");
-  const [reverseStringValue, setReverseStringValue] = useState("");
+  const [steps, setSteps] = useState<string[][] | null>(null);
+  const [currentStepIndex, setCurrentStepIndex] = useState(0);
 
   function handleInputChange(event: ChangeEvent<HTMLInputElement>) {
     setInputValue(event.target.value);
   }
-  const reverseString = (string: string, currentIndex: number = 0) => {
-    let stringArray = string.split("");
-    let end = stringArray.length;
-    setIsLoading(true);
 
-    const timeoutId = setTimeout(() => {
-      if (currentIndex < Math.floor(end / 2)) {
-        setCircleStates((prevCircleStates) => {
-          return updateCircleState(
-            prevCircleStates,
-            currentIndex,
-            ElementStates.Changing,
-            stringArray
-          );
-        });
-
-        setTimeout(() => {
-          swap(stringArray, currentIndex, end - 1 - currentIndex);
-          setReverseStringValue(stringArray.join(""));
-          setCircleStates((prevCircleStates) => {
-            return updateCircleState(
-              prevCircleStates,
-              currentIndex,
-              ElementStates.Modified,
-              stringArray
-            );
-          });
-
-          reverseString(stringArray.join(""), currentIndex + 1);
-        }, DELAY_IN_MS);
-      } else {
-        clearTimeout(timeoutId);
-        setIsLoading(false);
-        setCircleStates((prevCircleStates) => {
-          return updateCircleState(
-            prevCircleStates,
-            currentIndex,
-            ElementStates.Modified
-          );
-        });
-      }
-    }, DELAY_IN_MS);
-
-    return string;
-  };
-
-  function handleButtonClick(event: FormEvent<HTMLFormElement>) {
+  function reverseStringAlgorithm(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
-    setReverseStringValue(inputValue);
-    setCircleStates([ElementStates.Default]);
-    setTimeout(() => {
-      const reversedString = reverseString(inputValue);
-      setReverseStringValue(reversedString);
-    }, DELAY_IN_MS);
+    setIsLoading(true);
+    const newSteps = reverseStringBySteps(inputValue);
+    setSteps(newSteps);
+    setCurrentStepIndex(0);
+    if (!newSteps.length) {
+      return;
+    }
+    let index = 0;
+    const intervalId = setInterval(() => {
+      if (index >= newSteps.length - 1) {
+        clearInterval(intervalId);
+        setIsLoading(false);
+        return;
+      }
+
+      setCurrentStepIndex(++index);
+    }, 1000);
   }
 
   return (
     <SolutionLayout title="Строка">
       <div className="formContent">
-        <form onSubmit={handleButtonClick} className="formContainer">
+        <form onSubmit={reverseStringAlgorithm} className="formContainer">
           <Input
             onChange={handleInputChange}
             value={inputValue}
@@ -91,9 +57,9 @@ export const StringComponent: React.FC = () => {
           />
         </form>
         <div className="formContentContainer">
-          {reverseStringValue.split("").map((text, index) => (
+          {steps?.[currentStepIndex].map((text, index) => (
             <Circle
-              state={circleStates[index]}
+              state={getStringColumnState({ index, steps, currentStepIndex })}
               letter={text}
               key={index}
             ></Circle>
