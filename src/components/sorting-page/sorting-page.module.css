@@ -1,0 +1,18 @@
+.buttonsContainer {
+  display: flex;
+  flex-direction: row;
+  gap: 25px;
+  align-items: center;
+  justify-content: center;
+}
+.sortingContent {
+  display: flex;
+  list-style-type: none;
+  justify-content: center;
+  align-items: center;
+  align-items: flex-end;
+  margin: 48px auto 0;
+  column-gap: 10px;
+  padding: 0;
+  max-width: 980px;
+}
