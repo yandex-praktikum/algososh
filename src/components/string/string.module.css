@@ -1,0 +1,18 @@
+.container {
+    display: flex;
+    width: 55%;
+    gap: 12px;
+    margin: 0 auto;
+    justify-content: center;
+}
+
+
+.letterContainer {
+    display: flex;
+    width: 100%;
+    gap: 15px;
+    margin: 100px auto;
+    justify-content: center;
+
+
+}

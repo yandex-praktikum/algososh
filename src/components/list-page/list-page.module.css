@@ -1,0 +1,19 @@
+.container {
+    display: flex;
+    gap: 10px;
+}
+
+.letterContainer {
+    display: flex;
+    width: 80%;
+    gap: 16px;
+    margin: 100px auto;
+    justify-content: center;
+    flex-wrap: wrap;
+    row-gap: 100px;
+}
+
+.circleContainer {
+    display: flex;
+    align-items: center;
+}
