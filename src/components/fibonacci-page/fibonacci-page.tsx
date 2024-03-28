@@ -4,53 +4,47 @@ import { SolutionLayout } from "../ui/solution-layout/solution-layout";
 import { Input } from "../ui/input/input";
 import { Button } from "../ui/button/button";
 import { Circle } from "../ui/circle/circle";
+import { getFibonacciNumbers } from "./util";
 
 
 export const FibonacciPage: React.FC = () => {
   const [index, setIndex] = useState<number>(0);
-  const [number, setNumber] = useState<number>(0);
+  const [number, setNumber] = useState<string>('');
+  const [isValid, setIsValid] = useState(false);
   const [isButtonPressed, setIsButtonPressed] = useState(false);
   const [isLoader, setIsLoader] = useState<boolean>(false);
   useEffect(() => {
-
+    setIsValid(+number < 20 && +number > 0);
     const interval = setInterval(() => {
-      if (isButtonPressed && (index < (getFibonacciNumbers(number).length - 1))) {
+      if (isButtonPressed && (index < (getFibonacciNumbers(+number).length - 1))) {
         setIndex(prev => prev + 1);
+        setIsLoader(true)
       }
     }, 500);
-    if (index === (getFibonacciNumbers(number).length - 1)) {
+    if (index === (getFibonacciNumbers(+number).length - 1)) {
       setIsLoader(false)
     }
 
     return () => { clearInterval(interval); }
 
   }, [isButtonPressed, index, number])
-  const getFibonacciNumbers = (number: number) => {
-    const array: number[][] = []
-    let arr: number[] = [0, 1];
-    for (let i = 2; i <= number; i++) {
-      arr.push(arr[i - 2] + arr[i - 1])
-      array.push([...arr])
-    }
-    array.unshift([0,1])
-    return array;
 
+  const handleInput = (evt: React.FormEvent<HTMLInputElement>) => {
+    const target = evt.target as HTMLInputElement;
+    setNumber(target.value)
+    
   }
 
   return (
     <SolutionLayout title="Последовательность Фибоначчи">
       <div className={styles.container}>
-        <Input max={19} type={"number"} isLimitText={true} onChange={(evt: any) => {
-          if(0 < evt.target.value && evt.target.value < 20){
-          setNumber(evt.target.value)}}
-        } />
-        < Button text={'Развернуть'} isLoader={isLoader ? true : false} onClick={() => {
+        <Input max={19} type={"number"} isLimitText={true} onChange={(evt) => handleInput(evt) } />
+        < Button text={'Развернуть'} isLoader={isLoader ? true : false} disabled = {!isValid} onClick={() => {
           setIsButtonPressed(true)
-          setIsLoader(true)
         }} />
       </div>
       <div className={styles.letterContainer}>
-        {isButtonPressed && < CircleComponent number={getFibonacciNumbers(number)[index]} />}
+        {isValid && isButtonPressed && < CircleComponent number={getFibonacciNumbers(+number)[index]} />}
       </div>
     </SolutionLayout>
   );

@@ -5,59 +5,7 @@ import { Input } from "../ui/input/input";
 import { Button } from "../ui/button/button";
 import { Circle } from "../ui/circle/circle";
 import { ElementStates } from "../../types/element-states";
-
-type TQueue = {
-  enqueue: (item: string, tail: number) => void;
-  dequeue: () => void;
-  elements: () => string[]
-}
-class Queue implements TQueue {
-  private items: string[] = [];
-  constructor(queue: string[]) {
-    this.items = queue;
-  }
-
-  enqueue(item: string, tail: number) {
-    if (tail <= 0) {
-      let index = this.items.findIndex(item => item === '')
-      this.items[index] = item;
-    }
-    else {
-      this.items[tail] = item
-    }
-  }
-
-  dequeue() {
-    if (this.isEmpty()) {
-      throw new Error("No elements in the queue");
-    }
-    let index = this.items.findIndex(item => item !== '')
-    this.items[index] = '';
-    return this.items;
-  }
-
-  isEmpty() {
-    return this.items.length === 0;
-  }
-  elements() {
-    return this.items;
-  }
-  clear() {
-    return this.items = ['', '', '', '', '', '', '',];
-  }
-  head() {
-    return this.items.findIndex(item => item !== '');
-  }
-  tail() {
-    let index: number = -1;
-    for (let i = this.items.length - 1; i >= 0; i--) {
-      if (this.items[i] !== '') {
-        return index = i;
-      }
-    }
-    return index;
-  }
-}
+import { Queue } from "./utils";
 
 export const QueuePage: React.FC = () => {
   const [string, setString] = useState<string>('');

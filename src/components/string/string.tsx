@@ -6,6 +6,7 @@ import { Input } from "../ui/input/input";
 import { Circle } from "../ui/circle/circle";
 import { useState, useEffect } from "react";
 import { ElementStates } from "../../types/element-states";
+import { algoritm } from "./util"
 
 export const StringComponent: React.FC = () => {
   const [string, setString] = useState('');
@@ -13,34 +14,12 @@ export const StringComponent: React.FC = () => {
   const [index, setIndex] = useState(0);
   const [isLoader, setIsLoader] = useState(false);
 
-  const algoritm = (string: string) => {
-    const arr: string[] = [];
-    for (let i = 0; i < string.length; i++) {
-      arr.push(string[i])
-    }
-    let start = 0;
-    let end = arr.length - 1;
-    let array = [];
-    let data = arr.slice();
-    while (start < end) {
-      data[start] = data.splice(end, 1, data[start])[0]
-      start++;
-      end--;
-      array.push([...data])
-    }
-    array.unshift(arr)
-    if (arr.length % 2 !== 0) {
-      array.push(array[array.length - 1])
-    }
-    return array;
-  }
-
   useEffect(() => {
     const interval = setInterval(() => {
       if (isButtonPressed && (index < (algoritm(string).length - 1))) {
         setIndex(prev => prev + 1);
       }
-    }, 3000);
+    }, 1000);
     if (index === (algoritm(string).length - 1)) {
       setIsLoader(false)
     }

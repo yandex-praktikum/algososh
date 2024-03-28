@@ -5,39 +5,7 @@ import { Input } from "../ui/input/input";
 import { Button } from "../ui/button/button";
 import { Circle } from "../ui/circle/circle";
 import { ElementStates } from "../../types/element-states";
-
-
-function Stack(items: string[]) {
-
-  function push(element: string) {
-    return items = [...items, element]
-  }
-
-  function pop() {
-    return items.length = [...items].length - 1;
-  }
-
-  function elements() {
-    return items;
-  }
-
-
-  function size() {
-    return items.length;
-  }
-
-  function clear() {
-    items = [];
-  }
-
-  return {
-    clear,
-    push,
-    pop,
-    size,
-    elements
-  };
-}
+import { Stack } from "./utils";
 
 
 export const StackPage: React.FC = () => {
